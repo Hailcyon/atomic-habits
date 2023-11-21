@@ -47,22 +47,7 @@ final demos = [
       // This sample uses a mock HTTP client.
       httpClient: mockClient,
     ),
-  ),
-  Demo(
-    name: 'Autofill',
-    route: 'autofill',
-    builder: (context) => const AutofillDemo(),
-  ),
-  Demo(
-    name: 'Form widgets',
-    route: 'form_widgets',
-    builder: (context) => const FormWidgetsDemo(),
-  ),
-  Demo(
-    name: 'Validation',
-    route: 'validation',
-    builder: (context) => const FormValidationDemo(),
-  ),
+  )
 ];
 
 final router = GoRouter(
