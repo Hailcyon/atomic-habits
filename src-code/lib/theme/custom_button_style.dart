@@ -23,6 +23,16 @@ class CustomButtonStyles {
           borderRadius: BorderRadius.circular(10.h),
         ),
       );
+
+  // Outline button style
+  static ButtonStyle get outlineOnPrimary => ElevatedButton.styleFrom(
+        backgroundColor: theme.colorScheme.onErrorContainer,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(6.h),
+        ),
+        shadowColor: theme.colorScheme.onPrimary.withOpacity(0.05),
+        elevation: 1,
+      );
   // text button style
   static ButtonStyle get none => ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),

@@ -14,16 +14,30 @@ class AppDecoration {
       );
 
   // Outline decorations
+  static BoxDecoration get outline => BoxDecoration(
+        color: appTheme.gray100,
+        boxShadow: [
+          BoxShadow(
+            color: theme.colorScheme.onPrimary,
+            spreadRadius: 2.h,
+            blurRadius: 2.h,
+            offset: Offset(
+              0,
+              1,
+            ),
+          ),
+        ],
+      );
   static BoxDecoration get outlineBlack => BoxDecoration(
         color: appTheme.lime50,
         border: Border.all(
-          color: appTheme.black900.withOpacity(0.4),
+          color: appTheme.black90001.withOpacity(0.4),
           width: 2.h,
         ),
       );
-  static BoxDecoration get outlineBlack900 => BoxDecoration(
+  static BoxDecoration get outlineBlack90001 => BoxDecoration(
         border: Border.all(
-          color: appTheme.black900,
+          color: appTheme.black90001,
           width: 4.h,
         ),
       );
@@ -33,9 +47,9 @@ class AppDecoration {
           width: 4.h,
         ),
       );
-  static BoxDecoration get outlineSecondaryContainer => BoxDecoration(
+  static BoxDecoration get outlineOnError => BoxDecoration(
         border: Border.all(
-          color: theme.colorScheme.secondaryContainer,
+          color: theme.colorScheme.onError,
           width: 4.h,
         ),
       );

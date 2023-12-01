@@ -5,33 +5,32 @@ part of 'customize_save_habit_bloc.dart';
 /// Represents the state of CustomizeSaveHabit in the application.
 class CustomizeSaveHabitState extends Equatable {
   CustomizeSaveHabitState({
-    this.fortyEightIconController,
-    this.fortyEightGoForARunController,
+    this.icondirectionsrunController,
+    this.goforarunController,
     this.customizeSaveHabitModelObj,
   });
 
-  TextEditingController? fortyEightIconController;
+  TextEditingController? icondirectionsrunController;
 
-  TextEditingController? fortyEightGoForARunController;
+  TextEditingController? goforarunController;
 
   CustomizeSaveHabitModel? customizeSaveHabitModelObj;
 
   @override
   List<Object?> get props => [
-        fortyEightIconController,
-        fortyEightGoForARunController,
+        icondirectionsrunController,
+        goforarunController,
         customizeSaveHabitModelObj,
       ];
   CustomizeSaveHabitState copyWith({
-    TextEditingController? fortyEightIconController,
-    TextEditingController? fortyEightGoForARunController,
+    TextEditingController? icondirectionsrunController,
+    TextEditingController? goforarunController,
     CustomizeSaveHabitModel? customizeSaveHabitModelObj,
   }) {
     return CustomizeSaveHabitState(
-      fortyEightIconController:
-          fortyEightIconController ?? this.fortyEightIconController,
-      fortyEightGoForARunController:
-          fortyEightGoForARunController ?? this.fortyEightGoForARunController,
+      icondirectionsrunController:
+          icondirectionsrunController ?? this.icondirectionsrunController,
+      goforarunController: goforarunController ?? this.goforarunController,
       customizeSaveHabitModelObj:
           customizeSaveHabitModelObj ?? this.customizeSaveHabitModelObj,
     );

@@ -15,6 +15,6 @@ class EditHabitNameBloc extends Bloc<EditHabitNameEvent, EditHabitNameState> {
     EditHabitNameInitialEvent event,
     Emitter<EditHabitNameState> emit,
   ) async {
-    emit(state.copyWith(habitNameController: TextEditingController()));
+    emit(state.copyWith(goforarunController: TextEditingController()));
   }
 }

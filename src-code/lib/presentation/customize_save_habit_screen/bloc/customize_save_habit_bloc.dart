@@ -18,7 +18,7 @@ class CustomizeSaveHabitBloc
     Emitter<CustomizeSaveHabitState> emit,
   ) async {
     emit(state.copyWith(
-        fortyEightIconController: TextEditingController(),
-        fortyEightGoForARunController: TextEditingController()));
+        icondirectionsrunController: TextEditingController(),
+        goforarunController: TextEditingController()));
   }
 }

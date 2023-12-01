@@ -27,7 +27,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         passwordController: TextEditingController(), isShowPassword: true));
     Future.delayed(const Duration(milliseconds: 3000), () {
       NavigatorService.popAndPushNamed(
-        AppRoutes.homePageContainerScreen,
+        AppRoutes.homePageContainer1Screen,
       );
     });
   }

@@ -5,26 +5,25 @@ part of 'new_habit_search_bloc.dart';
 /// Represents the state of NewHabitSearch in the application.
 class NewHabitSearchState extends Equatable {
   NewHabitSearchState({
-    this.searchEditTextController,
+    this.searchController,
     this.newHabitSearchModelObj,
   });
 
-  TextEditingController? searchEditTextController;
+  TextEditingController? searchController;
 
   NewHabitSearchModel? newHabitSearchModelObj;
 
   @override
   List<Object?> get props => [
-        searchEditTextController,
+        searchController,
         newHabitSearchModelObj,
       ];
   NewHabitSearchState copyWith({
-    TextEditingController? searchEditTextController,
+    TextEditingController? searchController,
     NewHabitSearchModel? newHabitSearchModelObj,
   }) {
     return NewHabitSearchState(
-      searchEditTextController:
-          searchEditTextController ?? this.searchEditTextController,
+      searchController: searchController ?? this.searchController,
       newHabitSearchModelObj:
           newHabitSearchModelObj ?? this.newHabitSearchModelObj,
     );

@@ -18,8 +18,8 @@ class ImplementationIntEditBloc
     Emitter<ImplementationIntEditState> emit,
   ) async {
     emit(state.copyWith(
-        habitNameController: TextEditingController(),
-        habitTimeController: TextEditingController(),
-        habitLocationController: TextEditingController()));
+        runController: TextEditingController(),
+        timeController: TextEditingController(),
+        libertyparkController: TextEditingController()));
   }
 }

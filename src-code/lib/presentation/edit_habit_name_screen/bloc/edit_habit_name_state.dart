@@ -5,25 +5,25 @@ part of 'edit_habit_name_bloc.dart';
 /// Represents the state of EditHabitName in the application.
 class EditHabitNameState extends Equatable {
   EditHabitNameState({
-    this.habitNameController,
+    this.goforarunController,
     this.editHabitNameModelObj,
   });
 
-  TextEditingController? habitNameController;
+  TextEditingController? goforarunController;
 
   EditHabitNameModel? editHabitNameModelObj;
 
   @override
   List<Object?> get props => [
-        habitNameController,
+        goforarunController,
         editHabitNameModelObj,
       ];
   EditHabitNameState copyWith({
-    TextEditingController? habitNameController,
+    TextEditingController? goforarunController,
     EditHabitNameModel? editHabitNameModelObj,
   }) {
     return EditHabitNameState(
-      habitNameController: habitNameController ?? this.habitNameController,
+      goforarunController: goforarunController ?? this.goforarunController,
       editHabitNameModelObj:
           editHabitNameModelObj ?? this.editHabitNameModelObj,
     );

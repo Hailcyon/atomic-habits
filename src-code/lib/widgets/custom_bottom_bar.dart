@@ -36,7 +36,7 @@ class CustomBottomBarState extends State<CustomBottomBar> {
     return Container(
       height: 80.v,
       decoration: BoxDecoration(
-        color: theme.colorScheme.onPrimary,
+        color: appTheme.black900,
       ),
       child: BottomNavigationBar(
         backgroundColor: Colors.transparent,

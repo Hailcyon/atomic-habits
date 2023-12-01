@@ -16,6 +16,6 @@ class NewHabitSearchBloc
     NewHabitSearchInitialEvent event,
     Emitter<NewHabitSearchState> emit,
   ) async {
-    emit(state.copyWith(searchEditTextController: TextEditingController()));
+    emit(state.copyWith(searchController: TextEditingController()));
   }
 }

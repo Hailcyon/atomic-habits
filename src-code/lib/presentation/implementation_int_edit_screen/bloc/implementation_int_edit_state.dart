@@ -5,38 +5,38 @@ part of 'implementation_int_edit_bloc.dart';
 /// Represents the state of ImplementationIntEdit in the application.
 class ImplementationIntEditState extends Equatable {
   ImplementationIntEditState({
-    this.habitNameController,
-    this.habitTimeController,
-    this.habitLocationController,
+    this.runController,
+    this.timeController,
+    this.libertyparkController,
     this.implementationIntEditModelObj,
   });
 
-  TextEditingController? habitNameController;
+  TextEditingController? runController;
 
-  TextEditingController? habitTimeController;
+  TextEditingController? timeController;
 
-  TextEditingController? habitLocationController;
+  TextEditingController? libertyparkController;
 
   ImplementationIntEditModel? implementationIntEditModelObj;
 
   @override
   List<Object?> get props => [
-        habitNameController,
-        habitTimeController,
-        habitLocationController,
+        runController,
+        timeController,
+        libertyparkController,
         implementationIntEditModelObj,
       ];
   ImplementationIntEditState copyWith({
-    TextEditingController? habitNameController,
-    TextEditingController? habitTimeController,
-    TextEditingController? habitLocationController,
+    TextEditingController? runController,
+    TextEditingController? timeController,
+    TextEditingController? libertyparkController,
     ImplementationIntEditModel? implementationIntEditModelObj,
   }) {
     return ImplementationIntEditState(
-      habitNameController: habitNameController ?? this.habitNameController,
-      habitTimeController: habitTimeController ?? this.habitTimeController,
-      habitLocationController:
-          habitLocationController ?? this.habitLocationController,
+      runController: runController ?? this.runController,
+      timeController: timeController ?? this.timeController,
+      libertyparkController:
+          libertyparkController ?? this.libertyparkController,
       implementationIntEditModelObj:
           implementationIntEditModelObj ?? this.implementationIntEditModelObj,
     );

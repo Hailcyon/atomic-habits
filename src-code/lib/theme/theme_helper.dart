@@ -62,7 +62,7 @@ class ThemeHelper {
         style: OutlinedButton.styleFrom(
           backgroundColor: Colors.transparent,
           side: BorderSide(
-            color: appTheme.black900,
+            color: appTheme.black90001,
             width: 4.h,
           ),
           shape: RoundedRectangleBorder(
@@ -89,13 +89,13 @@ class ThemeHelper {
 class TextThemes {
   static TextTheme textTheme(ColorScheme colorScheme) => TextTheme(
         bodyLarge: TextStyle(
-          color: appTheme.black900,
+          color: appTheme.black90001,
           fontSize: 19.fSize,
           fontFamily: 'Inter',
           fontWeight: FontWeight.w400,
         ),
         bodyMedium: TextStyle(
-          color: colorScheme.primaryContainer.withOpacity(1),
+          color: appTheme.gray90002,
           fontSize: 15.fSize,
           fontFamily: 'Montserrat',
           fontWeight: FontWeight.w400,
@@ -113,19 +113,25 @@ class TextThemes {
           fontWeight: FontWeight.w700,
         ),
         headlineLarge: TextStyle(
-          color: appTheme.black900,
+          color: appTheme.gray90002,
           fontSize: 31.fSize,
           fontFamily: 'Montserrat',
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w400,
         ),
         headlineMedium: TextStyle(
-          color: appTheme.black900,
+          color: appTheme.gray90002,
           fontSize: 27.fSize,
           fontFamily: 'Montserrat',
           fontWeight: FontWeight.w400,
         ),
+        headlineSmall: TextStyle(
+          color: colorScheme.primaryContainer,
+          fontSize: 24.fSize,
+          fontFamily: 'Lexend',
+          fontWeight: FontWeight.w700,
+        ),
         titleLarge: TextStyle(
-          color: appTheme.black900,
+          color: appTheme.black90001,
           fontSize: 22.fSize,
           fontFamily: 'Inter',
           fontWeight: FontWeight.w400,
@@ -138,11 +144,16 @@ class ColorSchemes {
   static final primaryColorScheme = ColorScheme.light(
     // Primary colors
     primary: Color(0XFF245FA6),
-    primaryContainer: Color(0X99001B3C),
+    primaryContainer: Color(0XFF141414),
     secondaryContainer: Color(0XFF0073FF),
 
+    // Error colors
+    errorContainer: Color(0XFF004B91),
+    onError: Color(0XFF0073FF),
+    onErrorContainer: Color(0XFFFFFFFF),
+
     // On colors(text colors)
-    onPrimary: Color(0XFF12110C),
+    onPrimary: Color(0X3F000E33),
     onPrimaryContainer: Color(0XFFFF7E7E),
   );
 }
@@ -154,12 +165,19 @@ class PrimaryColors {
   Color get amber200 => Color(0XFFFFE088);
 
   // Black
-  Color get black900 => Color(0XFF000000);
+  Color get black900 => Color(0XFF12110C);
+  Color get black90001 => Color(0XFF000000);
 
   // Gray
+  Color get gray100 => Color(0XFFF5F5F5);
   Color get gray300 => Color(0XFFECE8DF);
   Color get gray30001 => Color(0XFFE6E2D9);
-  Color get gray900 => Color(0XFF1C1B1F);
+  Color get gray900 => Color(0XFF1E1E1E);
+  Color get gray90001 => Color(0XFF1C1B1F);
+  Color get gray90002 => Color(0XFF001B3C);
+
+  // Indigo
+  Color get indigoA700 => Color(0XFF0047FF);
 
   // LightBlue
   Color get lightBlue900 => Color(0XFF004B91);
