@@ -11,6 +11,11 @@ class CustomTextStyles {
         fontSize: 17.fSize,
       );
   // Display text style
+  static get displayMediumGray90002 => theme.textTheme.displayMedium!.copyWith(
+        color: appTheme.gray90002,
+        fontSize: 45.fSize,
+        fontWeight: FontWeight.w400,
+      );
   static get displayMediumPrimary => theme.textTheme.displayMedium!.copyWith(
         color: theme.colorScheme.primary,
         fontSize: 50.fSize,
@@ -23,9 +28,18 @@ class CustomTextStyles {
         fontWeight: FontWeight.w400,
       );
   // Headline text style
+  static get headlineLargeBlack90001 => theme.textTheme.headlineLarge!.copyWith(
+        color: appTheme.black90001,
+        fontWeight: FontWeight.w700,
+      );
+  static get headlineLargeBlack90001_1 =>
+      theme.textTheme.headlineLarge!.copyWith(
+        color: appTheme.black90001,
+      );
   static get headlineLargeLightgreen100 =>
       theme.textTheme.headlineLarge!.copyWith(
         color: appTheme.lightGreen100,
+        fontWeight: FontWeight.w700,
       );
   static get headlineLargePrimaryContainer =>
       theme.textTheme.headlineLarge!.copyWith(
@@ -35,12 +49,29 @@ class CustomTextStyles {
   static get headlineLargeRegular => theme.textTheme.headlineLarge!.copyWith(
         fontWeight: FontWeight.w400,
       );
+  static get headlineMedium26 => theme.textTheme.headlineMedium!.copyWith(
+        fontSize: 26.fSize,
+      );
   static get headlineMedium29 => theme.textTheme.headlineMedium!.copyWith(
         fontSize: 29.fSize,
       );
   static get headlineMediumAmber200 => theme.textTheme.headlineMedium!.copyWith(
         color: appTheme.amber200,
         fontWeight: FontWeight.w700,
+      );
+  static get headlineMediumBlack90001 =>
+      theme.textTheme.headlineMedium!.copyWith(
+        color: appTheme.black90001,
+        fontSize: 29.fSize,
+      );
+  static get headlineMediumBlack90001Bold =>
+      theme.textTheme.headlineMedium!.copyWith(
+        color: appTheme.black90001,
+        fontWeight: FontWeight.w700,
+      );
+  static get headlineMediumBlack90001_1 =>
+      theme.textTheme.headlineMedium!.copyWith(
+        color: appTheme.black90001,
       );
   static get headlineMediumBold => theme.textTheme.headlineMedium!.copyWith(
         fontWeight: FontWeight.w700,
@@ -72,9 +103,28 @@ class CustomTextStyles {
         color: appTheme.black900.withOpacity(0.53),
         fontWeight: FontWeight.w700,
       );
+  static get titleLargeMontserratBlack90001 =>
+      theme.textTheme.titleLarge!.montserrat.copyWith(
+        color: appTheme.black90001.withOpacity(0.53),
+        fontWeight: FontWeight.w700,
+      );
   static get titleLargeMontserratBold =>
       theme.textTheme.titleLarge!.montserrat.copyWith(
         fontWeight: FontWeight.w700,
+      );
+  static get titleLargeMontserratGray90002 =>
+      theme.textTheme.titleLarge!.montserrat.copyWith(
+        color: appTheme.gray90002,
+      );
+  static get titleLargeMontserratGray9000220 =>
+      theme.textTheme.titleLarge!.montserrat.copyWith(
+        color: appTheme.gray90002,
+        fontSize: 20.fSize,
+      );
+  static get titleLargeMontserratGray9000220_1 =>
+      theme.textTheme.titleLarge!.montserrat.copyWith(
+        color: appTheme.gray90002.withOpacity(0.6),
+        fontSize: 20.fSize,
       );
   static get titleLargeMontserratPrimary =>
       theme.textTheme.titleLarge!.montserrat.copyWith(
@@ -105,6 +155,12 @@ class CustomTextStyles {
 }
 
 extension on TextStyle {
+  TextStyle get lexend {
+    return copyWith(
+      fontFamily: 'Lexend',
+    );
+  }
+
   TextStyle get inter {
     return copyWith(
       fontFamily: 'Inter',

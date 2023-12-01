@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ahapp3/presentation/sign_up_screen/sign_up_screen.dart';
+import 'package:ahapp3/presentation/iphone_14_15_pro_max_two_screen/iphone_14_15_pro_max_two_screen.dart';
 import 'package:ahapp3/presentation/make_it_attractive_one_screen/make_it_attractive_one_screen.dart';
 import 'package:ahapp3/presentation/make_it_attractive_two_screen/make_it_attractive_two_screen.dart';
 import 'package:ahapp3/presentation/make_it_attractive_three_screen/make_it_attractive_three_screen.dart';
@@ -14,21 +15,22 @@ import 'package:ahapp3/presentation/edit_a_habit_page_two_screen/edit_a_habit_pa
 import 'package:ahapp3/presentation/make_it_obvious_one_screen/make_it_obvious_one_screen.dart';
 import 'package:ahapp3/presentation/make_it_obvious_two_screen/make_it_obvious_two_screen.dart';
 import 'package:ahapp3/presentation/loading_screen/loading_screen.dart';
-import 'package:ahapp3/presentation/home_page_container_screen/home_page_container_screen.dart';
+import 'package:ahapp3/presentation/calendar_screen/calendar_screen.dart';
+import 'package:ahapp3/presentation/home_page_container1_screen/home_page_container1_screen.dart';
 import 'package:ahapp3/presentation/edit_a_habit_page_three_screen/edit_a_habit_page_three_screen.dart';
-import 'package:ahapp3/presentation/rd_law_page_screen/rd_law_page_screen.dart';
-import 'package:ahapp3/presentation/rd_law_action_page_screen/rd_law_action_page_screen.dart';
-import 'package:ahapp3/presentation/th_law_page_screen/th_law_page_screen.dart';
-import 'package:ahapp3/presentation/th_law_action_page_screen/th_law_action_page_screen.dart';
+import 'package:ahapp3/presentation/iphone_14_15_pro_max_one_screen/iphone_14_15_pro_max_one_screen.dart';
 import 'package:ahapp3/presentation/home_page_check_habit_screen/home_page_check_habit_screen.dart';
 import 'package:ahapp3/presentation/home_page_skip_habit_screen/home_page_skip_habit_screen.dart';
-import 'package:ahapp3/presentation/environment_priming_screen/environment_priming_screen.dart';
-import 'package:ahapp3/presentation/reinforcement_screen/reinforcement_screen.dart';
 import 'package:ahapp3/presentation/sign_in_screen/sign_in_screen.dart';
+import 'package:ahapp3/presentation/rd_law_action_page_screen/rd_law_action_page_screen.dart';
+import 'package:ahapp3/presentation/th_law_action_page_screen/th_law_action_page_screen.dart';
 import 'package:ahapp3/presentation/app_navigation_screen/app_navigation_screen.dart';
 
 class AppRoutes {
   static const String signUpScreen = '/sign_up_screen';
+
+  static const String iphone1415ProMaxTwoScreen =
+      '/iphone_14_15_pro_max_two_screen';
 
   static const String makeItAttractiveOneScreen =
       '/make_it_attractive_one_screen';
@@ -62,31 +64,28 @@ class AppRoutes {
 
   static const String loadingScreen = '/loading_screen';
 
-  static const String homePage = '/home_page';
+  static const String calendarScreen = '/calendar_screen';
 
-  static const String homePageContainerScreen = '/home_page_container_screen';
+  static const String homePageContainerPage = '/home_page_container_page';
+
+  static const String homePageContainer1Screen = '/home_page_container1_screen';
 
   static const String editAHabitPageThreeScreen =
       '/edit_a_habit_page_three_screen';
 
-  static const String rdLawPageScreen = '/rd_law_page_screen';
-
-  static const String rdLawActionPageScreen = '/rd_law_action_page_screen';
-
-  static const String thLawPageScreen = '/th_law_page_screen';
-
-  static const String thLawActionPageScreen = '/th_law_action_page_screen';
+  static const String iphone1415ProMaxOneScreen =
+      '/iphone_14_15_pro_max_one_screen';
 
   static const String homePageCheckHabitScreen =
       '/home_page_check_habit_screen';
 
   static const String homePageSkipHabitScreen = '/home_page_skip_habit_screen';
 
-  static const String environmentPrimingScreen = '/environment_priming_screen';
-
-  static const String reinforcementScreen = '/reinforcement_screen';
-
   static const String signInScreen = '/sign_in_screen';
+
+  static const String rdLawActionPageScreen = '/rd_law_action_page_screen';
+
+  static const String thLawActionPageScreen = '/th_law_action_page_screen';
 
   static const String appNavigationScreen = '/app_navigation_screen';
 
@@ -94,6 +93,7 @@ class AppRoutes {
 
   static Map<String, WidgetBuilder> get routes => {
         signUpScreen: SignUpScreen.builder,
+        iphone1415ProMaxTwoScreen: Iphone1415ProMaxTwoScreen.builder,
         makeItAttractiveOneScreen: MakeItAttractiveOneScreen.builder,
         makeItAttractiveTwoScreen: MakeItAttractiveTwoScreen.builder,
         makeItAttractiveThreeScreen: MakeItAttractiveThreeScreen.builder,
@@ -108,17 +108,15 @@ class AppRoutes {
         makeItObviousOneScreen: MakeItObviousOneScreen.builder,
         makeItObviousTwoScreen: MakeItObviousTwoScreen.builder,
         loadingScreen: LoadingScreen.builder,
-        homePageContainerScreen: HomePageContainerScreen.builder,
+        calendarScreen: CalendarScreen.builder,
+        homePageContainer1Screen: HomePageContainer1Screen.builder,
         editAHabitPageThreeScreen: EditAHabitPageThreeScreen.builder,
-        rdLawPageScreen: RdLawPageScreen.builder,
-        rdLawActionPageScreen: RdLawActionPageScreen.builder,
-        thLawPageScreen: ThLawPageScreen.builder,
-        thLawActionPageScreen: ThLawActionPageScreen.builder,
+        iphone1415ProMaxOneScreen: Iphone1415ProMaxOneScreen.builder,
         homePageCheckHabitScreen: HomePageCheckHabitScreen.builder,
         homePageSkipHabitScreen: HomePageSkipHabitScreen.builder,
-        environmentPrimingScreen: EnvironmentPrimingScreen.builder,
-        reinforcementScreen: ReinforcementScreen.builder,
         signInScreen: SignInScreen.builder,
+        rdLawActionPageScreen: RdLawActionPageScreen.builder,
+        thLawActionPageScreen: ThLawActionPageScreen.builder,
         appNavigationScreen: AppNavigationScreen.builder,
         initialRoute: SignUpScreen.builder
       };

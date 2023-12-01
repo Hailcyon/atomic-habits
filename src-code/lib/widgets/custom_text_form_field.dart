@@ -87,8 +87,8 @@ class CustomTextFormField extends StatelessWidget {
           controller: controller,
           focusNode: focusNode ?? FocusNode(),
           autofocus: autofocus!,
-          style: textStyle ??
-              CustomTextStyles.titleLargeMontserratPrimaryContainer20_1,
+          style:
+              textStyle ?? CustomTextStyles.titleLargeMontserratGray9000220_1,
           obscureText: obscureText!,
           textInputAction: textInputAction,
           keyboardType: textInputType,
@@ -99,7 +99,7 @@ class CustomTextFormField extends StatelessWidget {
       );
   InputDecoration get decoration => InputDecoration(
         hintText: hintText ?? "",
-        hintStyle: hintStyle ?? CustomTextStyles.titleLargeMontserratBlack900,
+        hintStyle: hintStyle ?? CustomTextStyles.titleLargeMontserratBlack90001,
         prefixIcon: prefix,
         prefixIconConstraints: prefixConstraints,
         suffixIcon: suffix,
@@ -122,7 +122,7 @@ class CustomTextFormField extends StatelessWidget {
             OutlineInputBorder(
               borderRadius: BorderRadius.circular(5.h),
               borderSide: BorderSide(
-                color: appTheme.black900,
+                color: appTheme.black90001,
                 width: 1,
               ),
             ),

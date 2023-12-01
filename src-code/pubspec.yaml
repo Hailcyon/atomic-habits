@@ -15,6 +15,7 @@ dependencies:
   flutter_svg: ^1.1.6
   equatable: ^2.0.0
   flutter_svg_provider: ^1.0.3
+  table_calendar: ^3.0.6
 dev_dependencies: 
   flutter_test: 
     sdk: flutter
@@ -36,3 +37,7 @@ flutter:
       fonts: 
         - asset: assets/fonts/InterRegular.ttf
           weight: 400
+    - family: Lexend
+      fonts: 
+        - asset: assets/fonts/LexendBold.ttf
+          weight: 700
