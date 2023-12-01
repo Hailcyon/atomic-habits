@@ -84,14 +84,6 @@
 		<data>
 		lGs+ItSPpLE69P52w1pMEPll/eA=
 		</data>
-		<key>flutter_assets/assets/images/img_group_11.svg</key>
-		<data>
-		FcDTWvcmdHvSKaQeC0EbeQ8tnTk=
-		</data>
-		<key>flutter_assets/assets/images/img_group_12.svg</key>
-		<data>
-		FcDTWvcmdHvSKaQeC0EbeQ8tnTk=
-		</data>
 		<key>flutter_assets/assets/images/img_group_18.svg</key>
 		<data>
 		V/04nWLOpihDQXXKVfs03zRV55A=
@@ -162,7 +154,7 @@
 		</data>
 		<key>flutter_assets/kernel_blob.bin</key>
 		<data>
-		ti6UYVa9mXVpioexHLl8QHtuhk0=
+		ZDipYbcqTLhzZgS+W48uLeH3N64=
 		</data>
 		<key>flutter_assets/shaders/ink_sparkle.frag</key>
 		<data>
@@ -301,20 +293,6 @@
 			s+6VNEkV8m3rUblLi/M1olH2PZf3Ks2Wgx1+YJRRUr8=
 			</data>
 		</dict>
-		<key>flutter_assets/assets/images/img_group_11.svg</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			Wgpu+hLN1Dy7iWQUw19W+/HMwIA+D2eQTOSnn/4sNFY=
-			</data>
-		</dict>
-		<key>flutter_assets/assets/images/img_group_12.svg</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			Wgpu+hLN1Dy7iWQUw19W+/HMwIA+D2eQTOSnn/4sNFY=
-			</data>
-		</dict>
 		<key>flutter_assets/assets/images/img_group_18.svg</key>
 		<dict>
 			<key>hash2</key>
@@ -438,7 +416,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			9/+i4z8GpqhjaiiumZJUzdRy/4+rucGw18Mkg9ZoO+Q=
+			pQNlHkyNMfI72Q1iCzR/btNMItQ2pK4JI83RSEdsFjQ=
 			</data>
 		</dict>
 		<key>flutter_assets/shaders/ink_sparkle.frag</key>
