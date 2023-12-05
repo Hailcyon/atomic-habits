@@ -26,6 +26,8 @@ import 'package:ahapp3/presentation/rd_law_action_page_screen/rd_law_action_page
 import 'package:ahapp3/presentation/th_law_action_page_screen/th_law_action_page_screen.dart';
 import 'package:ahapp3/presentation/app_navigation_screen/app_navigation_screen.dart';
 
+import 'package:ahapp3/presentation/log_in_screen/log_in_screen.dart';
+
 class AppRoutes {
   static const String signUpScreen = '/sign_up_screen';
 
@@ -89,9 +91,13 @@ class AppRoutes {
 
   static const String appNavigationScreen = '/app_navigation_screen';
 
-  static const String initialRoute = '/initialRoute';
+  // static const String initialRoute = '/initialRoute';
+  static const String loginScreenRoute = '/log_in_screen';
+  static const String initialRoute = loginScreenRoute;
 
   static Map<String, WidgetBuilder> get routes => {
+        loginScreenRoute: (context) => loginScreen(),
+
         signUpScreen: SignUpScreen.builder,
         iphone1415ProMaxTwoScreen: Iphone1415ProMaxTwoScreen.builder,
         makeItAttractiveOneScreen: MakeItAttractiveOneScreen.builder,
@@ -118,6 +124,6 @@ class AppRoutes {
         rdLawActionPageScreen: RdLawActionPageScreen.builder,
         thLawActionPageScreen: ThLawActionPageScreen.builder,
         appNavigationScreen: AppNavigationScreen.builder,
-        initialRoute: SignUpScreen.builder
+        // initialRoute: SignUpScreen.builder
       };
 }
