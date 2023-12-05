@@ -88,47 +88,54 @@ class HomePageContainerPage extends StatelessWidget {
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Container(
-              width: 41.h,
-              padding: EdgeInsets.symmetric(horizontal: 13.h, vertical: 6.v),
+              width: 42.h,
+              padding: EdgeInsets.symmetric(horizontal: 9.h, vertical: 8.v),
               decoration: AppDecoration.outlineBlack90001
                   .copyWith(borderRadius: BorderRadiusStyle.circleBorder18),
-              child: Text("lbl_3".tr, style: theme.textTheme.titleLarge)),
+              child: Center(
+                child: Text("lbl_3".tr, style: theme.textTheme.titleLarge))),
           Container(
               width: 42.h,
-              padding: EdgeInsets.symmetric(horizontal: 13.h, vertical: 6.v),
+              padding: EdgeInsets.symmetric(horizontal: 8.h, vertical: 8.v),
               decoration: AppDecoration.outlineBlack90001
                   .copyWith(borderRadius: BorderRadiusStyle.circleBorder18),
-              child: Text("lbl_4".tr, style: theme.textTheme.titleLarge)),
-          Container(
-              width: 41.h,
-              padding: EdgeInsets.symmetric(horizontal: 13.h, vertical: 5.v),
-              decoration: AppDecoration.outlineBlack90001
-                  .copyWith(borderRadius: BorderRadiusStyle.circleBorder18),
-              child: Text("lbl_5".tr, style: theme.textTheme.titleLarge)),
+              child: Center(
+                child: Text("lbl_4".tr, style: theme.textTheme.titleLarge))),
           Container(
               width: 42.h,
-              padding: EdgeInsets.symmetric(horizontal: 14.h, vertical: 5.v),
+              padding: EdgeInsets.symmetric(horizontal: 8.h, vertical: 8.v),
               decoration: AppDecoration.outlineBlack90001
                   .copyWith(borderRadius: BorderRadiusStyle.circleBorder18),
-              child: Text("lbl_6".tr, style: theme.textTheme.titleLarge)),
+              child: Center(
+                child: Text("lbl_5".tr, style: theme.textTheme.titleLarge))),
           Container(
-              width: 41.h,
-              padding: EdgeInsets.symmetric(horizontal: 14.h, vertical: 6.v),
+              width: 42.h,
+              padding: EdgeInsets.symmetric(horizontal: 8.h, vertical: 8.v),
+              decoration: AppDecoration.outlineBlack90001
+                  .copyWith(borderRadius: BorderRadiusStyle.circleBorder18),
+              child: Center(
+                child: Text("lbl_6".tr, style: theme.textTheme.titleLarge))),
+          Container(
+              width: 42.h,
+              padding: EdgeInsets.symmetric(horizontal: 8.h, vertical: 8.v),
               decoration: AppDecoration.outlineLightGreenA
                   .copyWith(borderRadius: BorderRadiusStyle.circleBorder18),
-              child: Text("lbl_7".tr, style: theme.textTheme.titleLarge)),
+              child: Center(
+                child: Text("lbl_7".tr, style: theme.textTheme.titleLarge))),
           Container(
-              width: 41.h,
-              padding: EdgeInsets.symmetric(horizontal: 13.h, vertical: 6.v),
+              width: 42.h,
+              padding: EdgeInsets.symmetric(horizontal: 8.h, vertical: 8.v),
               decoration: AppDecoration.outlineBlack90001
                   .copyWith(borderRadius: BorderRadiusStyle.circleBorder18),
-              child: Text("lbl_8".tr, style: theme.textTheme.titleLarge)),
+              child: Center(
+                child: Text("lbl_8".tr, style: theme.textTheme.titleLarge))),
           Container(
-              width: 41.h,
-              padding: EdgeInsets.symmetric(horizontal: 13.h, vertical: 6.v),
+              width: 42.h,
+              padding: EdgeInsets.symmetric(horizontal: 8.h, vertical: 8.v),
               decoration: AppDecoration.outlineBlack90001
                   .copyWith(borderRadius: BorderRadiusStyle.circleBorder18),
-              child: Text("lbl_9".tr, style: theme.textTheme.titleLarge))
+              child: Center(
+                child: Text("lbl_9".tr, style: theme.textTheme.titleLarge))),
         ]));
   }
 
