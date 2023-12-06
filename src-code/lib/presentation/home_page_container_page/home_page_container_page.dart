@@ -7,6 +7,7 @@ import 'package:ahapp3/widgets/app_bar/appbar_trailing_image.dart';
 import 'package:ahapp3/widgets/app_bar/custom_app_bar.dart';
 import 'package:ahapp3/widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class HomePageContainerPage extends StatelessWidget {
   const HomePageContainerPage({Key? key}) : super(key: key);
@@ -76,68 +77,71 @@ class HomePageContainerPage extends StatelessWidget {
               imagePath: ImageConstant.imgCalendarPic,
               margin: EdgeInsets.only(left: 36.h, right: 36.h, bottom: 12.v),
               onTap: () {
-                onTapCalendarPic(context);
+                buildCalendar(context);
               })
         ]);
   }
 
-  /// Section Widget
-  Widget _buildWidget(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8.h),
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Container(
-              width: 42.h,
-              padding: EdgeInsets.symmetric(horizontal: 9.h, vertical: 8.v),
-              decoration: AppDecoration.outlineBlack90001
-                  .copyWith(borderRadius: BorderRadiusStyle.circleBorder18),
-              child: Center(
-                child: Text("lbl_3".tr, style: theme.textTheme.titleLarge))),
-          Container(
-              width: 42.h,
-              padding: EdgeInsets.symmetric(horizontal: 8.h, vertical: 8.v),
-              decoration: AppDecoration.outlineBlack90001
-                  .copyWith(borderRadius: BorderRadiusStyle.circleBorder18),
-              child: Center(
-                child: Text("lbl_4".tr, style: theme.textTheme.titleLarge))),
-          Container(
-              width: 42.h,
-              padding: EdgeInsets.symmetric(horizontal: 8.h, vertical: 8.v),
-              decoration: AppDecoration.outlineBlack90001
-                  .copyWith(borderRadius: BorderRadiusStyle.circleBorder18),
-              child: Center(
-                child: Text("lbl_5".tr, style: theme.textTheme.titleLarge))),
-          Container(
-              width: 42.h,
-              padding: EdgeInsets.symmetric(horizontal: 8.h, vertical: 8.v),
-              decoration: AppDecoration.outlineBlack90001
-                  .copyWith(borderRadius: BorderRadiusStyle.circleBorder18),
-              child: Center(
-                child: Text("lbl_6".tr, style: theme.textTheme.titleLarge))),
-          Container(
-              width: 42.h,
-              padding: EdgeInsets.symmetric(horizontal: 8.h, vertical: 8.v),
-              decoration: AppDecoration.outlineLightGreenA
-                  .copyWith(borderRadius: BorderRadiusStyle.circleBorder18),
-              child: Center(
-                child: Text("lbl_7".tr, style: theme.textTheme.titleLarge))),
-          Container(
-              width: 42.h,
-              padding: EdgeInsets.symmetric(horizontal: 8.h, vertical: 8.v),
-              decoration: AppDecoration.outlineBlack90001
-                  .copyWith(borderRadius: BorderRadiusStyle.circleBorder18),
-              child: Center(
-                child: Text("lbl_8".tr, style: theme.textTheme.titleLarge))),
-          Container(
-              width: 42.h,
-              padding: EdgeInsets.symmetric(horizontal: 8.h, vertical: 8.v),
-              decoration: AppDecoration.outlineBlack90001
-                  .copyWith(borderRadius: BorderRadiusStyle.circleBorder18),
-              child: Center(
-                child: Text("lbl_9".tr, style: theme.textTheme.titleLarge))),
-        ]));
+  buildCalendar(BuildContext context) {
+    DateTime dateTime = DateTime.now();
+    showCupertinoModalPopup(
+      context: context, 
+      builder: (BuildContext context) => SizedBox(
+        height: 250,
+        width: MediaQuery.of(context).size.width,
+        child: CupertinoDatePicker(
+          backgroundColor: Colors.white,
+          initialDateTime: dateTime,
+          onDateTimeChanged: (DateTime newTime) {
+            dateTime = newTime;
+          },
+          use24hFormat: true,
+          mode: CupertinoDatePickerMode.date,
+        ),
+      )
+    );
   }
+
+    /// Navigates to the calendarScreen when the action is triggered.
+  onTapCalendarPic(BuildContext context) {
+    NavigatorService.pushNamed(
+      AppRoutes.calendarScreen,
+    );
+  }
+
+  /// Section Widget
+Widget _buildWidget(BuildContext context) {
+  return Padding(
+    padding: EdgeInsets.symmetric(horizontal: 8.h),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        buildContainer("lbl_3", Colors.black, false, context),
+        buildContainer("lbl_4", Colors.black, false, context),
+        buildContainer("lbl_5", Colors.black, false, context),
+        buildContainer("lbl_6", Colors.black, false, context),
+        buildContainer("lbl_7", Colors.lightGreen, true, context),
+        buildContainer("lbl_8", Colors.black, false, context),
+        buildContainer("lbl_9", Colors.black, false, context),
+      ],
+    ),
+  );
+}
+
+Widget buildContainer(String label, Color outlineColor, bool isLightGreen, BuildContext context) {
+  return Container(
+    width: 42.h,
+    padding: EdgeInsets.symmetric(horizontal: 8.h, vertical: 8.v),
+    decoration: isLightGreen
+        ? AppDecoration.outlineLightGreenA
+            .copyWith(borderRadius: BorderRadiusStyle.circleBorder18)
+        : AppDecoration.outlineBlack90001
+            .copyWith(borderRadius: BorderRadiusStyle.circleBorder18),
+    child: Center(
+      child: Text(label.tr, style: theme.textTheme.titleLarge),
+    ),
+  );
+}
 
   /// Section Widget
   Widget _buildMon(BuildContext context) {
@@ -164,13 +168,6 @@ class HomePageContainerPage extends StatelessWidget {
               padding: EdgeInsets.only(left: 25.h),
               child: Text("lbl_sun".tr, style: theme.textTheme.bodyLarge))
         ]));
-  }
-
-  /// Navigates to the calendarScreen when the action is triggered.
-  onTapCalendarPic(BuildContext context) {
-    NavigatorService.pushNamed(
-      AppRoutes.calendarScreen,
-    );
   }
 
   /// Navigates to the editAHabitPageScreen when the action is triggered.

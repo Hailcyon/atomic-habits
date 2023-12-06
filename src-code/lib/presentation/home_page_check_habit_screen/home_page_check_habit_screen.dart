@@ -51,8 +51,8 @@ class HomePageCheckHabitScreen extends StatelessWidget {
   /// Section Widget
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
-        height: 113.v,
-        leadingWidth: 79.h,
+        height: 50.v,
+        leadingWidth: 50.h,
         leading: AppbarLeadingImage(
             imagePath: ImageConstant.imgThreeLinesPic,
             margin: EdgeInsets.only(left: 35.h, top: 1.v, bottom: 17.v)),
