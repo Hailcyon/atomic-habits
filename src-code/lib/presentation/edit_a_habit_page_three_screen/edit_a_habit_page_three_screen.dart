@@ -148,6 +148,8 @@ class EditAHabitPageThreeScreen extends StatelessWidget {
   }
 
   onTaptf(BuildContext context) {
-    // TODO: implement Actions
+    NavigatorService.pushNamed(
+      AppRoutes.makeItEasyOneScreen,
+    );
   }
 }

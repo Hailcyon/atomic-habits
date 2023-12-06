@@ -27,6 +27,9 @@ import 'package:ahapp3/presentation/th_law_action_page_screen/th_law_action_page
 import 'package:ahapp3/presentation/app_navigation_screen/app_navigation_screen.dart';
 
 import 'package:ahapp3/presentation/log_in_screen/log_in_screen.dart';
+import 'package:ahapp3/presentation/make_it_easy_one_screen/make_it_easy_one_screen.dart';
+import 'package:ahapp3/presentation/make_it_easy_two_screen/make_it_easy_two_screen.dart';
+import 'package:ahapp3/presentation/make_it_easy_three_screen/make_it_easy_three_screen.dart';
 
 class AppRoutes {
   static const String signUpScreen = '/sign_up_screen';
@@ -95,8 +98,15 @@ class AppRoutes {
   static const String loginScreenRoute = '/log_in_screen';
   static const String initialRoute = loginScreenRoute;
 
+  static const String makeItEasyOneScreen = '/make_it_easy_one_screen';
+  static const String makeItEasyTwoScreen = '/make_it_easy_two_screen';
+  static const String makeItEasyThreeScreen = '/make_it_easy_three_screen';
+
   static Map<String, WidgetBuilder> get routes => {
         loginScreenRoute: (context) => loginScreen(),
+        makeItEasyOneScreen: MakeItEasyOneScreen.builder,
+        makeItEasyTwoScreen: MakeItEasyTwoScreen.builder,
+        makeItEasyThreeScreen: MakeItEasyThreeScreen.builder,
 
         signUpScreen: SignUpScreen.builder,
         iphone1415ProMaxTwoScreen: Iphone1415ProMaxTwoScreen.builder,
