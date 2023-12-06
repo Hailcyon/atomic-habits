@@ -15,19 +15,19 @@ class CustomBottomBarState extends State<CustomBottomBar> {
 
   List<BottomMenuModel> bottomMenuList = [
     BottomMenuModel(
-      icon: ImageConstant.imgVectorLime50,
-      activeIcon: ImageConstant.imgVectorLime50,
-      type: BottomBarEnum.Vectorlime50,
+      icon: ImageConstant.imgHomeIcon,
+      activeIcon: ImageConstant.imgHomeIcon,
+      type: BottomBarEnum.HomeIcon,
     ),
     BottomMenuModel(
-      icon: ImageConstant.imgVectorLime5037x41,
-      activeIcon: ImageConstant.imgVectorLime5037x41,
-      type: BottomBarEnum.Vectorlime5037x41,
+      icon: ImageConstant.imgPlusIcon,
+      activeIcon: ImageConstant.imgPlusIcon,
+      type: BottomBarEnum.PlusIcon,
     ),
     BottomMenuModel(
-      icon: ImageConstant.imgVectorLime5037x36,
-      activeIcon: ImageConstant.imgVectorLime5037x36,
-      type: BottomBarEnum.Vectorlime5037x36,
+      icon: ImageConstant.imgStatisticsIcon,
+      activeIcon: ImageConstant.imgStatisticsIcon,
+      type: BottomBarEnum.StatisticsIcon,
     )
   ];
 
@@ -74,9 +74,9 @@ class CustomBottomBarState extends State<CustomBottomBar> {
 }
 
 enum BottomBarEnum {
-  Vectorlime50,
-  Vectorlime5037x41,
-  Vectorlime5037x36,
+  HomeIcon,
+  PlusIcon,
+  StatisticsIcon,
 }
 
 class BottomMenuModel {

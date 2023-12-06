@@ -47,12 +47,12 @@ class ImageConstant {
 
   static String imgCalendarPic = '$imagePath/img_calendar_pic.svg';
 
-  static String imgVectorLime50 = '$imagePath/img_vector_lime_50.svg';
+  static String imgHomeIcon = '$imagePath/img_vector_lime_50.svg';
 
-  static String imgVectorLime5037x41 =
+  static String imgPlusIcon =
       '$imagePath/img_vector_lime_50_37x41.svg';
 
-  static String imgVectorLime5037x36 =
+  static String imgStatisticsIcon =
       '$imagePath/img_vector_lime_50_37x36.svg';
 
   static String imgInfo = '$imagePath/img_info.svg';

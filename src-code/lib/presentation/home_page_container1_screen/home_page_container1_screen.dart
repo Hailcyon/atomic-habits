@@ -1,3 +1,5 @@
+import 'package:ahapp3/presentation/add_a_new_habit_screen/add_a_new_habit_screen.dart';
+
 import 'bloc/home_page_container1_bloc.dart';
 import 'models/home_page_container1_model.dart';
 import 'package:ahapp3/core/app_export.dart';
@@ -47,11 +49,11 @@ class HomePageContainer1Screen extends StatelessWidget {
   ///Handling route based on bottom click actions
   String getCurrentRoute(BottomBarEnum type) {
     switch (type) {
-      case BottomBarEnum.Vectorlime50:
+      case BottomBarEnum.HomeIcon:
         return AppRoutes.homePageContainerPage;
-      case BottomBarEnum.Vectorlime5037x41:
-        return "/";
-      case BottomBarEnum.Vectorlime5037x36:
+      case BottomBarEnum.PlusIcon:
+        return AppRoutes.addANewHabitScreen;
+      case BottomBarEnum.StatisticsIcon:
         return "/";
       default:
         return "/";
@@ -66,6 +68,8 @@ class HomePageContainer1Screen extends StatelessWidget {
     switch (currentRoute) {
       case AppRoutes.homePageContainerPage:
         return HomePageContainerPage.builder(context);
+      case AppRoutes.addANewHabitScreen:
+        return AddANewHabitScreen.builder(context);
       default:
         return DefaultWidget();
     }

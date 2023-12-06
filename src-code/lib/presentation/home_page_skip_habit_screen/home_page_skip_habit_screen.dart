@@ -188,11 +188,11 @@ class HomePageSkipHabitScreen extends StatelessWidget {
   ///Handling route based on bottom click actions
   String getCurrentRoute(BottomBarEnum type) {
     switch (type) {
-      case BottomBarEnum.Vectorlime50:
+      case BottomBarEnum.HomeIcon:
         return AppRoutes.homePageContainerPage;
-      case BottomBarEnum.Vectorlime5037x41:
+      case BottomBarEnum.PlusIcon:
         return "/";
-      case BottomBarEnum.Vectorlime5037x36:
+      case BottomBarEnum.StatisticsIcon:
         return "/";
       default:
         return "/";
