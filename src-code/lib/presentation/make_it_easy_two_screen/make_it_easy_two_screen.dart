@@ -75,7 +75,7 @@ class MakeItEasyTwoScreen extends StatelessWidget {
               onTapBackButton(context);
             }),
         centerTitle: true,
-        title: AppbarSubtitleTwo(text: "msg_make_it_attractive".tr));
+        title: AppbarSubtitleTwo(text: "lbl_make_it_easy".tr));
   }
 
   /// Section Widget
@@ -86,7 +86,7 @@ class MakeItEasyTwoScreen extends StatelessWidget {
         children: [
           Padding(
               padding: EdgeInsets.only(bottom: 4.v),
-              child: Text("msg_reduce_friction".tr,
+              child: Text("lbl_reduce_friction".tr,
                   style: CustomTextStyles.headlineMediumBlack90001_1)),
           CustomImageView(
               imagePath: ImageConstant.imgVector,
@@ -104,7 +104,7 @@ class MakeItEasyTwoScreen extends StatelessWidget {
         children: [
           Padding(
               padding: EdgeInsets.only(bottom: 4.v),
-              child: Text("msg_two_minute_rule".tr,
+              child: Text("lbl_two_minute_rule".tr,
                   style: CustomTextStyles.headlineMediumBlack90001_1)),
           CustomImageView(
               imagePath: ImageConstant.imgVector,
@@ -122,7 +122,7 @@ class MakeItEasyTwoScreen extends StatelessWidget {
         children: [
           Padding(
               padding: EdgeInsets.only(bottom: 4.v),
-              child: Text("msg_habit_automat".tr,
+              child: Text("msg_habit_automation".tr,
                   style: CustomTextStyles.headlineMediumBlack90001_1)),
           CustomImageView(
               imagePath: ImageConstant.imgVector,
