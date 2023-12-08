@@ -7,7 +7,6 @@ class AppbarSubtitleTwo extends StatelessWidget {
     Key? key,
     required this.text,
     this.margin,
-    this.onTap,
   }) : super(
           key: key,
         );
@@ -21,9 +20,6 @@ class AppbarSubtitleTwo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        onTap!.call();
-      },
       child: Padding(
         padding: margin ?? EdgeInsets.zero,
         child: Text(

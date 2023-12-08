@@ -104,7 +104,7 @@ class Iphone1415ProMaxTwoScreen extends StatelessWidget {
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(userName,
-              style: CustomTextStyles.headlineMediumBold
+              style: theme.textTheme.headlineMedium!
                   .copyWith(color: appTheme.gray90002)),
           CustomImageView(
               imagePath: ImageConstant.imgVector,
