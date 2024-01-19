@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "771709967082",
+    "project_id": "atomic-habits-2e313",
+    "storage_bucket": "atomic-habits-2e313.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:771709967082:android:e0cb47d34c0c00833f5593",
+        "android_client_info": {
+          "package_name": "com.ahapp.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCI0Y6Ny48VyKC5Jllu68tIpKl-N7GYqhk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

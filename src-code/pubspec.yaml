@@ -16,6 +16,10 @@ dependencies:
   equatable: ^2.0.0
   flutter_svg_provider: ^1.0.3
   table_calendar: ^3.0.6
+  firebase_core: ^2.24.0
+  firebase_auth: ^4.15.0
+
+
 dev_dependencies: 
   flutter_test: 
     sdk: flutter

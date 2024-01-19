@@ -13,7 +13,7 @@ class HomePageContainerState extends Equatable {
         homePageContainerModelObj,
       ];
   HomePageContainerState copyWith(
-      {HomePageContainerModel? homePageContainerModelObj}) {
+      {HomePageContainerModel? homePageContainerModelObj, required data, required bool isLoading, required String error}) {
     return HomePageContainerState(
       homePageContainerModelObj:
           homePageContainerModelObj ?? this.homePageContainerModelObj,
