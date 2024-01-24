@@ -1,5 +1,5 @@
-import 'bloc/home_page_container_bloc.dart';
-import 'models/home_page_container_model.dart';
+//import 'bloc/home_page_container_bloc.dart';
+//import 'models/home_page_container_model.dart';
 import 'package:ahapp3/core/app_export.dart';
 import 'package:ahapp3/widgets/app_bar/appbar_leading_image.dart';
 import 'package:ahapp3/widgets/app_bar/appbar_title.dart';
@@ -195,13 +195,13 @@ Widget buildContainer(String label, Color outlineColor, bool isLightGreen) {
 //                     SizedBox(height: 5.v)
 //                   ]))));
 
-  static Widget builder(BuildContext context) {
-    return BlocProvider<HomePageContainerBloc>(
-      create: (context) => HomePageContainerBloc()
-        ..add(HomePageContainerInitialEvent()),
-      child: HomePageContainerPage(),
-    );
-  }
+  // static Widget builder(BuildContext context) {
+  //   return BlocProvider<HomePageContainerBloc>(
+  //     create: (context) => HomePageContainerBloc()
+  //       ..add(HomePageContainerInitialEvent()),
+  //     child: HomePageContainerPage(),
+  //   );
+  // }
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
         title: Text('Atomic Habits'),

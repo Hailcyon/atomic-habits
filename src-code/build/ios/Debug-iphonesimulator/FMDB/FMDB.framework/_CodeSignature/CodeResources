@@ -12,6 +12,10 @@
 		<data>
 		pMX1XJI7wMyxuYqA9+d9cI8p+3w=
 		</data>
+		<key>Headers/FMDatabase 2.h</key>
+		<data>
+		vDJaynNV1xjr3XP2ELuBq5ZJIzM=
+		</data>
 		<key>Headers/FMDatabase.h</key>
 		<data>
 		vDJaynNV1xjr3XP2ELuBq5ZJIzM=
@@ -34,7 +38,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		zgkXehdD4ARQvlQxfLFWcbcqmlQ=
+		hR2jwvtgoRHD69oaOV+V1Uej5Fc=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -63,6 +67,17 @@
 			<key>hash2</key>
 			<data>
 			zN6LJ1SNyhEgHjQn9KFzMj2mNcnoJOLjjbPr/26D/eE=
+			</data>
+		</dict>
+		<key>Headers/FMDatabase 2.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			vDJaynNV1xjr3XP2ELuBq5ZJIzM=
+			</data>
+			<key>hash2</key>
+			<data>
+			Tvz4Jcf7j/lamLTNJ4Q56B2a9eVHAKOLsYVU7A5WQH8=
 			</data>
 		</dict>
 		<key>Headers/FMDatabase.h</key>
