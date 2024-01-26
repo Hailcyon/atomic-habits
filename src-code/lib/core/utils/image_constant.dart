@@ -49,11 +49,9 @@ class ImageConstant {
 
   static String imgHomeIcon = '$imagePath/img_vector_lime_50.svg';
 
-  static String imgPlusIcon =
-      '$imagePath/img_vector_lime_50_37x41.svg';
+  static String imgPlusIcon = '$imagePath/img_vector_lime_50_37x41.svg';
 
-  static String imgStatisticsIcon =
-      '$imagePath/img_vector_lime_50_37x36.svg';
+  static String imgStatisticsIcon = '$imagePath/img_vector_lime_50_37x36.svg';
 
   static String imgInfo = '$imagePath/img_info.svg';
 
