@@ -53,53 +53,30 @@ class HomePageContainerPage extends StatelessWidget {
             children: <Widget>[
               _buildDaysNum(),
               _buildDays(context),
-              SizedBox(height: 30.v),
-              Text("Habits", style: theme.textTheme.headlineLarge),
-              SizedBox(height: 10.v),
-              buildHabitButton(
-                buttonText: "Go For a Run",
-                leftIconPath: ImageConstant.imgIconDirectionsRun,
+              Column(
+                children: [
+                  SizedBox(height: 30.v),
+                  Text("Habits", style: theme.textTheme.headlineLarge),
+                  SizedBox(height: 20.v),
+                  buildHabitButton(
+                    buttonText: "Go For a Run",
+                    leftIconPath: ImageConstant.imgIconDirectionsRun,
+                  ),
+                  SizedBox(height: 100.v),
+                  TextButton(
+                    //add a new habit button
+                    child: Icon(Icons.add_rounded, size: 50),
+                    onPressed: () {},
+                    style: TextButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.black,
+                        shape: CircleBorder()),
+                  ),
+                  SizedBox(height: 300.v),
+                  _userUid(),
+                  _signOutButton(),
+                ],
               ),
-              buildHabitButton(
-                buttonText: "Go For a Run",
-                leftIconPath: ImageConstant.imgIconDirectionsRun,
-              ),
-              buildHabitButton(
-                buttonText: "Go For a Run",
-                leftIconPath: ImageConstant.imgIconDirectionsRun,
-              ),
-              buildHabitButton(
-                buttonText: "Go For a Run",
-                leftIconPath: ImageConstant.imgIconDirectionsRun,
-              ),
-              buildHabitButton(
-                buttonText: "Go For a Run",
-                leftIconPath: ImageConstant.imgIconDirectionsRun,
-              ),
-              buildHabitButton(
-                buttonText: "Go For a Run",
-                leftIconPath: ImageConstant.imgIconDirectionsRun,
-              ),
-              SizedBox(height: 100.v),
-              // ElevatedButton(
-              //     onPressed: () {},
-              //     child: Image.asset(ImageConstant.imgPlusIcon)),
-              // ElevatedButton.icon(
-              //   onPressed: () {},
-              //   icon: Icon(Icons.add_circle_outline_rounded),
-              //   label: Text(''),
-              // ),
-              TextButton(
-                child: Icon(Icons.add_rounded, size: 50),
-                onPressed: () {},
-                style: TextButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.black,
-                    shape: CircleBorder()),
-              ),
-              SizedBox(height: 300.v),
-              _userUid(),
-              _signOutButton()
             ],
           ),
         ),
