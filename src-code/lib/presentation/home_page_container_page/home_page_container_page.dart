@@ -35,6 +35,20 @@ class HomePageContainerPage extends StatelessWidget {
     );
   }
 
+  Widget _newHabitButton(BuildContext context) {
+    return TextButton(
+      //add a new habit button
+      child: Icon(Icons.add_rounded, size: 50),
+      onPressed: () {
+        Navigator.of(context).pushNamed(AppRoutes.customHabitPageRoute);
+      },
+      style: TextButton.styleFrom(
+          backgroundColor: Colors.green,
+          foregroundColor: Colors.black,
+          shape: CircleBorder()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,15 +77,7 @@ class HomePageContainerPage extends StatelessWidget {
                     leftIconPath: ImageConstant.imgIconDirectionsRun,
                   ),
                   SizedBox(height: 100.v),
-                  TextButton(
-                    //add a new habit button
-                    child: Icon(Icons.add_rounded, size: 50),
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        foregroundColor: Colors.black,
-                        shape: CircleBorder()),
-                  ),
+                  _newHabitButton(context),
                   SizedBox(height: 300.v),
                   _userUid(),
                   _signOutButton(),
