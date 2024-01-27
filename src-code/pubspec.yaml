@@ -28,6 +28,7 @@ flutter:
   assets: 
     - assets/
     - assets/images/
+    - assets/images/img_vector_lime_50_37x41.svg
   fonts: 
     - family: Montserrat
       fonts: 

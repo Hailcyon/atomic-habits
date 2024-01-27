@@ -5,7 +5,6 @@ import 'core/app_export.dart';
 import 'package:ahapp3/presentation/widget_tree.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-
 var globalMessengerKey = GlobalKey<ScaffoldMessengerState>();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.orange
+        primarySwatch: Colors.blue,
       ),
       //home: const WidgetTree(),
       initialRoute: AppRoutes.initialRoute,

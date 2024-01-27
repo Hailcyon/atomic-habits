@@ -11,7 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ahapp3/presentation/auth.dart';
 
-class HomePageContainerPage extends StatelessWidget{
+class HomePageContainerPage extends StatelessWidget {
   HomePageContainerPage({Key? key}) : super(key: key);
 
   final User? user = Auth().currentUser;
@@ -28,11 +28,24 @@ class HomePageContainerPage extends StatelessWidget{
     return Text(user?.email ?? "User email");
   }
 
-
   Widget _signOutButton() {
     return ElevatedButton(
       onPressed: signOut,
       child: const Text("Sign Out"),
+    );
+  }
+
+  Widget _newHabitButton(BuildContext context) {
+    return TextButton(
+      //add a new habit button
+      child: Icon(Icons.add_rounded, size: 40),
+      onPressed: () {
+        Navigator.of(context).pushNamed(AppRoutes.newHabitPageRoute);
+      },
+      style: TextButton.styleFrom(
+          backgroundColor: Colors.green,
+          foregroundColor: Colors.black,
+          shape: CircleBorder()),
     );
   }
 
@@ -47,23 +60,31 @@ class HomePageContainerPage extends StatelessWidget{
         height: double.infinity,
         width: double.infinity,
         padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            _buildDaysNum(),
-            _buildDays(context),
-            SizedBox(height: 30.v),
-            Text("Habits", style: theme.textTheme.headlineLarge),
-            SizedBox(height: 10.v),
-            buildHabitButton(
-                buttonText: "Go For a Run",
-                leftIconPath: ImageConstant.imgIconDirectionsRun,
-             ),
-             SizedBox(height: 300.v),
-            _userUid(),
-            _signOutButton()
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              _buildDaysNum(),
+              _buildDays(context),
+              Column(
+                children: [
+                  SizedBox(height: 30.v),
+                  Text("Habits", style: theme.textTheme.headlineLarge),
+                  SizedBox(height: 20.v),
+                  buildHabitButton(
+                    buttonText: "Go For a Run",
+                    leftIconPath: ImageConstant.imgIconDirectionsRun,
+                  ),
+                  SizedBox(height: 100.v),
+                  _newHabitButton(context),
+                  SizedBox(height: 300.v),
+                  _userUid(),
+                  _signOutButton(),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -71,10 +92,9 @@ class HomePageContainerPage extends StatelessWidget{
 
   Widget _buildDaysNum() {
     return Container(
-      padding: EdgeInsets.only(left:20, right: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
+        padding: EdgeInsets.only(left: 20, right: 20),
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           buildContainer("3", Colors.black, false),
           buildContainer("4", Colors.black, false),
           buildContainer("5", Colors.black, false),
@@ -82,52 +102,49 @@ class HomePageContainerPage extends StatelessWidget{
           buildContainer("7", Colors.green, false),
           buildContainer("8", Colors.black, false),
           buildContainer("9", Colors.black, false)
-        ]
-      )
-    );
+        ]));
   }
 
-Widget buildContainer(String label, Color outlineColor, bool isLightGreen) {
-  return Container(
-    width: 42.h,
-    padding: EdgeInsets.symmetric(horizontal: 10.h, vertical: 10.v),
-    decoration: BoxDecoration(
-      border: Border.all(color: outlineColor),
-      borderRadius: BorderRadius.circular(20),
-    ),
-    child: Center(
-      child: Text(label, style: theme.textTheme.bodyLarge),
-    ),
-  );
-}
+  Widget buildContainer(String label, Color outlineColor, bool isLightGreen) {
+    return Container(
+      width: 42.h,
+      padding: EdgeInsets.symmetric(horizontal: 10.h, vertical: 10.v),
+      decoration: BoxDecoration(
+        border: Border.all(color: outlineColor),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Center(
+        child: Text(label, style: theme.textTheme.bodyLarge),
+      ),
+    );
+  }
 
   Widget buildHabitButton({
     required String buttonText,
     required String leftIconPath,
   }) {
     return CustomElevatedButton(
-      text: buttonText,
-      margin: EdgeInsets.only(right: 8.h),
-      rightIcon: Container(
-        margin: EdgeInsets.only(left: 30.h),
-        child: CustomImageView(
-          imagePath: ImageConstant.imgVectorBlack90015x25,
-          height: 17.adaptSize,
-          width: 17.adaptSize,
+        text: buttonText,
+        margin: EdgeInsets.only(right: 8.h),
+        rightIcon: Container(
+          margin: EdgeInsets.only(left: 30.h),
+          child: CustomImageView(
+            imagePath: ImageConstant.imgVectorBlack90015x25,
+            height: 17.adaptSize,
+            width: 17.adaptSize,
+          ),
         ),
-      ),
-      leftIcon: Container(
-        margin: EdgeInsets.only(right: 30.h),
-        child: CustomImageView(
-          imagePath: leftIconPath,
-          height: 35.v,
-          width: 30.h,
+        leftIcon: Container(
+          margin: EdgeInsets.only(right: 30.h),
+          child: CustomImageView(
+            imagePath: leftIconPath,
+            height: 35.v,
+            width: 30.h,
+          ),
         ),
-      ),
-      buttonStyle: CustomButtonStyles.fillYellowTL10,
-      buttonTextStyle: CustomTextStyles.headlineMedium26,
-      onPressed: onTapGoForARun
-    );
+        buttonStyle: CustomButtonStyles.fillYellowTL10,
+        buttonTextStyle: CustomTextStyles.headlineMedium26,
+        onPressed: onTapGoForARun);
   }
 
   // @override
@@ -160,7 +177,6 @@ Widget buildContainer(String label, Color outlineColor, bool isLightGreen) {
   //     )
   //   );
   // }
-
 
   // appBar: _buildAppBar(context),
 //               body: Container(
@@ -197,14 +213,15 @@ Widget buildContainer(String label, Color outlineColor, bool isLightGreen) {
 
   static Widget builder(BuildContext context) {
     return BlocProvider<HomePageContainerBloc>(
-      create: (context) => HomePageContainerBloc()
-        ..add(HomePageContainerInitialEvent()),
+      create: (context) =>
+          HomePageContainerBloc()..add(HomePageContainerInitialEvent()),
       child: HomePageContainerPage(),
     );
   }
+
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
-        title: Text('Atomic Habits'),
+        title: Text('Atomic Habits', style: TextStyle(color: Colors.black)),
         height: 70.v,
         leadingWidth: 100.h,
         leading: AppbarLeadingImage(
@@ -224,21 +241,20 @@ Widget buildContainer(String label, Color outlineColor, bool isLightGreen) {
   buildCalendar(BuildContext context) {
     DateTime dateTime = DateTime.now();
     showCupertinoModalPopup(
-      context: context, 
-      builder: (BuildContext context) => SizedBox(
-        height: 250,
-        width: MediaQuery.of(context).size.width,
-        child: CupertinoDatePicker(
-          backgroundColor: Colors.white,
-          initialDateTime: dateTime,
-          onDateTimeChanged: (DateTime newTime) {
-            dateTime = newTime;
-          },
-          use24hFormat: true,
-          mode: CupertinoDatePickerMode.date,
-        ),
-      )
-    );
+        context: context,
+        builder: (BuildContext context) => SizedBox(
+              height: 250,
+              width: MediaQuery.of(context).size.width,
+              child: CupertinoDatePicker(
+                backgroundColor: Colors.white,
+                initialDateTime: dateTime,
+                onDateTimeChanged: (DateTime newTime) {
+                  dateTime = newTime;
+                },
+                use24hFormat: true,
+                mode: CupertinoDatePickerMode.date,
+              ),
+            ));
   }
 
 // return Container(
@@ -249,9 +265,8 @@ Widget buildContainer(String label, Color outlineColor, bool isLightGreen) {
   Widget _buildDays(BuildContext context) {
     return Container(
         padding: EdgeInsets.only(left: 20, right: 20, bottom: 5),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween, 
-          children: [
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text("Mon", style: theme.textTheme.bodyLarge),
           Text("Tue", style: theme.textTheme.bodyLarge),
           Text("Wed", style: theme.textTheme.bodyLarge),
