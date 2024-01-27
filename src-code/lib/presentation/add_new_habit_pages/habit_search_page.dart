@@ -14,6 +14,7 @@ class HabitSearchPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            _entryField('Search', TextEditingController()),
             const Text('Search'),
             const Text('Not what you\'re looking for?'),
             _customHabitButton(context),
@@ -29,6 +30,18 @@ class HabitSearchPage extends StatelessWidget {
         Navigator.of(context).pushNamed(AppRoutes.customHabitPageRoute);
       },
       child: const Text("Add a Custom Habit"),
+    );
+  }
+
+  Widget _entryField(
+    String title,
+    TextEditingController controller,
+  ) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: title,
+      ),
     );
   }
 }
