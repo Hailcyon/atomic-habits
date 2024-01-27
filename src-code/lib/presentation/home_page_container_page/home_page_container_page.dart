@@ -38,9 +38,9 @@ class HomePageContainerPage extends StatelessWidget {
   Widget _newHabitButton(BuildContext context) {
     return TextButton(
       //add a new habit button
-      child: Icon(Icons.add_rounded, size: 50),
+      child: Icon(Icons.add_rounded, size: 40),
       onPressed: () {
-        Navigator.of(context).pushNamed(AppRoutes.customHabitPageRoute);
+        Navigator.of(context).pushNamed(AppRoutes.newHabitPageRoute);
       },
       style: TextButton.styleFrom(
           backgroundColor: Colors.green,
@@ -221,7 +221,7 @@ class HomePageContainerPage extends StatelessWidget {
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
-        title: Text('Atomic Habits'),
+        title: Text('Atomic Habits', style: TextStyle(color: Colors.black)),
         height: 70.v,
         leadingWidth: 100.h,
         leading: AppbarLeadingImage(

@@ -1,3 +1,4 @@
+import 'package:ahapp3/presentation/add_new_habit_pages/habit_search_page.dart';
 import 'package:flutter/material.dart';
 // import 'package:ahapp3/presentation/sign_up_screen/sign_up_screen.dart';
 // import 'package:ahapp3/presentation/iphone_14_15_pro_max_two_screen/iphone_14_15_pro_max_two_screen.dart';
@@ -28,6 +29,7 @@ import 'package:flutter/material.dart';
 import 'package:ahapp3/presentation/widget_tree.dart';
 import 'package:ahapp3/presentation/log_in_screen/log_in_screen.dart';
 import 'package:ahapp3/presentation/add_new_habit_pages/custom_habit_page.dart';
+import 'package:ahapp3/presentation/add_new_habit_pages/add_new_habit_page.dart';
 // import 'package:ahapp3/presentation/make_it_easy_one_screen/make_it_easy_one_screen.dart';
 // import 'package:ahapp3/presentation/make_it_easy_two_screen/make_it_easy_two_screen.dart';
 // import 'package:ahapp3/presentation/make_it_easy_three_screen/make_it_easy_three_screen.dart';
@@ -99,6 +101,8 @@ class AppRoutes {
   static const String loginScreenRoute = '/log_in_screen';
   static const String widgetTreeRoute = '/widget_tree.dart';
   static const String customHabitPageRoute = '/custom_habit_page.dart';
+  static const String newHabitPageRoute = '/add_new_habit_page.dart';
+  static const String habitSearchPageRoute = '/habit_search_page.dart';
   static const String initialRoute = widgetTreeRoute;
 
   // static const String makeItEasyOneScreen = '/make_it_easy_one_screen';
@@ -109,6 +113,8 @@ class AppRoutes {
         widgetTreeRoute: (context) => WidgetTree(),
         loginScreenRoute: (context) => LoginPage(),
         customHabitPageRoute: (context) => CustomHabitPage(),
+        newHabitPageRoute: (context) => NewHabitPage(),
+        habitSearchPageRoute: (context) => HabitSearchPage(),
         // makeItEasyOneScreen: MakeItEasyOneScreen.builder,
         // makeItEasyTwoScreen: MakeItEasyTwoScreen.builder,
         // makeItEasyThreeScreen: MakeItEasyThreeScreen.builder,
