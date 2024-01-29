@@ -1,4 +1,5 @@
 import 'package:ahapp3/presentation/add_new_habit_pages/habit_search_page.dart';
+import 'package:ahapp3/presentation//edit_a_habit_page/edit_a_habit_page.dart';
 import 'package:flutter/material.dart';
 // import 'package:ahapp3/presentation/sign_up_screen/sign_up_screen.dart';
 // import 'package:ahapp3/presentation/iphone_14_15_pro_max_two_screen/iphone_14_15_pro_max_two_screen.dart';
@@ -103,6 +104,7 @@ class AppRoutes {
   static const String customHabitPageRoute = '/custom_habit_page.dart';
   static const String newHabitPageRoute = '/add_new_habit_page.dart';
   static const String habitSearchPageRoute = '/habit_search_page.dart';
+  static const String editHabitPageRoute = '/edit_a_habit_page.dart';
   static const String initialRoute = widgetTreeRoute;
 
   // static const String makeItEasyOneScreen = '/make_it_easy_one_screen';
@@ -115,6 +117,7 @@ class AppRoutes {
         customHabitPageRoute: (context) => CustomHabitPage(),
         newHabitPageRoute: (context) => NewHabitPage(),
         habitSearchPageRoute: (context) => HabitSearchPage(),
+        editHabitPageRoute: (context) => EditHabitPage(),
         // makeItEasyOneScreen: MakeItEasyOneScreen.builder,
         // makeItEasyTwoScreen: MakeItEasyTwoScreen.builder,
         // makeItEasyThreeScreen: MakeItEasyThreeScreen.builder,

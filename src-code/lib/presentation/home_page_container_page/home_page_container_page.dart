@@ -75,6 +75,7 @@ class HomePageContainerPage extends StatelessWidget {
                   buildHabitButton(
                     buttonText: "Go For a Run",
                     leftIconPath: ImageConstant.imgIconDirectionsRun,
+                    context: context,
                   ),
                   SizedBox(height: 100.v),
                   _newHabitButton(context),
@@ -122,6 +123,7 @@ class HomePageContainerPage extends StatelessWidget {
   Widget buildHabitButton({
     required String buttonText,
     required String leftIconPath,
+    required BuildContext context,
   }) {
     return CustomElevatedButton(
         text: buttonText,
@@ -144,7 +146,10 @@ class HomePageContainerPage extends StatelessWidget {
         ),
         buttonStyle: CustomButtonStyles.fillYellowTL10,
         buttonTextStyle: CustomTextStyles.headlineMedium26,
-        onPressed: onTapGoForARun);
+        onPressed: () {
+          Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute);
+        },
+    );
   }
 
   // @override
