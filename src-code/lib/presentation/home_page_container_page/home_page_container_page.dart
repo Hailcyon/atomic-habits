@@ -1,3 +1,5 @@
+// import 'dart:js';
+
 import 'bloc/home_page_container_bloc.dart';
 import 'models/home_page_container_model.dart';
 import 'package:ahapp3/core/app_export.dart';
@@ -10,6 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ahapp3/presentation/auth.dart';
+
+import 'package:ahapp3/presentation/law_three_page/law_three_page.dart';
 
 class HomePageContainerPage extends StatelessWidget {
   HomePageContainerPage({Key? key}) : super(key: key);
@@ -73,6 +77,7 @@ class HomePageContainerPage extends StatelessWidget {
                   Text("Habits", style: theme.textTheme.headlineLarge),
                   SizedBox(height: 20.v),
                   buildHabitButton(
+                    context: context,
                     buttonText: "Go For a Run",
                     leftIconPath: ImageConstant.imgIconDirectionsRun,
                   ),
@@ -120,6 +125,7 @@ class HomePageContainerPage extends StatelessWidget {
   }
 
   Widget buildHabitButton({
+    required BuildContext context,
     required String buttonText,
     required String leftIconPath,
   }) {
@@ -144,72 +150,12 @@ class HomePageContainerPage extends StatelessWidget {
         ),
         buttonStyle: CustomButtonStyles.fillYellowTL10,
         buttonTextStyle: CustomTextStyles.headlineMedium26,
-        onPressed: onTapGoForARun);
+        // onPressed: onTapGoForARun(context));
+        onPressed: (){
+          Navigator.of(context).pushNamed(AppRoutes.lawThreePageRout);
+        },
+    );
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: _buildAppBar(context),
-  //     body: Container(
-  //         height: double.infinity,
-  //         width: double.maxFinite,
-  //         padding: EdgeInsets.all(20),
-  //         child: Column(children: [
-  //           _buildWidget(context),
-  //           SizedBox(height: 6.v),
-  //           _buildMon(context),
-  //           SizedBox(height: 28.v),
-  //           buildCustomElevatedButton(
-  //               buttonText: "lbl_go_for_a_run3",
-  //               onPressed: () {
-  //                 onTapGoForARun(context);
-  //               },
-  //               leftIconPath: ImageConstant.imgIconDirectionsRun,
-  //               rightIconPath: ImageConstant.imgVectorBlack90015x25,
-  //            ),
-  //           _userUid(),
-  //           _signOutButton(),
-  //           SizedBox(height: 5.v)
-
-  //         ]
-  //       )
-  //     )
-  //   );
-  // }
-
-  // appBar: _buildAppBar(context),
-//               body: Container(
-//                   width: double.maxFinite,
-//                   padding:
-//                       EdgeInsets.symmetric(horizontal: 15.h, vertical: 18.v),
-//                   child: Column(children: [
-//                     _buildWidget(context),
-//                     SizedBox(height: 6.v),
-//                     _buildMon(context),
-//                     SizedBox(height: 28.v),
-//                     CustomElevatedButton(
-//                         text: "lbl_go_for_a_run3".tr,
-//                         margin: EdgeInsets.only(right: 8.h),
-//                         rightIcon: Container(
-//                             margin: EdgeInsets.only(left: 30.h),
-//                             child: CustomImageView(
-//                                 imagePath: ImageConstant.imgVectorBlack90015x25,
-//                                 height: 17.adaptSize,
-//                                 width: 17.adaptSize)),
-//                         leftIcon: Container(
-//                             margin: EdgeInsets.only(right: 30.h),
-//                             child: CustomImageView(
-//                                 imagePath: ImageConstant.imgIconDirectionsRun,
-//                                 height: 35.v,
-//                                 width: 30.h)),
-//                         buttonStyle: CustomButtonStyles.fillYellowTL10,
-//                         buttonTextStyle: CustomTextStyles.headlineMedium26,
-//                         onPressed: () {
-//                           onTapGoForARun(context);
-//                         }),
-//                     SizedBox(height: 5.v)
-//                   ]))));
 
   static Widget builder(BuildContext context) {
     return BlocProvider<HomePageContainerBloc>(
@@ -277,76 +223,14 @@ class HomePageContainerPage extends StatelessWidget {
         ]));
   }
 
-  /// Navigates to the editAHabitPageScreen when the action is triggered.
-  onTapGoForARun() {
-    NavigatorService.pushNamed(
-      AppRoutes.editAHabitPageScreen,
-    );
-  }
+  // /// Navigates to the editAHabitPageScreen when the action is triggered.
+  // onTapGoForARun() {
+  //   NavigatorService.pushNamed(
+  //     AppRoutes.editAHabitPageScreen,
+  //   );
+  // }
+  // onTapGoForARun(BuildContext context) {
+  //   Navigator.of(context).pushNamed(AppRoutes.customHabitPageRoute);
+  // }
+
 }
-
-
-// class HomePageContainerPage extends StatelessWidget {
-//   HomePageContainerPage({Key? key}) : super(key: key);
-
-//   //final User? user = Auth().currentUser;
-
-//   static Widget builder(BuildContext context) {
-//     return BlocProvider<HomePageContainerBloc>(
-//       create: (context) => HomePageContainerBloc()
-//         ..add(HomePageContainerInitialEvent()),
-//       child: HomePageContainerPage(),
-//     );
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocBuilder<HomePageContainerBloc, HomePageContainerState>(
-//         builder: (context, state) {
-//       return SafeArea(
-//           child: Scaffold(
-//               appBar: _buildAppBar(context),
-//               body: Container(
-//                   width: double.maxFinite,
-//                   padding:
-//                       EdgeInsets.symmetric(horizontal: 15.h, vertical: 18.v),
-//                   child: Column(children: [
-//                     _buildWidget(context),
-//                     SizedBox(height: 6.v),
-//                     _buildMon(context),
-//                     SizedBox(height: 28.v),
-//                     CustomElevatedButton(
-//                         text: "lbl_go_for_a_run3".tr,
-//                         margin: EdgeInsets.only(right: 8.h),
-//                         rightIcon: Container(
-//                             margin: EdgeInsets.only(left: 30.h),
-//                             child: CustomImageView(
-//                                 imagePath: ImageConstant.imgVectorBlack90015x25,
-//                                 height: 17.adaptSize,
-//                                 width: 17.adaptSize)),
-//                         leftIcon: Container(
-//                             margin: EdgeInsets.only(right: 30.h),
-//                             child: CustomImageView(
-//                                 imagePath: ImageConstant.imgIconDirectionsRun,
-//                                 height: 35.v,
-//                                 width: 30.h)),
-//                         buttonStyle: CustomButtonStyles.fillYellowTL10,
-//                         buttonTextStyle: CustomTextStyles.headlineMedium26,
-//                         onPressed: () {
-//                           onTapGoForARun(context);
-//                         }),
-//                     SizedBox(height: 5.v)
-//                   ]))));
-//     });
-//   }
-//   // static Widget builder(BuildContext context) {
-//   //   return BlocProvider<HomePageContainerBloc>(
-//   //       create: (context) => HomePageContainerBloc(HomePageContainerState(
-//   //           homePageContainerModelObj: HomePageContainerModel()))
-//   //         ..add(HomePageContainerInitialEvent()),
-//   //       child: HomePageContainerPage());
-  
-
-
-  /// Section Widget
-
