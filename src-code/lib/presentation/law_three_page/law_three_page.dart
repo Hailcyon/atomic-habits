@@ -1,4 +1,6 @@
 import 'package:ahapp3/core/utils/size_utils.dart';
+import 'package:ahapp3/presentation/law_three_page/reduce_friction_page.dart';
+import 'package:ahapp3/routes/app_routes.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +12,14 @@ class LawThreePage extends StatefulWidget {
 }
 
 class _LawThreePageState extends State<LawThreePage> {
+  String frictionResult = "";
+
+  void updateFrictionText(String newText) {
+    setState(() {
+      frictionResult = newText;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +68,10 @@ class _LawThreePageState extends State<LawThreePage> {
           alignment: Alignment.topLeft,
           child: Padding(
             padding: EdgeInsets.only(right: 0.0, left: 0.0),  // Right padding to match childrenPadding
-            child: Text('Reduce friction explained xxxxxxxx xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj.'),
+            child: frictionResult.isNotEmpty 
+            ? Text(frictionResult) // Display the frictionResult text if it's not empty
+            : Text('Reduce friction explained xxxxxxxx...'), 
+            //Text('Reduce friction explained xxxxxxxx xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj.'),
           ),
         ),
         SizedBox(height: 16.0), // Add some space
@@ -68,7 +81,12 @@ class _LawThreePageState extends State<LawThreePage> {
             padding: EdgeInsets.only(right: 16.0),  // Right padding to match childrenPadding
             child: ElevatedButton.icon(
               onPressed: () {
-                // Button action
+                // Navigator.of(context).pushNamed(AppRoutes.reduceFrictionRoute);
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ReduceFrictionPage(
+                    onSave: updateFrictionText,
+                  ),
+                ));
               },
               icon: Icon(
                 Icons.add,
@@ -76,7 +94,7 @@ class _LawThreePageState extends State<LawThreePage> {
               ),
               label: Text(""),
               style: ElevatedButton.styleFrom(
-                primary: const Color.fromARGB(255, 1, 82, 148),
+                backgroundColor: const Color.fromARGB(255, 1, 82, 148),
                 fixedSize: Size(500, 20),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5), // Larger corner radius
@@ -129,7 +147,7 @@ class _LawThreePageState extends State<LawThreePage> {
               ),
               label: Text(""),
               style: ElevatedButton.styleFrom(
-                primary: const Color.fromARGB(255, 1, 82, 148),
+                backgroundColor: const Color.fromARGB(255, 1, 82, 148),
                 fixedSize: Size(500, 20),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5), // Larger corner radius
@@ -182,7 +200,7 @@ class _LawThreePageState extends State<LawThreePage> {
               ),
               label: Text(""),
               style: ElevatedButton.styleFrom(
-                primary: const Color.fromARGB(255, 1, 82, 148),
+                backgroundColor: const Color.fromARGB(255, 1, 82, 148),
                 fixedSize: Size(500, 20),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5), // Larger corner radius
@@ -235,7 +253,7 @@ class _LawThreePageState extends State<LawThreePage> {
               ),
               label: Text(""),
               style: ElevatedButton.styleFrom(
-                primary: const Color.fromARGB(255, 1, 82, 148),
+                backgroundColor: const Color.fromARGB(255, 1, 82, 148),
                 fixedSize: Size(500, 20),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5), // Larger corner radius

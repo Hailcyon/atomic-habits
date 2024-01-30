@@ -6,6 +6,7 @@ import 'package:ahapp3/presentation/add_new_habit_pages/custom_habit_page.dart';
 import 'package:ahapp3/presentation/add_new_habit_pages/add_new_habit_page.dart';
 
 import 'package:ahapp3/presentation/law_three_page/law_three_page.dart';
+// import 'package:ahapp3/presentation/law_three_page/reduce_friction_page.dart';
 
 class AppRoutes {
   static const String editAHabitPageScreen = '/edit_a_habit_page_screen';
@@ -17,6 +18,7 @@ class AppRoutes {
   static const String initialRoute = widgetTreeRoute;
 
   static const String lawThreePageRout = '/law_three_page.dart';
+  // static const String reduceFrictionRoute = '/reduce_friction_page.dart';
 
 
   static Map<String, WidgetBuilder> get routes => {
@@ -26,5 +28,6 @@ class AppRoutes {
         newHabitPageRoute: (context) => NewHabitPage(),
         habitSearchPageRoute: (context) => HabitSearchPage(),
         lawThreePageRout: (context) => LawThreePage(),
+        // reduceFrictionRoute: (context) => ReduceFrictionPage(),
       };
 }
