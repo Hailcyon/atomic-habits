@@ -28,17 +28,11 @@ class _ReduceFrictionPageState extends State<ReduceFrictionPage> {
     return Scaffold(
       // backgroundColor: Colors.white,
       appBar: AppBar(
-        centerTitle: true,
         title: Text(
           'Reduce Friction',
-          style: TextStyle(
-            fontSize: 30.0,
-          ),
         ),
-        backgroundColor: Color.fromARGB(255, 246, 240, 230),
       ),
       body: Container(
-        color: Color.fromARGB(255, 246, 240, 230),
         child: ListView(
           physics: BouncingScrollPhysics(),
           children: [
