@@ -35,10 +35,10 @@ class EditHabitPage extends StatelessWidget {
           child: ListView(
             physics: BouncingScrollPhysics(),
             children: [
-              _buildLaw(habitLaws: dummy_mio, buttonText: "Make it Obvious", context: context),
-              _buildLaw(habitLaws: dummy_mia, buttonText: "Make it Attractive", context: context),
-              _buildLaw(habitLaws: dummy_mie, buttonText: "Make it Easy", context: context),
-              _buildLaw(habitLaws: dummy_mis, buttonText: "Make it Satisfying", context: context),
+              _buildLaw(habitLaws: dummy_mio, buttonText: "Make it Obvious", context: context, onPressed: (){Navigator.of(context).pushNamed(AppRoutes.lawThreePageRout);}),
+              _buildLaw(habitLaws: dummy_mia, buttonText: "Make it Attractive", context: context, onPressed: (){Navigator.of(context).pushNamed(AppRoutes.lawThreePageRout);}),
+              _buildLaw(habitLaws: dummy_mie, buttonText: "Make it Easy", context: context, onPressed: (){Navigator.of(context).pushNamed(AppRoutes.lawThreePageRout);}),
+              _buildLaw(habitLaws: dummy_mis, buttonText: "Make it Satisfying", context: context, onPressed: (){Navigator.of(context).pushNamed(AppRoutes.lawThreePageRout);}),
             ],
           ),
         ),
@@ -46,7 +46,11 @@ class EditHabitPage extends StatelessWidget {
     );
   }
 
-  Widget _buildLaw({required List habitLaws, required String buttonText, required BuildContext context}) {
+  Widget _buildLaw({
+      required List habitLaws, 
+      required String buttonText, 
+      required BuildContext context,
+      required VoidCallback onPressed}) {
     return ExpansionTile(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -69,9 +73,7 @@ class EditHabitPage extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.only(right: 16.0),  // Right padding to match childrenPadding
             child: ElevatedButton.icon(
-              onPressed: () {
-                // Button action
-              },
+              onPressed: onPressed,
               icon: Icon(
                 Icons.add,
                 color: Color.fromARGB(255, 246, 240, 230),

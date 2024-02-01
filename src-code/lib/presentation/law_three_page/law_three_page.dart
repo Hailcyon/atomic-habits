@@ -25,17 +25,11 @@ class _LawThreePageState extends State<LawThreePage> {
     return Scaffold(
       // backgroundColor: Colors.white,
       appBar: AppBar(
-        centerTitle: true,
         title: Text(
-          'Make It Easy',
-          style: TextStyle(
-            fontSize: 30.0,
-          ),
-        ),
-        backgroundColor: Color.fromARGB(255, 246, 240, 230),
+          'Make It Easy')
       ),
       body: Container(
-        color: Color.fromARGB(255, 246, 240, 230),
+        //color: Color.fromARGB(255, 246, 240, 230),
         child: ListView(
           physics: BouncingScrollPhysics(),
           children: [
