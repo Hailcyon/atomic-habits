@@ -18,6 +18,7 @@ dependencies:
   table_calendar: ^3.0.6
   firebase_core: ^2.24.0
   firebase_auth: ^4.15.0
+  day_picker: ^2.2.0
 
 
 dev_dependencies: 
