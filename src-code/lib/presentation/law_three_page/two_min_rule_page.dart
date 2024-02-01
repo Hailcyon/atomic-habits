@@ -3,23 +3,21 @@ import 'package:ahapp3/routes/app_routes.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
-class ReduceFrictionPage extends StatefulWidget {
+class TwoMinPage extends StatefulWidget {
   // const ReduceFrictionPage({Key? key}) : super(key: key);
   final Function(String) onSave;
 
-  const ReduceFrictionPage({Key? key, required this.onSave}) : super(key: key);
+  const TwoMinPage({Key? key, required this.onSave}) : super(key: key);
 
 
   @override
-  State<ReduceFrictionPage> createState() => _ReduceFrictionPageState();
+  State<TwoMinPage> createState() => _TwoMinPage();
 }
 
-class _ReduceFrictionPageState extends State<ReduceFrictionPage> {
+class _TwoMinPage extends State<TwoMinPage> {
   final userInputController = TextEditingController();
   final List<String> suggestions = [
-    "Suggestion 1 jyfhf,jf,jhf,jhg,jhghghghfgfhg ftshkjug,khuk hfyggu hfjugkug jygjgjmghjg hghjghgtuy fdersfcvnhgnhc hghghyfyuf,hgfjh  tfjhfjhfuyg",
-    "Suggestion 2",
-    "Suggestion 3",
+    "Suggestion 1: ..."
     // Add more suggestions as needed
   ];
 
@@ -29,7 +27,7 @@ class _ReduceFrictionPageState extends State<ReduceFrictionPage> {
       // backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          'Reduce Friction',
+          'Two Minute Rule',
         ),
       ),
       body: Container(
