@@ -35,7 +35,7 @@ class EditHabitPage extends StatelessWidget {
           child: ListView(
             physics: BouncingScrollPhysics(),
             children: [
-              _buildLaw(habitLaws: dummy_mio, buttonText: "Make it Obvious", context: context, onPressed: (){Navigator.of(context).pushNamed(AppRoutes.lawThreePageRout);}),
+              _buildLaw(habitLaws: dummy_mio, buttonText: "Make it Obvious", context: context, onPressed: (){Navigator.of(context).pushNamed(AppRoutes.lawOnePageRoute);}),
               _buildLaw(habitLaws: dummy_mia, buttonText: "Make it Attractive", context: context, onPressed: (){Navigator.of(context).pushNamed(AppRoutes.lawThreePageRout);}),
               _buildLaw(habitLaws: dummy_mie, buttonText: "Make it Easy", context: context, onPressed: (){Navigator.of(context).pushNamed(AppRoutes.lawThreePageRout);}),
               _buildLaw(habitLaws: dummy_mis, buttonText: "Make it Satisfying", context: context, onPressed: (){Navigator.of(context).pushNamed(AppRoutes.lawThreePageRout);}),
