@@ -80,7 +80,6 @@ class HomePageContainerPage extends StatelessWidget {
                     context: context,
                     buttonText: "Go For a Run",
                     leftIconPath: ImageConstant.imgIconDirectionsRun,
-                    context: context,
                   ),
                   SizedBox(height: 100.v),
                   _newHabitButton(context),
@@ -129,7 +128,6 @@ class HomePageContainerPage extends StatelessWidget {
     required BuildContext context,
     required String buttonText,
     required String leftIconPath,
-    required BuildContext context,
   }) {
     return CustomElevatedButton(
         text: buttonText,
