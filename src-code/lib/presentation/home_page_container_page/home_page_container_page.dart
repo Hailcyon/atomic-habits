@@ -1,5 +1,8 @@
 // import 'dart:js';
 
+import 'package:ahapp3/service/database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'bloc/home_page_container_bloc.dart';
 import 'models/home_page_container_model.dart';
 import 'package:ahapp3/core/app_export.dart';
@@ -15,10 +18,26 @@ import 'package:ahapp3/presentation/auth.dart';
 
 import 'package:ahapp3/presentation/law_three_page/law_three_page.dart';
 
-class HomePageContainerPage extends StatelessWidget {
+class HomePageContainerPage extends StatefulWidget {
   HomePageContainerPage({Key? key}) : super(key: key);
 
+  @override
+  State<HomePageContainerPage> createState() => _HomePageContainerPageState();
+
+  static Widget builder(BuildContext context) {
+    return BlocProvider<HomePageContainerBloc>(
+      create: (context) =>
+          HomePageContainerBloc()..add(HomePageContainerInitialEvent()),
+      child: HomePageContainerPage(),
+    );
+  }
+}
+
+class _HomePageContainerPageState extends State<HomePageContainerPage> {
   final User? user = Auth().currentUser;
+
+  final String uid = FirebaseAuth.instance.currentUser?.uid ?? '';
+  List<String> habitNames = [];
 
   Future<void> signOut() async {
     await Auth().signOut();
@@ -54,6 +73,20 @@ class HomePageContainerPage extends StatelessWidget {
   }
 
   @override
+  void initState() {
+    super.initState();
+    loadHabits();
+  }
+
+  void loadHabits() async {
+    final DatabaseService dbService = DatabaseService(uid: uid); // Replace with actual user ID
+    List<String> names = await dbService.getHabitNames();
+    setState(() {
+      habitNames = names;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(context),
@@ -76,14 +109,32 @@ class HomePageContainerPage extends StatelessWidget {
                   SizedBox(height: 30.v),
                   Text("Habits", style: theme.textTheme.headlineLarge),
                   SizedBox(height: 20.v),
-                  buildHabitButton(
-                    context: context,
-                    buttonText: "Go For a Run",
-                    leftIconPath: ImageConstant.imgIconDirectionsRun,
-                  ),
+                  // buildHabitButton(
+                  //   context: context,
+                  //   buttonText: "Go For a Run",
+                  //   leftIconPath: ImageConstant.imgIconDirectionsRun,
+                  // ),
+
+                  // buildHabitButtons(context), // Replaced static button with dynamic habit buttons
+
+                  // for (var habitName in habitNames)
+                  //   buildHabitButton(
+                  //     context: context,
+                  //     buttonText: habitName,
+                  //     leftIconPath: ImageConstant.imgIconDirectionsRun,
+                  //   ),
+                  for (int i = 0; i < habitNames.length; i++) ...[
+                    buildHabitButton(
+                      context: context,
+                      buttonText: habitNames[i],
+                      leftIconPath: ImageConstant.imgIconDirectionsRun,
+                    ),
+                    if (i < habitNames.length - 1)
+                      SizedBox(height: 10.0), // Space between buttons
+                  ],
                   SizedBox(height: 100.v),
                   _newHabitButton(context),
-                  SizedBox(height: 300.v),
+                  // SizedBox(height: 300.v),
                   _userUid(),
                   _signOutButton(),
                 ],
@@ -94,6 +145,106 @@ class HomePageContainerPage extends StatelessWidget {
       ),
     );
   }
+
+//   Widget buildHabitButtons(BuildContext context) {
+//   final DatabaseService dbService = DatabaseService(uid: uid);
+
+//   return StreamBuilder<QuerySnapshot>(
+//     stream: dbService.getHabits(),
+//     builder: (context, snapshot) {
+//       if (snapshot.hasError) {
+//         return Text('Error: ${snapshot.error}');
+//       }
+//       if (snapshot.connectionState == ConnectionState.waiting) {
+//         return CircularProgressIndicator();
+//       }
+
+//       List<DocumentSnapshot> documents = snapshot.data!.docs;
+//       return ListView.builder(
+//         itemCount: documents.length,
+//         itemBuilder: (context, index) {
+//           String habitName = documents[index].id; // Use the document ID as the habit name
+//           return buildHabitButton(
+//             context: context,
+//             buttonText: habitName,
+//             leftIconPath: "your_icon_path", // Update this accordingly
+//           );
+//         },
+//       );
+//     },
+//   );
+// }
+
+  Widget buildHabitButton({
+    required BuildContext context,
+    required String buttonText,
+    required String leftIconPath,
+  }) {
+    return Container(
+      width: 600,
+      // height: 50,
+      margin: EdgeInsets.symmetric(horizontal: 16.0),
+      child: Expanded(
+        child: ElevatedButton.icon(
+          icon: const Icon(Icons.directions_run_rounded),
+          label: Text(
+            buttonText,
+            style: TextStyle(color: Colors.black), // Text color
+            overflow: TextOverflow.ellipsis,
+            softWrap: false,
+            maxLines: 100,
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.yellow, // Button color
+            // fixedSize: Size(100, 0), // Fixed size of the button (width, height)
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8), // Rounded corners
+            ),
+            alignment: Alignment.centerLeft, // Align the icon and text to the left
+            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0), // Padding inside the button
+          ),
+          onPressed: () {
+            Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute);
+          },
+        ),
+      ),
+    );
+  }
+
+
+  // Widget buildHabitButton({
+  //   required BuildContext context,
+  //   required String buttonText,
+  //   required String leftIconPath,
+  // }) {
+  //   return CustomElevatedButton(
+  //       text: buttonText,
+  //       margin: EdgeInsets.only(right: 8.h),
+  //       rightIcon: Container(
+  //         margin: EdgeInsets.only(left: 30.h),
+  //         child: CustomImageView(
+  //           imagePath: ImageConstant.imgVectorBlack90015x25,
+  //           height: 17.adaptSize,
+  //           width: 17.adaptSize,
+  //         ),
+  //       ),
+  //       leftIcon: Container(
+  //         margin: EdgeInsets.only(right: 30.h),
+  //         child: CustomImageView(
+  //           imagePath: leftIconPath,
+  //           height: 35.v,
+  //           width: 30.h,
+  //         ),
+  //       ),
+  //       buttonStyle: CustomButtonStyles.fillYellowTL10,
+  //       buttonTextStyle: CustomTextStyles.headlineMedium26,
+  //       onPressed: () {
+  //         Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute);
+  //       },
+  //   );
+  // }
+
+
 
   Widget _buildDaysNum() {
     return Container(
@@ -121,46 +272,6 @@ class HomePageContainerPage extends StatelessWidget {
       child: Center(
         child: Text(label, style: theme.textTheme.bodyLarge),
       ),
-    );
-  }
-
-  Widget buildHabitButton({
-    required BuildContext context,
-    required String buttonText,
-    required String leftIconPath,
-  }) {
-    return CustomElevatedButton(
-        text: buttonText,
-        margin: EdgeInsets.only(right: 8.h),
-        rightIcon: Container(
-          margin: EdgeInsets.only(left: 30.h),
-          child: CustomImageView(
-            imagePath: ImageConstant.imgVectorBlack90015x25,
-            height: 17.adaptSize,
-            width: 17.adaptSize,
-          ),
-        ),
-        leftIcon: Container(
-          margin: EdgeInsets.only(right: 30.h),
-          child: CustomImageView(
-            imagePath: leftIconPath,
-            height: 35.v,
-            width: 30.h,
-          ),
-        ),
-        buttonStyle: CustomButtonStyles.fillYellowTL10,
-        buttonTextStyle: CustomTextStyles.headlineMedium26,
-        onPressed: () {
-          Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute);
-        },
-    );
-  }
-
-  static Widget builder(BuildContext context) {
-    return BlocProvider<HomePageContainerBloc>(
-      create: (context) =>
-          HomePageContainerBloc()..add(HomePageContainerInitialEvent()),
-      child: HomePageContainerPage(),
     );
   }
 
@@ -202,10 +313,6 @@ class HomePageContainerPage extends StatelessWidget {
             ));
   }
 
-// return Container(
-//       padding: EdgeInsets.all(20),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
   /// Section Widget
   Widget _buildDays(BuildContext context) {
     return Container(
@@ -221,15 +328,4 @@ class HomePageContainerPage extends StatelessWidget {
           Text("Mon", style: theme.textTheme.bodyLarge)
         ]));
   }
-
-  // /// Navigates to the editAHabitPageScreen when the action is triggered.
-  // onTapGoForARun() {
-  //   NavigatorService.pushNamed(
-  //     AppRoutes.editAHabitPageScreen,
-  //   );
-  // }
-  // onTapGoForARun(BuildContext context) {
-  //   Navigator.of(context).pushNamed(AppRoutes.customHabitPageRoute);
-  // }
-
 }

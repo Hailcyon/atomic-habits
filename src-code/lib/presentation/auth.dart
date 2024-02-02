@@ -1,3 +1,4 @@
+import 'package:ahapp3/service/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Auth{
@@ -23,6 +24,12 @@ class Auth{
     await _firebaseAuth.createUserWithEmailAndPassword(
       email: email, 
       password: password);
+
+    if (_firebaseAuth.currentUser != null) {
+      print(_firebaseAuth.currentUser!.uid);
+      await DatabaseService(uid: _firebaseAuth.currentUser!.uid).initializeUser();
+    }
+
   }
 
   Future<void> signOut() async {

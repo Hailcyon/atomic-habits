@@ -4,10 +4,6 @@
 <dict>
 	<key>files</key>
 	<dict>
-		<key>Headers/FMDB 3.h</key>
-		<data>
-		pMX1XJI7wMyxuYqA9+d9cI8p+3w=
-		</data>
 		<key>Headers/FMDB-umbrella.h</key>
 		<data>
 		bnKtOwCKrJdH80wCEKUpI4h1uzQ=
@@ -16,41 +12,21 @@
 		<data>
 		pMX1XJI7wMyxuYqA9+d9cI8p+3w=
 		</data>
-		<key>Headers/FMDatabase 3.h</key>
-		<data>
-		vDJaynNV1xjr3XP2ELuBq5ZJIzM=
-		</data>
 		<key>Headers/FMDatabase.h</key>
 		<data>
 		vDJaynNV1xjr3XP2ELuBq5ZJIzM=
-		</data>
-		<key>Headers/FMDatabaseAdditions 3.h</key>
-		<data>
-		oYPJZ2qnL9tDRUFc4njfVpjcG+I=
 		</data>
 		<key>Headers/FMDatabaseAdditions.h</key>
 		<data>
 		oYPJZ2qnL9tDRUFc4njfVpjcG+I=
 		</data>
-		<key>Headers/FMDatabasePool 3.h</key>
-		<data>
-		GRPIlJeLgiYtr0gYrCsERD6Msyo=
-		</data>
 		<key>Headers/FMDatabasePool.h</key>
 		<data>
 		GRPIlJeLgiYtr0gYrCsERD6Msyo=
 		</data>
-		<key>Headers/FMDatabaseQueue 3.h</key>
-		<data>
-		z9VmkSmRhTrKVnL4eb1XSOYufSI=
-		</data>
 		<key>Headers/FMDatabaseQueue.h</key>
 		<data>
 		z9VmkSmRhTrKVnL4eb1XSOYufSI=
-		</data>
-		<key>Headers/FMResultSet 3.h</key>
-		<data>
-		ttXlMDDozAXOMnYHKscshFhNl6I=
 		</data>
 		<key>Headers/FMResultSet.h</key>
 		<data>
@@ -58,7 +34,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		hR2jwvtgoRHD69oaOV+V1Uej5Fc=
+		zgkXehdD4ARQvlQxfLFWcbcqmlQ=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -67,17 +43,6 @@
 	</dict>
 	<key>files2</key>
 	<dict>
-		<key>Headers/FMDB 3.h</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			pMX1XJI7wMyxuYqA9+d9cI8p+3w=
-			</data>
-			<key>hash2</key>
-			<data>
-			zN6LJ1SNyhEgHjQn9KFzMj2mNcnoJOLjjbPr/26D/eE=
-			</data>
-		</dict>
 		<key>Headers/FMDB-umbrella.h</key>
 		<dict>
 			<key>hash</key>
@@ -100,17 +65,6 @@
 			zN6LJ1SNyhEgHjQn9KFzMj2mNcnoJOLjjbPr/26D/eE=
 			</data>
 		</dict>
-		<key>Headers/FMDatabase 3.h</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			vDJaynNV1xjr3XP2ELuBq5ZJIzM=
-			</data>
-			<key>hash2</key>
-			<data>
-			Tvz4Jcf7j/lamLTNJ4Q56B2a9eVHAKOLsYVU7A5WQH8=
-			</data>
-		</dict>
 		<key>Headers/FMDatabase.h</key>
 		<dict>
 			<key>hash</key>
@@ -120,17 +74,6 @@
 			<key>hash2</key>
 			<data>
 			Tvz4Jcf7j/lamLTNJ4Q56B2a9eVHAKOLsYVU7A5WQH8=
-			</data>
-		</dict>
-		<key>Headers/FMDatabaseAdditions 3.h</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			oYPJZ2qnL9tDRUFc4njfVpjcG+I=
-			</data>
-			<key>hash2</key>
-			<data>
-			8TZsULb8xEkWsryKGKgfEsIp95WiRwkP2NEL1qIe0zo=
 			</data>
 		</dict>
 		<key>Headers/FMDatabaseAdditions.h</key>
@@ -144,17 +87,6 @@
 			8TZsULb8xEkWsryKGKgfEsIp95WiRwkP2NEL1qIe0zo=
 			</data>
 		</dict>
-		<key>Headers/FMDatabasePool 3.h</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			GRPIlJeLgiYtr0gYrCsERD6Msyo=
-			</data>
-			<key>hash2</key>
-			<data>
-			0dcniSiQZvUaNfubFR3W8NEEGcnSZZeXlJmj46ctQ3I=
-			</data>
-		</dict>
 		<key>Headers/FMDatabasePool.h</key>
 		<dict>
 			<key>hash</key>
@@ -166,17 +98,6 @@
 			0dcniSiQZvUaNfubFR3W8NEEGcnSZZeXlJmj46ctQ3I=
 			</data>
 		</dict>
-		<key>Headers/FMDatabaseQueue 3.h</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			z9VmkSmRhTrKVnL4eb1XSOYufSI=
-			</data>
-			<key>hash2</key>
-			<data>
-			sUHAJobiEdcS2YNB8LPtGcEe2XU4JjXq6PYLYYJm1pA=
-			</data>
-		</dict>
 		<key>Headers/FMDatabaseQueue.h</key>
 		<dict>
 			<key>hash</key>
@@ -186,17 +107,6 @@
 			<key>hash2</key>
 			<data>
 			sUHAJobiEdcS2YNB8LPtGcEe2XU4JjXq6PYLYYJm1pA=
-			</data>
-		</dict>
-		<key>Headers/FMResultSet 3.h</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			ttXlMDDozAXOMnYHKscshFhNl6I=
-			</data>
-			<key>hash2</key>
-			<data>
-			+QNK7GVKITWRQb+zGXFfNL/r6c1QUmhfGA5TyGHkMZg=
 			</data>
 		</dict>
 		<key>Headers/FMResultSet.h</key>
