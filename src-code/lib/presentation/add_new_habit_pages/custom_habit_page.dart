@@ -1,9 +1,17 @@
+import 'package:ahapp3/service/database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:ahapp3/core/app_export.dart';
 import 'package:day_picker/day_picker.dart';
 
-class CustomHabitPage extends StatelessWidget {
+class CustomHabitPage extends StatefulWidget {
   CustomHabitPage({Key? key}) : super(key: key);
+
+  @override
+  State<CustomHabitPage> createState() => _CustomHabitPageState();
+}
+
+class _CustomHabitPageState extends State<CustomHabitPage> {
   final List<DayInWeek> _days = [
     DayInWeek("Mo", dayKey: "monday"),
     DayInWeek("Tu", dayKey: "tuesday"),
@@ -13,6 +21,8 @@ class CustomHabitPage extends StatelessWidget {
     DayInWeek("Sa", dayKey: "saturday"),
     DayInWeek("Su", dayKey: "sunday"),
   ];
+
+  final TextEditingController _habitNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +34,8 @@ class CustomHabitPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _entryField('Habit Name', TextEditingController()),
+              // _entryField('Habit Name', TextEditingController()),
+              _entryField('Habit Name', _habitNameController),
               SizedBox(height: 40.v),
               SelectWeekDays(
                 days: _days,
@@ -61,6 +72,7 @@ class CustomHabitPage extends StatelessWidget {
     return ElevatedButton(
       onPressed: () {
         // Button action
+        _saveHabit(context);
       },
       child: Text('Save', style: TextStyle(fontSize: 20)),
       style: ElevatedButton.styleFrom(
@@ -84,4 +96,19 @@ class CustomHabitPage extends StatelessWidget {
       ),
     );
   }
+
+  void _saveHabit(BuildContext context) {
+    final String habitName = _habitNameController.text;
+
+    if (habitName.isNotEmpty) {
+      final FirebaseAuth auth = FirebaseAuth.instance;
+      final String uid = auth.currentUser?.uid ?? '';
+      
+      // Save the habit to Firestore
+      DatabaseService(uid: uid).saveHabit(habitName);
+
+      Navigator.of(context).pop(); // Optionally pop back after saving
+    }
+  }
+
 }

@@ -9,6 +9,8 @@ import 'package:ahapp3/presentation/add_new_habit_pages/add_new_habit_page.dart'
 import 'package:ahapp3/presentation/law_three_page/law_three_page.dart';
 
 import 'package:ahapp3/presentation/law_one_page/law_one_page.dart';
+import 'package:ahapp3/presentation/law_two_page/law_two_page.dart';
+import 'package:ahapp3/presentation/law_four_page/law_four_page.dart';
 // import 'package:ahapp3/presentation/law_three_page/reduce_friction_page.dart';
 
 class AppRoutes {
@@ -23,6 +25,8 @@ class AppRoutes {
 
   static const String lawThreePageRout = '/law_three_page.dart';
   static const String lawOnePageRoute = '/law_one_page.dart';
+  static const String lawTwoPageRoute = '/law_two_page.dart';
+  static const String lawFourPageRoute = '/law_four_page.dart';
   // static const String reduceFrictionRoute = '/reduce_friction_page.dart';
 
 
@@ -35,6 +39,8 @@ class AppRoutes {
         editHabitPageRoute: (context) => EditHabitPage(),
         lawThreePageRout: (context) => LawThreePage(),
         lawOnePageRoute: (context) => LawOnePage(),
+        lawTwoPageRoute: (context) => LawTwoPage(),
+        lawFourPageRoute: (context) => LawFourPage(),
         // reduceFrictionRoute: (context) => ReduceFrictionPage(),
       };
 }
