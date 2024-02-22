@@ -17,7 +17,8 @@ class EnvDes extends StatefulWidget {
 class _EnvDes extends State<EnvDes> {
   final userInputController = TextEditingController();
   final List<String> suggestions = [
-    "Suggestion 1: ..."
+    "Put running shoes near the door",
+    "Water bottle on bedside table"
     // Add more suggestions as needed
   ];
 
@@ -51,7 +52,7 @@ class _EnvDes extends State<EnvDes> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "I will make go for a run easier by ",
+            "How can I change my environment optimize this habit?",
             style: TextStyle(
               fontSize: 20.0,
             ),
@@ -102,7 +103,7 @@ class _EnvDes extends State<EnvDes> {
           Padding(
           padding: EdgeInsets.only(bottom:0), // Space between the label and the first suggestion
           child: Text(
-            "Suggestions:", // The label text
+            "Examples:", // The label text
             style: TextStyle(
               color: Colors.black, // Color of the label
               fontSize: 20, // Size of the label text

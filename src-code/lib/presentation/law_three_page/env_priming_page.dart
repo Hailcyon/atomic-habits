@@ -17,7 +17,7 @@ class EnvPrimingPage extends StatefulWidget {
 class _EnvPrimingPage extends State<EnvPrimingPage> {
   final userInputController = TextEditingController();
   final List<String> suggestions = [
-    "Suggestion 1: Put shoes near door."
+    "Place a water bottle on the desk."
     // Add more suggestions as needed
   ];
 
@@ -36,7 +36,7 @@ class _EnvPrimingPage extends State<EnvPrimingPage> {
           children: [
             _reduceFrictionDetail(context),
             SizedBox(height: 50.0),
-            _reduceFrictionSugguestion(context),
+            //_reduceFrictionSugguestion(context),
           ],
         ),
       ),
@@ -51,7 +51,7 @@ class _EnvPrimingPage extends State<EnvPrimingPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "I will make go for a run easier by ",
+            "What is a cue that will initiate my habit?",
             style: TextStyle(
               fontSize: 20.0,
             ),
