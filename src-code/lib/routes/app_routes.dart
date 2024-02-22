@@ -27,6 +27,7 @@ class AppRoutes {
   static const String lawOnePageRoute = '/law_one_page.dart';
   static const String lawTwoPageRoute = '/law_two_page.dart';
   static const String lawFourPageRoute = '/law_four_page.dart';
+  static String currentPageID = '';
   // static const String reduceFrictionRoute = '/reduce_friction_page.dart';
 
 

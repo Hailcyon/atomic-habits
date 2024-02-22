@@ -26,6 +26,12 @@ class DatabaseService {
     });
   }
 
+  Future<void> saveHabitLaw(String habitName, String habitLawName, String habitLawDetails) async {
+    await firestoreInstance.collection('Users').doc(uid).collection('Habits').doc(habitName).set({
+       habitLawName: habitLawDetails
+    });
+  }
+
   // String getHabits(String habitDocName) {
   //   String habit_name;
   //   habit_name = firestoreInstance.collection('Users').doc(uid).collection('Habits').doc(habitDocName).id;

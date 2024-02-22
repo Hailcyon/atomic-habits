@@ -17,7 +17,8 @@ class TwoMinPage extends StatefulWidget {
 class _TwoMinPage extends State<TwoMinPage> {
   final userInputController = TextEditingController();
   final List<String> suggestions = [
-    "Suggestion 1: ..."
+    "Do one push-up",
+    "Put on running clothes"
     // Add more suggestions as needed
   ];
 
@@ -51,7 +52,7 @@ class _TwoMinPage extends State<TwoMinPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "I will make go for a run easier by ",
+            "How can you minimize the habit into two minutes?",
             style: TextStyle(
               fontSize: 20.0,
             ),

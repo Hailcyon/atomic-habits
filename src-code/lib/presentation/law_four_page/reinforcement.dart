@@ -17,9 +17,7 @@ class Reinforcement extends StatefulWidget {
 class _Reinforcement extends State<Reinforcement> {
   final userInputController = TextEditingController();
   final List<String> suggestions = [
-    "Suggestion 1:...",
-    "Suggestion 2",
-    "Suggestion 3",
+    "An after work-out snack",
     // Add more suggestions as needed
   ];
 
@@ -53,7 +51,7 @@ class _Reinforcement extends State<Reinforcement> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "I will make go for a run easier by ",
+            "I will make reward myself after completing my habit by",
             style: TextStyle(
               fontSize: 20.0,
             ),
