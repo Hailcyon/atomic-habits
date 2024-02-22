@@ -24,6 +24,9 @@ class _LawOnePage extends State<LawOnePage> {
 
   @override
   Widget build(BuildContext context) {
+    // Retrieve the habitName passed as an argument
+    final String _habitId = ModalRoute.of(context)?.settings.arguments as String? ?? 'Default Habit Name';
+
     return Scaffold(
       // backgroundColor: Colors.white,
       appBar: AppBar(
@@ -37,10 +40,11 @@ class _LawOnePage extends State<LawOnePage> {
           children: [
             _buildHabitLaw(context, 
                           "Implementation Intention", 
-                          "Specify when and where for effective habit planning.",
+                          "Edit [HABIT_ACTION] on [DAY] at [TIME] on [PLACE] for effective habit planning.",
                           (){Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => ImpInt(
                                 onSave: updateFrictionText,
+                                habitId: _habitId,
                                 ),
                             ));}),
             _buildHabitLaw(context, 

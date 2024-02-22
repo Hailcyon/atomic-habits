@@ -6,6 +6,10 @@ class NewHabitPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Extract the arguments(currentDateTime) from HomePageContainerPage
+    // settings and cast them as currentDateTime
+    // final argDayOfWeek = ModalRoute.of(context)!.settings.arguments as String;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Add a New Habit'),

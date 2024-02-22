@@ -16,7 +16,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ahapp3/presentation/auth.dart';
 
-import 'package:ahapp3/presentation/law_three_page/law_three_page.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:ahapp3/utils/date_utils.dart' as date_util;
 
 class HomePageContainerPage extends StatefulWidget {
   HomePageContainerPage({Key? key}) : super(key: key);
@@ -36,16 +37,29 @@ class HomePageContainerPage extends StatefulWidget {
 class _HomePageContainerPageState extends State<HomePageContainerPage> {
   final User? user = Auth().currentUser;
 
-  final String uid = FirebaseAuth.instance.currentUser?.uid ?? '';
+  // final String uid = FirebaseAuth.instance.currentUser?.uid ?? '';
   List<String> habitNames = [];
+
+  final DatabaseService dbService = DatabaseService(uid: FirebaseAuth.instance.currentUser?.uid ?? ''); // Initialize dbService with the user's UID;
+  
+  // new calendar
+  double width = 0.0;
+  double height = 0.0;
+  late ScrollController scrollController;
+  List<DateTime> currentMonthList = List.empty();
+  DateTime currentDateTime = DateTime.now();
+  DateTime staticCuurentDateTime = DateTime.now();
+  bool initialDateTimeChanged = false;
+  TextEditingController controller = TextEditingController();
+  String curDayOfWeekFullName = '';
+
+  // final monthList = ['January','Febuary','March','April','May','June','July','August','September','October','November','December'];
+  // final yearList 
 
   Future<void> signOut() async {
     await Auth().signOut();
   }
 
-  Widget _title() {
-    return const Text('Atomic Habits');
-  }
 
   Widget _userUid() {
     return Text(user?.email ?? "User email");
@@ -58,7 +72,14 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     );
   }
 
+  String getDayOfWeekFullName(DateTime dateTime) {
+    List<String> daysOfWeekAbbrev = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+    // DateTime.weekday returns an integer from 1 (Monday) to 7 (Sunday)
+    return daysOfWeekAbbrev[dateTime.weekday - 1];
+  }
+
   Widget _newHabitButton(BuildContext context) {
+    // String dayOfWeekAbbrev = getDayOfWeekAbbreviation(currentDateTime); // This will be from Mon - Sun
     return TextButton(
       //add a new habit button
       child: Icon(Icons.add_rounded, size: 40),
@@ -74,145 +95,555 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
 
   @override
   void initState() {
+    currentMonthList = date_util.DateUtils.daysInMonth(currentDateTime);
+    currentMonthList.sort((a, b) => a.day.compareTo(b.day));
+    currentMonthList = currentMonthList.toSet().toList();
+    scrollController =
+        ScrollController(initialScrollOffset: 45.0 * currentDateTime.day);
+
+    curDayOfWeekFullName = getDayOfWeekFullName(currentDateTime);
+
     super.initState();
-    loadHabits();
+    // loadHabits();
+    // dbService = DatabaseService(uid: uid); // Initialize dbService with the user's UID
   }
 
-  void loadHabits() async {
-    final DatabaseService dbService = DatabaseService(uid: uid); // Replace with actual user ID
-    List<String> names = await dbService.getHabitNames();
-    setState(() {
-      habitNames = names;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(context),
-      // AppBar(
-      //   title: _title(),
-      // ),
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        padding: const EdgeInsets.all(20),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              _buildDaysNum(),
-              _buildDays(context),
-              Column(
-                children: [
-                  SizedBox(height: 30.v),
-                  Text("Habits", style: theme.textTheme.headlineLarge),
-                  SizedBox(height: 20.v),
-                  // buildHabitButton(
-                  //   context: context,
-                  //   buttonText: "Go For a Run",
-                  //   leftIconPath: ImageConstant.imgIconDirectionsRun,
-                  // ),
-
-                  // buildHabitButtons(context), // Replaced static button with dynamic habit buttons
-
-                  // for (var habitName in habitNames)
-                  //   buildHabitButton(
-                  //     context: context,
-                  //     buttonText: habitName,
-                  //     leftIconPath: ImageConstant.imgIconDirectionsRun,
-                  //   ),
-                  for (int i = 0; i < habitNames.length; i++) ...[
-                    buildHabitButton(
-                      context: context,
-                      buttonText: habitNames[i],
-                      leftIconPath: ImageConstant.imgIconDirectionsRun,
-                    ),
-                    if (i < habitNames.length - 1)
-                      SizedBox(height: 10.0), // Space between buttons
-                  ],
-                  SizedBox(height: 100.v),
-                  _newHabitButton(context),
-                  // SizedBox(height: 300.v),
-                  _userUid(),
-                  _signOutButton(),
-                ],
-              ),
-            ],
-          ),
+  // the grey box to show days
+  Widget topView() {
+    return Container(
+      height: height * 0.13,
+      width: width,
+      decoration: BoxDecoration(
+        color: Colors.grey,
+        boxShadow: const [
+          BoxShadow(
+              blurRadius: 4,
+              color: Colors.black12,
+              offset: Offset(4, 4),
+              spreadRadius: 2)
+        ],
+        borderRadius: const BorderRadius.only(
+          topRight: Radius.circular(20),
+          topLeft: Radius.circular(20),
+          bottomRight: Radius.circular(20),
+          bottomLeft: Radius.circular(20),
         ),
+      ),
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            titleView(),
+            hrizontalCapsuleListView(),
+          ]),
+    );
+  }
+
+  // show Month/Year
+  Widget titleView() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+      child: Text(
+        // date_util.DateUtils.months[currentDateTime.month - 1] +
+        //     ' ' +
+        //     currentDateTime.year.toString(),
+        date_util.DateUtils.months[currentDateTime.month - 1] + ' ' + currentDateTime.year.toString(),
+        style: const TextStyle(
+            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
       ),
     );
   }
 
-//   Widget buildHabitButtons(BuildContext context) {
-//   final DatabaseService dbService = DatabaseService(uid: uid);
+  // show days(white) and selected days(green)
+  Widget hrizontalCapsuleListView() {
+    return Container(
+      width: width,
+      height: 50,
+      child: ListView.builder(
+        controller: scrollController,
+        scrollDirection: Axis.horizontal,
+        physics: const ClampingScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: currentMonthList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return capsuleView(index);
+        },
+      ),
+    );
+  }
 
-//   return StreamBuilder<QuerySnapshot>(
-//     stream: dbService.getHabits(),
-//     builder: (context, snapshot) {
-//       if (snapshot.hasError) {
-//         return Text('Error: ${snapshot.error}');
-//       }
-//       if (snapshot.connectionState == ConnectionState.waiting) {
-//         return CircularProgressIndicator();
-//       }
+  Widget capsuleView(int index) {
+    bool isSelected = currentMonthList[index].day == currentDateTime.day &&
+                    currentMonthList[index].month == currentDateTime.month &&
+                    currentMonthList[index].year == currentDateTime.year; // Ensure the month and year match too
+    
+    return Padding(
+        padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+        child: GestureDetector(
+          onTap: () {
+            setState(() {
+              currentDateTime = currentMonthList[index];
+              // update current dayOfWeek full name
+              curDayOfWeekFullName = getDayOfWeekFullName(currentDateTime);
+            });
+          },
+          child: Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    // colors: (currentMonthList[index].day != currentDateTime.day)
+                    colors: !isSelected
+                        ? [
+                            Colors.white.withOpacity(0.8),
+                            Colors.white.withOpacity(0.7),
+                            Colors.white.withOpacity(0.6)
+                          ]
+                        : [
+                            Colors.green.withOpacity(0.8),
+                            Colors.green.withOpacity(0.7),
+                            Colors.green.withOpacity(0.6)
+                          ],
+                    begin: const FractionalOffset(0.0, 0.0),
+                    end: const FractionalOffset(0.0, 1.0),
+                    stops: const [0.0, 0.5, 1.0],
+                    tileMode: TileMode.clamp),
+                borderRadius: BorderRadius.circular(40),
+                ),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    currentMonthList[index].day.toString(),
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color:
+                            (currentMonthList[index].day != currentDateTime.day)
+                                ? Colors.grey
+                                : Colors.white),
+                  ),
+                  Text(
+                    date_util.DateUtils
+                        .weekdays[currentMonthList[index].weekday - 1],
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color:
+                            (currentMonthList[index].day != currentDateTime.day)
+                                ? Colors.grey
+                                : Colors.white),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ));
+  }
 
-//       List<DocumentSnapshot> documents = snapshot.data!.docs;
-//       return ListView.builder(
-//         itemCount: documents.length,
-//         itemBuilder: (context, index) {
-//           String habitName = documents[index].id; // Use the document ID as the habit name
-//           return buildHabitButton(
-//             context: context,
-//             buttonText: habitName,
-//             leftIconPath: "your_icon_path", // Update this accordingly
-//           );
-//         },
-//       );
-//     },
-//   );
-// }
+  // days and "Habits" are not scrollable now
+  @override
+  Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+    return Scaffold(
+      appBar: _buildAppBar(context),
+      body: Column(
+        children: <Widget>[
+          topView(),
+          SizedBox(height: 10),
+          Text(
+            "Habits", 
+            style: theme.textTheme.headlineLarge,
+            textAlign: TextAlign.center, // Align text to the center
+          ),
+          SizedBox(height: 10),
+          Expanded(  // Use Expanded to fill the remaining space
+            child: ListView(
+              padding: const EdgeInsets.all(20),
+              children: <Widget>[
+                StreamBuilder<List<Map<String, String>>>(
+                  stream: dbService.getHabitsAscending(curDayOfWeekFullName),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text("Something went wrong: ${snapshot.error}");
+                    }
+                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Text("No habits found");  // Handle case where no data is available
+                    }
+                    List<Widget> habitWidgets = [];
+                    snapshot.data!.asMap().forEach((index, habit) {
+                      final habitId = habit['id']!;  // Extract the habit ID
+                      final habitName = habit['name']!;  // Extract the habit name
+
+                      // Add the habit button
+                      habitWidgets.add(buildHabitButton(
+                        context: context,
+                        habitId: habitId,  // Pass the habit ID
+                        buttonText: habitName,  // Pass the habit name
+                        leftIconPath: ImageConstant.imgIconDirectionsRun,
+                      ));
+
+                      // Add spacing after the button, but not after the last one
+                      if (index < snapshot.data!.length - 1) {
+                        habitWidgets.add(SizedBox(height: 10));  // Adjust the height for desired spacing
+                      }
+                    });
+
+                    // Return a SingleChildScrollView containing a Column of habit buttons
+                    return Column(
+                        children: habitWidgets,
+                    );
+                  },
+                ),
+                SizedBox(height: 100.v),
+                _newHabitButton(context),
+                // SizedBox(height: 300.v),
+                _userUid(),
+                _signOutButton(),
+              ]
+            ),
+          ),
+        ]  
+      )
+    );
+  }
+
+// // days and "Habits" are not scrollable now
+//   @override
+//   Widget build(BuildContext context) {
+//     width = MediaQuery.of(context).size.width;
+//     height = MediaQuery.of(context).size.height;
+//     return Scaffold(
+//       appBar: _buildAppBar(context),
+//       body: Column(
+//         children: <Widget>[
+//           topView(),
+//           SizedBox(height: 10),
+//           Text(
+//             "Habits", 
+//             style: theme.textTheme.headlineLarge,
+//             textAlign: TextAlign.center, // Align text to the center
+//           ),
+//           SizedBox(height: 10),
+//           Expanded(
+//             child: ListView(
+//               padding: const EdgeInsets.all(20),
+//               children: <Widget>[
+//                 StreamBuilder<List<Map<String, String>>>(
+//                   stream: dbService.getHabitsAscending(curDayOfWeekFullName),
+//                   builder: (context, snapshot) {
+//                     if (snapshot.hasError) {
+//                       print("${snapshot.error}");
+//                       return Text("Something went wrong: ${snapshot.error}");
+//                     }
+//                     if (!snapshot.hasData) {
+//                       return CircularProgressIndicator(); // Loading indicator
+//                     }
+//                     // final habitNames = snapshot.data!;
+//                     final habits = snapshot.data!;  // List<Map<String, String>>
+//                     return Column(
+//                       children: habitNames.map((name) => Column(
+//                         children: [
+//                           buildHabitButton(
+//                             context: context,
+//                             buttonText: name,
+//                             leftIconPath: ImageConstant.imgIconDirectionsRun,
+//                           ),
+//                           SizedBox(height: 10.0), // Space between buttons
+//                         ],
+//                       )).toList(),
+//                     );
+//                   },
+//                 ),
+//                 SizedBox(height: 100.v),
+//                 _newHabitButton(context),
+//                 // SizedBox(height: 300.v),
+//                 _userUid(),
+//                 _signOutButton(),
+//               ],
+//             ),
+//           ),
+//         ]  
+//       )
+//     );
+//   }
+
 
   Widget buildHabitButton({
     required BuildContext context,
+    required String habitId,
     required String buttonText,
     required String leftIconPath,
   }) {
-    return Container(
-      width: 600,
-      // height: 50,
-      margin: EdgeInsets.symmetric(horizontal: 16.0),
-      child: Expanded(
-        child: ElevatedButton.icon(
-          icon: const Icon(Icons.directions_run_rounded),
-          label: Text(
-            buttonText,
-            style: TextStyle(color: Colors.black), // Text color
-            overflow: TextOverflow.ellipsis,
-            softWrap: false,
-            maxLines: 100,
-          ),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.yellow, // Button color
-            // fixedSize: Size(100, 0), // Fixed size of the button (width, height)
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8), // Rounded corners
+    return Slidable(
+      endActionPane: ActionPane(
+        motion: StretchMotion(),
+        children: [
+          SlidableAction(
+            onPressed: ((context){
+              showDialog(
+                barrierDismissible: true, 
+                context: context, 
+                builder: (BuildContext context) => AlertDialog(
+                  content: Text("Are you sure you want to delete this habit?"),
+                  actions: [
+                    TextButton(
+                      child: Text("Yes"), 
+                      onPressed: () async {
+                        await dbService.deleteHabit(habitId); // use habit id to delete
+                        Navigator.of(context).pop(); // Close the dialog
+                      },
+                    ),
+                  ],
+                  elevation: 24,
+                ),
+              );
+            }),
+            backgroundColor: Colors.red,
+            icon: Icons.delete,
+          )
+        ],
+      ),
+      // build the habit button
+      child: Container(
+        width: 600,
+        margin: EdgeInsets.symmetric(horizontal: 16.0),
+        // child: Expanded( //have Expanded in Container will cause Incorrect use of ParentDataWidget error
+          child: ElevatedButton.icon(
+            icon: const Icon(Icons.directions_run_rounded),
+            label: Text(
+              buttonText,
+              style: TextStyle(color: Colors.black), // Text color
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
+              maxLines: 100,
             ),
-            alignment: Alignment.centerLeft, // Align the icon and text to the left
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0), // Padding inside the button
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.yellow, // Button color
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8), // Rounded corners
+              ),
+              alignment: Alignment.centerLeft, // Align the icon and text to the left
+              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0), // Padding inside the button
+            ),
+            onPressed: () {
+              Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute, arguments: habitId);
+            },
           ),
-          onPressed: () {
-            Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute);
-          },
-        ),
+        // ),
       ),
     );
   }
 
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
+    return CustomAppBar(
+        title: Text('Atomic Habits', style: TextStyle(color: Colors.black)),
+        height: 70.v,
+        leadingWidth: 100.h,
+        leading: AppbarLeadingImage(
+            imagePath: ImageConstant.imgThreeLinesPic,
+            margin: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 10)),
+        centerTitle: true,
+        actions: [
+          AppbarTrailingImage(
+              imagePath: ImageConstant.imgCalendarPic,
+              margin: EdgeInsets.only(right: 20),
+              onTap: () {
+                buildCalendar(context);
+              })
+        ]);
+  }
 
+  buildCalendar(BuildContext context) {
+    DateTime dateTime;
+    // make sure month/year in calendar stay updated
+    if(initialDateTimeChanged) {
+      dateTime = currentDateTime;   
+    } else {
+      dateTime = DateTime.now();
+    }
+    // curDayOfWeekFullName = getDayOfWeekFullName(dateTime);
+    showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) => SizedBox(
+        height: 250,
+        width: MediaQuery.of(context).size.width,
+        child: CupertinoDatePicker(
+          backgroundColor: Colors.white,
+          initialDateTime: dateTime,
+          onDateTimeChanged: (DateTime newTime) {
+            // dateTime = newTime;
+            initialDateTimeChanged = true;
+            setState(() {
+              // currentDateTime = DateTime(newTime.year, newTime.month);
+              currentDateTime = newTime;
+
+              // update current dayOfWeek full name
+              curDayOfWeekFullName = getDayOfWeekFullName(currentDateTime);
+
+              currentMonthList = date_util.DateUtils.daysInMonth(currentDateTime);
+              // Make sure to remove duplicates and sort if necessary, like in initState
+              currentMonthList.sort((a, b) => a.day.compareTo(b.day));
+            });
+          },
+          use24hFormat: true,
+          mode: CupertinoDatePickerMode.date,
+          // mode: CupertinoDatePickerMode.monthYear,
+        ),
+      )
+    );
+  }
+
+  // Widget _buildDaysNum() {
+  //   return Container(
+  //       padding: EdgeInsets.only(left: 20, right: 20),
+  //       child:
+  //           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+  //         buildContainer("3", Colors.black, false),
+  //         buildContainer("4", Colors.black, false),
+  //         buildContainer("5", Colors.black, false),
+  //         buildContainer("6", Colors.black, false),
+  //         buildContainer("7", Colors.green, false),
+  //         buildContainer("8", Colors.black, false),
+  //         buildContainer("9", Colors.black, false)
+  //       ]));
+  // }
+
+  // Widget buildContainer(String label, Color outlineColor, bool isLightGreen) {
+  //   return Container(
+  //     width: 42.h,
+  //     padding: EdgeInsets.symmetric(horizontal: 10.h, vertical: 10.v),
+  //     decoration: BoxDecoration(
+  //       border: Border.all(color: outlineColor),
+  //       borderRadius: BorderRadius.circular(20),
+  //     ),
+  //     child: Center(
+  //       child: Text(label, style: theme.textTheme.bodyLarge),
+  //     ),
+  //   );
+  // }
+
+
+
+  /// Section Widget
+  // Widget _buildDays(BuildContext context) {
+  //   return Container(
+  //       padding: EdgeInsets.only(left: 20, right: 20, bottom: 5),
+  //       child:
+  //           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+  //         Text("Mon", style: theme.textTheme.bodyLarge),
+  //         Text("Tue", style: theme.textTheme.bodyLarge),
+  //         Text("Wed", style: theme.textTheme.bodyLarge),
+  //         Text("Thu", style: theme.textTheme.bodyLarge),
+  //         Text("Sat", style: theme.textTheme.bodyLarge),
+  //         Text("Sun", style: theme.textTheme.bodyLarge),
+  //         Text("Mon", style: theme.textTheme.bodyLarge)
+  //       ]));
+  // }
+}
+
+
+
+
+
+
+
+
+
+//build that days is scrollable
+// @override
+  // Widget build(BuildContext context) {
+  //   // final DatabaseService dbService = DatabaseService(uid: uid);
+  //   return Scaffold(
+  //     appBar: _buildAppBar(context),
+  //     body: Expanded(
+  //             child: ListView(
+  //               padding: const EdgeInsets.all(20),
+  //               children: <Widget>[
+  //                 _buildDaysNum(),
+  //                 _buildDays(context),
+  //                 SizedBox(height: 30.v),
+  //                 Text(
+  //                   "Habits", 
+  //                   style: theme.textTheme.headlineLarge,
+  //                   textAlign: TextAlign.center, // Align text to the center
+  //                 ),
+  //                 StreamBuilder<List<String>>(
+  //                   stream: dbService.getHabitsAscending(),
+  //                   builder: (context, snapshot) {
+  //                     if (snapshot.hasError) {
+  //                       return Text("Something went wrong");
+  //                     }
+  //                     if (!snapshot.hasData) {
+  //                       return CircularProgressIndicator(); // Loading indicator
+  //                     }
+  //                     final habitNames = snapshot.data!;
+  //                     return Column(
+  //                       children: habitNames.map((name) => Column(
+  //                         children: [
+  //                           buildHabitButton(
+  //                             context: context,
+  //                             buttonText: name,
+  //                             leftIconPath: ImageConstant.imgIconDirectionsRun,
+  //                           ),
+  //                           SizedBox(height: 10.0), // Space between buttons
+  //                         ],
+  //                       )).toList(),
+  //                     );
+  //                   },
+  //                 ),
+  //                 SizedBox(height: 100.v),
+  //                 _newHabitButton(context),
+  //                 // SizedBox(height: 300.v),
+  //                 _userUid(),
+  //                 _signOutButton(),
+  //               ],
+  //             ),
+  //           ),
+  //   );
+  // }
+
+//buildHabitButton before update habit in realtime
   // Widget buildHabitButton({
+  //   required BuildContext context,
+  //   required String buttonText,
+  //   required String leftIconPath,
+  // }) {
+  //   return Container(
+  //     width: 600,
+  //     // height: 50,
+  //     margin: EdgeInsets.symmetric(horizontal: 16.0),
+  //     child: Expanded(
+  //       child: ElevatedButton.icon(
+  //         icon: const Icon(Icons.directions_run_rounded),
+  //         label: Text(
+  //           buttonText,
+  //           style: TextStyle(color: Colors.black), // Text color
+  //           overflow: TextOverflow.ellipsis,
+  //           softWrap: false,
+  //           maxLines: 100,
+  //         ),
+  //         style: ElevatedButton.styleFrom(
+  //           backgroundColor: Colors.yellow, // Button color
+  //           // fixedSize: Size(100, 0), // Fixed size of the button (width, height)
+  //           shape: RoundedRectangleBorder(
+  //             borderRadius: BorderRadius.circular(8), // Rounded corners
+  //           ),
+  //           alignment: Alignment.centerLeft, // Align the icon and text to the left
+  //           padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0), // Padding inside the button
+  //         ),
+  //         onPressed: () {
+  //           Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute);
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
+
+
+// buildHabitButton before involving database
+// Widget buildHabitButton({
   //   required BuildContext context,
   //   required String buttonText,
   //   required String leftIconPath,
@@ -245,87 +676,62 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
   // }
 
 
+ // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     appBar: _buildAppBar(context),
+  //     // AppBar(
+  //     //   title: _title(),
+  //     // ),
+  //     body: Container(
+  //       height: double.infinity,
+  //       width: double.infinity,
+  //       padding: const EdgeInsets.all(20),
+  //       child: SingleChildScrollView(
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.center,
+  //           mainAxisAlignment: MainAxisAlignment.start,
+  //           children: <Widget>[
+  //             _buildDaysNum(),
+  //             _buildDays(context),
+  //             Column(
+  //               children: [
+  //                 SizedBox(height: 30.v),
+  //                 Text("Habits", style: theme.textTheme.headlineLarge),
+  //                 SizedBox(height: 20.v),
+  //                 // buildHabitButton(
+  //                 //   context: context,
+  //                 //   buttonText: "Go For a Run",
+  //                 //   leftIconPath: ImageConstant.imgIconDirectionsRun,
+  //                 // ),
 
-  Widget _buildDaysNum() {
-    return Container(
-        padding: EdgeInsets.only(left: 20, right: 20),
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          buildContainer("3", Colors.black, false),
-          buildContainer("4", Colors.black, false),
-          buildContainer("5", Colors.black, false),
-          buildContainer("6", Colors.black, false),
-          buildContainer("7", Colors.green, false),
-          buildContainer("8", Colors.black, false),
-          buildContainer("9", Colors.black, false)
-        ]));
-  }
+  //                 // buildHabitButtons(context), // Replaced static button with dynamic habit buttons
 
-  Widget buildContainer(String label, Color outlineColor, bool isLightGreen) {
-    return Container(
-      width: 42.h,
-      padding: EdgeInsets.symmetric(horizontal: 10.h, vertical: 10.v),
-      decoration: BoxDecoration(
-        border: Border.all(color: outlineColor),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Center(
-        child: Text(label, style: theme.textTheme.bodyLarge),
-      ),
-    );
-  }
-
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
-    return CustomAppBar(
-        title: Text('Atomic Habits', style: TextStyle(color: Colors.black)),
-        height: 70.v,
-        leadingWidth: 100.h,
-        leading: AppbarLeadingImage(
-            imagePath: ImageConstant.imgThreeLinesPic,
-            margin: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 10)),
-        centerTitle: true,
-        actions: [
-          AppbarTrailingImage(
-              imagePath: ImageConstant.imgCalendarPic,
-              margin: EdgeInsets.only(right: 20),
-              onTap: () {
-                buildCalendar(context);
-              })
-        ]);
-  }
-
-  buildCalendar(BuildContext context) {
-    DateTime dateTime = DateTime.now();
-    showCupertinoModalPopup(
-        context: context,
-        builder: (BuildContext context) => SizedBox(
-              height: 250,
-              width: MediaQuery.of(context).size.width,
-              child: CupertinoDatePicker(
-                backgroundColor: Colors.white,
-                initialDateTime: dateTime,
-                onDateTimeChanged: (DateTime newTime) {
-                  dateTime = newTime;
-                },
-                use24hFormat: true,
-                mode: CupertinoDatePickerMode.date,
-              ),
-            ));
-  }
-
-  /// Section Widget
-  Widget _buildDays(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.only(left: 20, right: 20, bottom: 5),
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text("Mon", style: theme.textTheme.bodyLarge),
-          Text("Tue", style: theme.textTheme.bodyLarge),
-          Text("Wed", style: theme.textTheme.bodyLarge),
-          Text("Thu", style: theme.textTheme.bodyLarge),
-          Text("Sat", style: theme.textTheme.bodyLarge),
-          Text("Sun", style: theme.textTheme.bodyLarge),
-          Text("Mon", style: theme.textTheme.bodyLarge)
-        ]));
-  }
-}
+  //                 // for (var habitName in habitNames)
+  //                 //   buildHabitButton(
+  //                 //     context: context,
+  //                 //     buttonText: habitName,
+  //                 //     leftIconPath: ImageConstant.imgIconDirectionsRun,
+  //                 //   ),
+  //                 for (int i = 0; i < habitNames.length; i++) ...[
+  //                   buildHabitButton(
+  //                     context: context,
+  //                     buttonText: habitNames[i],
+  //                     leftIconPath: ImageConstant.imgIconDirectionsRun,
+  //                   ),
+  //                   if (i < habitNames.length - 1)
+  //                     SizedBox(height: 10.0), // Space between buttons
+  //                 ],
+  //                 SizedBox(height: 100.v),
+  //                 _newHabitButton(context),
+  //                 // SizedBox(height: 300.v),
+  //                 _userUid(),
+  //                 _signOutButton(),
+  //               ],
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
