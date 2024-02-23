@@ -15,13 +15,6 @@ Future<void> main() async {
   var notificationService = NotificationService();
   await notificationService.init();
   await notificationService.requestIOSPermissions();
-  notificationService.scheduleNotification(
-      1,
-      'test',
-      'testing our notification service',
-      DateTime(2024, 2, 23),
-      TimeOfDay(hour: 10, minute: 0),
-      'test');
 }
 
 class MyApp extends StatelessWidget {
