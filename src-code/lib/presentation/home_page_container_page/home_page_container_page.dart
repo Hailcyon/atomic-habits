@@ -309,66 +309,6 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     );
   }
 
-// // days and "Habits" are not scrollable now
-//   @override
-//   Widget build(BuildContext context) {
-//     width = MediaQuery.of(context).size.width;
-//     height = MediaQuery.of(context).size.height;
-//     return Scaffold(
-//       appBar: _buildAppBar(context),
-//       body: Column(
-//         children: <Widget>[
-//           topView(),
-//           SizedBox(height: 10),
-//           Text(
-//             "Habits", 
-//             style: theme.textTheme.headlineLarge,
-//             textAlign: TextAlign.center, // Align text to the center
-//           ),
-//           SizedBox(height: 10),
-//           Expanded(
-//             child: ListView(
-//               padding: const EdgeInsets.all(20),
-//               children: <Widget>[
-//                 StreamBuilder<List<Map<String, String>>>(
-//                   stream: dbService.getHabitsAscending(curDayOfWeekFullName),
-//                   builder: (context, snapshot) {
-//                     if (snapshot.hasError) {
-//                       print("${snapshot.error}");
-//                       return Text("Something went wrong: ${snapshot.error}");
-//                     }
-//                     if (!snapshot.hasData) {
-//                       return CircularProgressIndicator(); // Loading indicator
-//                     }
-//                     // final habitNames = snapshot.data!;
-//                     final habits = snapshot.data!;  // List<Map<String, String>>
-//                     return Column(
-//                       children: habitNames.map((name) => Column(
-//                         children: [
-//                           buildHabitButton(
-//                             context: context,
-//                             buttonText: name,
-//                             leftIconPath: ImageConstant.imgIconDirectionsRun,
-//                           ),
-//                           SizedBox(height: 10.0), // Space between buttons
-//                         ],
-//                       )).toList(),
-//                     );
-//                   },
-//                 ),
-//                 SizedBox(height: 100.v),
-//                 _newHabitButton(context),
-//                 // SizedBox(height: 300.v),
-//                 _userUid(),
-//                 _signOutButton(),
-//               ],
-//             ),
-//           ),
-//         ]  
-//       )
-//     );
-//   }
-
 
   Widget buildHabitButton({
     required BuildContext context,

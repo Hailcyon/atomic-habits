@@ -40,7 +40,7 @@ class _LawOnePage extends State<LawOnePage> {
           children: [
             _buildHabitLaw(context, 
                           "Implementation Intention", 
-                          "Edit [HABIT_ACTION] on [DAY] at [TIME] on [PLACE] for effective habit planning.",
+                          "Edit your habit for effective habit planning.",
                           (){Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => ImpInt(
                                 onSave: updateFrictionText,
@@ -60,7 +60,8 @@ class _LawOnePage extends State<LawOnePage> {
                           "Arrange surroundings to make habits visible and easy.",
                           (){Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => EnvDes(
-                                onSave: updateFrictionText,
+                                  onSave: updateFrictionText,
+                                  habitId: _habitId
                                 ),
                             ));}),
           ],

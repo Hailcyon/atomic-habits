@@ -69,6 +69,28 @@ class DatabaseService {
     return ref.id;
   }
 
+Future<String> saveHabitLaw(String habitId, int habitNum, int habitLawNum, String habitLaw) async {
+
+    DocumentReference ref = await firestoreInstance
+                                    .collection('Users')
+                                    .doc(uid)
+                                    .collection('Habits')
+                                    .doc(habitId)
+                                    .collection('HabitLaws')
+                                    .add({
+      "habitNum": habitNum,
+      "habitLawNum": habitLawNum,
+      "habitLaw": habitLaw,
+    });
+
+    return ref.id;
+}
+
+Future<QuerySnapshot> getHabitLawDetails(String habitId) {
+  return firestoreInstance.collection('Users').doc(uid).collection('Habits').doc(habitId).collection('HabitLaws').get();
+}
+
+
   Stream<List<Map<String, String>>> getHabitsAscending(String dayOfWeek) {
     return firestoreInstance
         .collection('Users')
