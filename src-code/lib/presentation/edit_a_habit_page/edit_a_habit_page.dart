@@ -49,6 +49,10 @@ class _EditHabitPageState extends State<EditHabitPage> {
   //     getHabitLawDetails();
   // }
 
+  // void setHabitLawDetailsFetchedFalse(){
+  //   habitLawDetailsFetched = false;
+  // }
+
   void getHabitDetails() async {
     //print("TEST")
     try {
@@ -80,7 +84,7 @@ class _EditHabitPageState extends State<EditHabitPage> {
             Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
             // Access other fields by their keys
             int habitNum = data['habitNum'];
-            int habitLawNum = data['habitLawNum'];
+            String habitLawNum = data['habitLawNum'];
             String habitlaw = data['habitLaw'];
             if (habitNum == 1) {
               mio.add(habitlaw);
@@ -107,6 +111,8 @@ class _EditHabitPageState extends State<EditHabitPage> {
     // List<String> dummy_mia = ["Listen to educational audio-book while running."]; //make it attractive
     // List<String> dummy_mie = ["Lay out running clothes by bed."]; //make it easy
     // List<String> dummy_mis = ["Reward yourself after a 5 mile run."]; //make it satisfying
+
+    //print("Test");
 
     if (!habitLawDetailsFetched) {
       getHabitLawDetails();

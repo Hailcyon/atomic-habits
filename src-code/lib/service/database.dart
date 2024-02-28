@@ -69,7 +69,7 @@ class DatabaseService {
     return ref.id;
   }
 
-Future<String> saveHabitLaw(String habitId, int habitNum, int habitLawNum, String habitLaw) async {
+Future<String> saveHabitLaw(String habitId, int habitNum, String habitLawNum, String habitLaw) async {
 
     DocumentReference ref = await firestoreInstance
                                     .collection('Users')

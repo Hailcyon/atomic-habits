@@ -2,6 +2,8 @@ class ImageConstant {
   // Image folder path
   static String imagePath = 'assets/images';
 
+  static String imgProfile = '$imagePath/profile.svg';
+
   // New Habit Search images
   static String imgRectangle51 = '$imagePath/img_rectangle_51.svg';
 

@@ -78,20 +78,20 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     return daysOfWeekAbbrev[dateTime.weekday - 1];
   }
 
-  Widget _newHabitButton(BuildContext context) {
-    // String dayOfWeekAbbrev = getDayOfWeekAbbreviation(currentDateTime); // This will be from Mon - Sun
-    return TextButton(
-      //add a new habit button
-      child: Icon(Icons.add_rounded, size: 40),
-      onPressed: () {
-        Navigator.of(context).pushNamed(AppRoutes.newHabitPageRoute);
-      },
-      style: TextButton.styleFrom(
-          backgroundColor: Colors.green,
-          foregroundColor: Colors.black,
-          shape: CircleBorder()),
-    );
-  }
+  // Widget _newHabitButton(BuildContext context) {
+  //   // String dayOfWeekAbbrev = getDayOfWeekAbbreviation(currentDateTime); // This will be from Mon - Sun
+  //   return TextButton(
+  //     //add a new habit button
+  //     child: Icon(Icons.add_rounded, size: 40),
+  //     onPressed: () {
+  //       Navigator.of(context).pushNamed(AppRoutes.newHabitPageRoute);
+  //     },
+  //     style: TextButton.styleFrom(
+  //         backgroundColor: Colors.green,
+  //         foregroundColor: Colors.black,
+  //         shape: CircleBorder()),
+  //   );
+  // }
 
   @override
   void initState() {
@@ -269,7 +269,9 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
                       return Text("Something went wrong: ${snapshot.error}");
                     }
                     if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return Text("No habits found");  // Handle case where no data is available
+                      return Center(
+                        child: Text("No habits found"),  // Handle case where no data is available
+                      );
                     }
                     List<Widget> habitWidgets = [];
                     snapshot.data!.asMap().forEach((index, habit) {
@@ -297,15 +299,42 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
                   },
                 ),
                 SizedBox(height: 100.v),
-                _newHabitButton(context),
+                //_newHabitButton(context),
                 // SizedBox(height: 300.v),
-                _userUid(),
-                _signOutButton(),
+                //_userUid(),
+                //_signOutButton(),
               ]
             ),
           ),
         ]  
-      )
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+          currentIndex: 0, // Index of the currently selected tab
+          onTap: (int index) {
+            if (index == 0) {
+
+            } else if (index == 1) {
+              Navigator.of(context).pushNamed(AppRoutes.newHabitPageRoute);
+            } else {
+              Navigator.pushNamedAndRemoveUntil(context, AppRoutes.profilePageRoute, (route) => false);
+            }
+            // Handle tab selection
+          },
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.add),
+              label: 'Add Habit',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Profile',
+            ),
+          ],
+        ),
     );
   }
 
@@ -382,7 +411,7 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
         height: 70.v,
         leadingWidth: 100.h,
         leading: AppbarLeadingImage(
-            imagePath: ImageConstant.imgThreeLinesPic,
+            imagePath: ImageConstant.imgProfile,
             margin: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 10)),
         centerTitle: true,
         actions: [
@@ -434,244 +463,4 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
       )
     );
   }
-
-  // Widget _buildDaysNum() {
-  //   return Container(
-  //       padding: EdgeInsets.only(left: 20, right: 20),
-  //       child:
-  //           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-  //         buildContainer("3", Colors.black, false),
-  //         buildContainer("4", Colors.black, false),
-  //         buildContainer("5", Colors.black, false),
-  //         buildContainer("6", Colors.black, false),
-  //         buildContainer("7", Colors.green, false),
-  //         buildContainer("8", Colors.black, false),
-  //         buildContainer("9", Colors.black, false)
-  //       ]));
-  // }
-
-  // Widget buildContainer(String label, Color outlineColor, bool isLightGreen) {
-  //   return Container(
-  //     width: 42.h,
-  //     padding: EdgeInsets.symmetric(horizontal: 10.h, vertical: 10.v),
-  //     decoration: BoxDecoration(
-  //       border: Border.all(color: outlineColor),
-  //       borderRadius: BorderRadius.circular(20),
-  //     ),
-  //     child: Center(
-  //       child: Text(label, style: theme.textTheme.bodyLarge),
-  //     ),
-  //   );
-  // }
-
-
-
-  /// Section Widget
-  // Widget _buildDays(BuildContext context) {
-  //   return Container(
-  //       padding: EdgeInsets.only(left: 20, right: 20, bottom: 5),
-  //       child:
-  //           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-  //         Text("Mon", style: theme.textTheme.bodyLarge),
-  //         Text("Tue", style: theme.textTheme.bodyLarge),
-  //         Text("Wed", style: theme.textTheme.bodyLarge),
-  //         Text("Thu", style: theme.textTheme.bodyLarge),
-  //         Text("Sat", style: theme.textTheme.bodyLarge),
-  //         Text("Sun", style: theme.textTheme.bodyLarge),
-  //         Text("Mon", style: theme.textTheme.bodyLarge)
-  //       ]));
-  // }
 }
-
-
-
-
-
-
-
-
-
-//build that days is scrollable
-// @override
-  // Widget build(BuildContext context) {
-  //   // final DatabaseService dbService = DatabaseService(uid: uid);
-  //   return Scaffold(
-  //     appBar: _buildAppBar(context),
-  //     body: Expanded(
-  //             child: ListView(
-  //               padding: const EdgeInsets.all(20),
-  //               children: <Widget>[
-  //                 _buildDaysNum(),
-  //                 _buildDays(context),
-  //                 SizedBox(height: 30.v),
-  //                 Text(
-  //                   "Habits", 
-  //                   style: theme.textTheme.headlineLarge,
-  //                   textAlign: TextAlign.center, // Align text to the center
-  //                 ),
-  //                 StreamBuilder<List<String>>(
-  //                   stream: dbService.getHabitsAscending(),
-  //                   builder: (context, snapshot) {
-  //                     if (snapshot.hasError) {
-  //                       return Text("Something went wrong");
-  //                     }
-  //                     if (!snapshot.hasData) {
-  //                       return CircularProgressIndicator(); // Loading indicator
-  //                     }
-  //                     final habitNames = snapshot.data!;
-  //                     return Column(
-  //                       children: habitNames.map((name) => Column(
-  //                         children: [
-  //                           buildHabitButton(
-  //                             context: context,
-  //                             buttonText: name,
-  //                             leftIconPath: ImageConstant.imgIconDirectionsRun,
-  //                           ),
-  //                           SizedBox(height: 10.0), // Space between buttons
-  //                         ],
-  //                       )).toList(),
-  //                     );
-  //                   },
-  //                 ),
-  //                 SizedBox(height: 100.v),
-  //                 _newHabitButton(context),
-  //                 // SizedBox(height: 300.v),
-  //                 _userUid(),
-  //                 _signOutButton(),
-  //               ],
-  //             ),
-  //           ),
-  //   );
-  // }
-
-//buildHabitButton before update habit in realtime
-  // Widget buildHabitButton({
-  //   required BuildContext context,
-  //   required String buttonText,
-  //   required String leftIconPath,
-  // }) {
-  //   return Container(
-  //     width: 600,
-  //     // height: 50,
-  //     margin: EdgeInsets.symmetric(horizontal: 16.0),
-  //     child: Expanded(
-  //       child: ElevatedButton.icon(
-  //         icon: const Icon(Icons.directions_run_rounded),
-  //         label: Text(
-  //           buttonText,
-  //           style: TextStyle(color: Colors.black), // Text color
-  //           overflow: TextOverflow.ellipsis,
-  //           softWrap: false,
-  //           maxLines: 100,
-  //         ),
-  //         style: ElevatedButton.styleFrom(
-  //           backgroundColor: Colors.yellow, // Button color
-  //           // fixedSize: Size(100, 0), // Fixed size of the button (width, height)
-  //           shape: RoundedRectangleBorder(
-  //             borderRadius: BorderRadius.circular(8), // Rounded corners
-  //           ),
-  //           alignment: Alignment.centerLeft, // Align the icon and text to the left
-  //           padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0), // Padding inside the button
-  //         ),
-  //         onPressed: () {
-  //           Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute);
-  //         },
-  //       ),
-  //     ),
-  //   );
-  // }
-
-
-// buildHabitButton before involving database
-// Widget buildHabitButton({
-  //   required BuildContext context,
-  //   required String buttonText,
-  //   required String leftIconPath,
-  // }) {
-  //   return CustomElevatedButton(
-  //       text: buttonText,
-  //       margin: EdgeInsets.only(right: 8.h),
-  //       rightIcon: Container(
-  //         margin: EdgeInsets.only(left: 30.h),
-  //         child: CustomImageView(
-  //           imagePath: ImageConstant.imgVectorBlack90015x25,
-  //           height: 17.adaptSize,
-  //           width: 17.adaptSize,
-  //         ),
-  //       ),
-  //       leftIcon: Container(
-  //         margin: EdgeInsets.only(right: 30.h),
-  //         child: CustomImageView(
-  //           imagePath: leftIconPath,
-  //           height: 35.v,
-  //           width: 30.h,
-  //         ),
-  //       ),
-  //       buttonStyle: CustomButtonStyles.fillYellowTL10,
-  //       buttonTextStyle: CustomTextStyles.headlineMedium26,
-  //       onPressed: () {
-  //         Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute);
-  //       },
-  //   );
-  // }
-
-
- // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: _buildAppBar(context),
-  //     // AppBar(
-  //     //   title: _title(),
-  //     // ),
-  //     body: Container(
-  //       height: double.infinity,
-  //       width: double.infinity,
-  //       padding: const EdgeInsets.all(20),
-  //       child: SingleChildScrollView(
-  //         child: Column(
-  //           crossAxisAlignment: CrossAxisAlignment.center,
-  //           mainAxisAlignment: MainAxisAlignment.start,
-  //           children: <Widget>[
-  //             _buildDaysNum(),
-  //             _buildDays(context),
-  //             Column(
-  //               children: [
-  //                 SizedBox(height: 30.v),
-  //                 Text("Habits", style: theme.textTheme.headlineLarge),
-  //                 SizedBox(height: 20.v),
-  //                 // buildHabitButton(
-  //                 //   context: context,
-  //                 //   buttonText: "Go For a Run",
-  //                 //   leftIconPath: ImageConstant.imgIconDirectionsRun,
-  //                 // ),
-
-  //                 // buildHabitButtons(context), // Replaced static button with dynamic habit buttons
-
-  //                 // for (var habitName in habitNames)
-  //                 //   buildHabitButton(
-  //                 //     context: context,
-  //                 //     buttonText: habitName,
-  //                 //     leftIconPath: ImageConstant.imgIconDirectionsRun,
-  //                 //   ),
-  //                 for (int i = 0; i < habitNames.length; i++) ...[
-  //                   buildHabitButton(
-  //                     context: context,
-  //                     buttonText: habitNames[i],
-  //                     leftIconPath: ImageConstant.imgIconDirectionsRun,
-  //                   ),
-  //                   if (i < habitNames.length - 1)
-  //                     SizedBox(height: 10.0), // Space between buttons
-  //                 ],
-  //                 SizedBox(height: 100.v),
-  //                 _newHabitButton(context),
-  //                 // SizedBox(height: 300.v),
-  //                 _userUid(),
-  //                 _signOutButton(),
-  //               ],
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }

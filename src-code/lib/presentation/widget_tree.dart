@@ -5,6 +5,7 @@ import "package:flutter/material.dart";
 import 'package:ahapp3/presentation/auth.dart';
 import 'package:ahapp3/presentation/log_in_screen/log_in_screen.dart';
 import 'package:ahapp3/presentation/home_page_container_page/home_page_container_page.dart';
+import "package:ahapp3/routes/app_routes.dart";
 
 class WidgetTree extends StatefulWidget {
   const WidgetTree({Key? key}) : super(key: key);
@@ -20,7 +21,12 @@ class _WidgetTreeState extends State<WidgetTree> {
       stream: Auth().authStateChanges,
       builder: (context, snapshot) {
          if (snapshot.hasData) {
+            // WidgetsBinding.instance!.addPostFrameCallback((_) {
+            //   Navigator.of(context).pushNamed(AppRoutes.homePageRoute);
+            // });
             return HomePageContainerPage();
+            // return HomePageContainerPage();
+            //Navigator.of(context).pushNamed(AppRoutes.homePageRoute);
             //return HomePageContainerPage.builder(context);
          } else {
           return const LoginPage();
@@ -29,24 +35,3 @@ class _WidgetTreeState extends State<WidgetTree> {
     );
   }
 }
-
-// class _WidgetTreeState extends State<WidgetTree> {
-//  @override
-//  Widget build(BuildContext context) {
-//    return BlocProvider<HomePageContainerBloc>(
-//      create: (context) => HomePageContainerBloc(HomePageContainerState(
-//          homePageContainerModelObj: HomePageContainerModel()))
-//        ..add(HomePageContainerInitialEvent()),
-//      child: StreamBuilder(
-//        stream: Auth().authStateChanges,
-//        builder: (context, snapshot) {
-//          if (snapshot.hasData) {
-//            return HomePageContainerPage();
-//          } else {
-//            return const LoginPage();
-//          }
-//        }
-//      ),
-//    );
-//  }
-// }
