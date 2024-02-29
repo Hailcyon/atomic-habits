@@ -1,11 +1,31 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:ahapp3/core/app_export.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:ahapp3/service/database.dart';
 
-class HabitSearchPage extends StatelessWidget {
+class HabitSearchPage extends StatefulWidget {
   const HabitSearchPage({Key? key}) : super(key: key);
 
   @override
+  State<HabitSearchPage> createState() => _HabitSearchPageState();
+}
+
+class _HabitSearchPageState extends State<HabitSearchPage> {
+  final DatabaseService dbService =
+      DatabaseService(uid: FirebaseAuth.instance.currentUser?.uid ?? '');
+  // Initialize dbService with the user's UID;
+  @override
   Widget build(BuildContext context) {
+    // List allSuggestions;
+    // async() {
+
+    // }
+
+    // getClientStream async() {
+    //   await FirebaseFirestore.instance.collection('SuggestedHabits').orderBy(name).get;
+    // }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Add a New Habit'),
@@ -18,6 +38,39 @@ class HabitSearchPage extends StatelessWidget {
             children: [
               _entryField('Search', TextEditingController()),
               Spacer(),
+              StreamBuilder<List<Map<String, String>>>(
+                  stream: dbService.getSuggestedHabits(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text("Something went wrong: ${snapshot.error}");
+                    }
+                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Text(
+                          "No habits found"); // Handle case where no data is available
+                    }
+                    List<Widget> habitWidgets = [];
+                    snapshot.data!.asMap().forEach((index, habit) {
+                      final habitId = habit['id']!; // Extract the habit ID
+
+                      // Add the habit button
+                      habitWidgets.add(_suggestedHabitButton(
+                        context: context,
+                        habitId: habitId, // Pass the habit ID
+                      ));
+
+                      // Add spacing after the button, but not after the last one
+                      if (index < snapshot.data!.length - 1) {
+                        habitWidgets.add(SizedBox(
+                            height:
+                                10)); // Adjust the height for desired spacing
+                      }
+                    });
+
+                    // Return a SingleChildScrollView containing a Column of habit buttons
+                    return Column(
+                      children: habitWidgets,
+                    );
+                  }),
               const Text('Not what you\'re looking for?',
                   style: TextStyle(fontSize: 18)),
               SizedBox(height: 30.v),
@@ -25,6 +78,25 @@ class HabitSearchPage extends StatelessWidget {
               SizedBox(height: 30.v),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _suggestedHabitButton({
+    required BuildContext context,
+    required String habitId,
+  }) {
+    return ElevatedButton(
+      onPressed: () {
+        Navigator.of(context).pushNamed(AppRoutes.customHabitPageRoute);
+      },
+      child: Text(habitId, style: TextStyle(fontSize: 20, color: Colors.black)),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.yellow,
+        fixedSize: Size(300, 50),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10), // Larger corner radius
         ),
       ),
     );

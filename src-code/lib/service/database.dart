@@ -51,13 +51,20 @@ class DatabaseService {
   // }
 
   //save new habit with auto generated id
-  Future<String> saveHabit(String habitName, List<String> days, TimeOfDay startTime, TimeOfDay endTime, String place) async {
+  Future<String> saveHabit(String habitName, List<String> days,
+      TimeOfDay startTime, TimeOfDay endTime, String place) async {
     // Format the times as strings
-    String startTimeStr = '${startTime.hour.toString().padLeft(2, '0')}:${startTime.minute.toString().padLeft(2, '0')}';
-    String endTimeStr = '${endTime.hour.toString().padLeft(2, '0')}:${endTime.minute.toString().padLeft(2, '0')}';
+    String startTimeStr =
+        '${startTime.hour.toString().padLeft(2, '0')}:${startTime.minute.toString().padLeft(2, '0')}';
+    String endTimeStr =
+        '${endTime.hour.toString().padLeft(2, '0')}:${endTime.minute.toString().padLeft(2, '0')}';
 
     // Let Firestore generate the ID automatically
-    DocumentReference ref = await firestoreInstance.collection('Users').doc(uid).collection('Habits').add({
+    DocumentReference ref = await firestoreInstance
+        .collection('Users')
+        .doc(uid)
+        .collection('Habits')
+        .add({
       "name": habitName,
       "days": days,
       "start time": startTimeStr,
@@ -79,8 +86,19 @@ class DatabaseService {
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((doc) => {
-                  'id': doc.id,  // Get the document ID
-                  'name': doc.data()['name'] as String,  // Get the habit name
+                  'id': doc.id, // Get the document ID
+                  'name': doc.data()['name'] as String, // Get the habit name
+                })
+            .toList());
+  }
+
+  Stream<List<Map<String, String>>> getSuggestedHabits() {
+    return firestoreInstance
+        .collection('SuggestedHabits')
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => {
+                  'id': doc.id, // Get the document ID, which is the habit name
                 })
             .toList());
   }
@@ -108,38 +126,48 @@ class DatabaseService {
 
   // have auto generated id
   Future<void> deleteHabit(String habitId) async {
-    await firestoreInstance.collection('Users').doc(uid).collection('Habits').doc(habitId).delete();
+    await firestoreInstance
+        .collection('Users')
+        .doc(uid)
+        .collection('Habits')
+        .doc(habitId)
+        .delete();
   }
 
   Future<void> updateHabitName(String habitId, String newHabitName) async {
     return firestoreInstance
-      .collection('Users')
-      .doc(uid) 
-      .collection('Habits')
-      .doc(habitId) // Use the habit ID instead of the old name
-      .update({'name': newHabitName}); // Update the 'name' field
+        .collection('Users')
+        .doc(uid)
+        .collection('Habits')
+        .doc(habitId) // Use the habit ID instead of the old name
+        .update({'name': newHabitName}); // Update the 'name' field
   }
 
   Future<void> updateStartTime(String habitId, String newStartTime) async {
     return firestoreInstance
-      .collection('Users')
-      .doc(uid) 
-      .collection('Habits')
-      .doc(habitId) // Use the habit ID instead of the old name
-      .update({'start time': newStartTime}); // Update the 'name' field
+        .collection('Users')
+        .doc(uid)
+        .collection('Habits')
+        .doc(habitId) // Use the habit ID instead of the old name
+        .update({'start time': newStartTime}); // Update the 'name' field
   }
 
   Future<void> updateEndTime(String habitId, String newEndTime) async {
     return firestoreInstance
-      .collection('Users')
-      .doc(uid) 
-      .collection('Habits')
-      .doc(habitId) // Use the habit ID instead of the old name
-      .update({'end time': newEndTime}); // Update the 'name' field
+        .collection('Users')
+        .doc(uid)
+        .collection('Habits')
+        .doc(habitId) // Use the habit ID instead of the old name
+        .update({'end time': newEndTime}); // Update the 'name' field
   }
 
   Future<DocumentSnapshot> getHabitDetails(String habitId) {
-    return firestoreInstance.collection('Users').doc(uid).collection('Habits').doc(habitId).get();
+    return firestoreInstance
+        .collection('Users')
+        .doc(uid)
+        .collection('Habits')
+        .doc(habitId)
+        .get();
   }
 
   // // before having auto generated doc id and creating Habit class
@@ -153,7 +181,6 @@ class DatabaseService {
   //     // .catchError((error) => print("Failed to update habit name: $error"))
   //     ;
   // }
-
 }
 
 
