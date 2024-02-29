@@ -23,14 +23,12 @@ class Auth {
     required String password,
     required String displayName, // Add display name parameter
   }) async {
-    print("IN CREATE USER AWAIT");
     await _firebaseAuth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
 
     if (_firebaseAuth.currentUser != null) {
-      print("IN CREATE NULL CHECK");
       await _firebaseAuth.currentUser!.updateDisplayName(displayName); // Set user's display name
       await DatabaseService(uid: _firebaseAuth.currentUser!.uid).initializeUser();
     }

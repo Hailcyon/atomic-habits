@@ -5,6 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'bloc/home_page_container_bloc.dart';
 import 'models/home_page_container_model.dart';
+import 'package:ahapp3/presentation/funAlertDialog.dart';
+
 import 'package:ahapp3/core/app_export.dart';
 import 'package:ahapp3/widgets/app_bar/appbar_leading_image.dart';
 import 'package:ahapp3/widgets/app_bar/appbar_title.dart';
@@ -338,72 +340,242 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     );
   }
 
-
-  Widget buildHabitButton({
-    required BuildContext context,
-    required String habitId,
-    required String buttonText,
-    required String leftIconPath,
-  }) {
-    return Slidable(
-      endActionPane: ActionPane(
-        motion: StretchMotion(),
-        children: [
-          SlidableAction(
-            onPressed: ((context){
-              showDialog(
-                barrierDismissible: true, 
-                context: context, 
-                builder: (BuildContext context) => AlertDialog(
-                  content: Text("Are you sure you want to delete this habit?"),
-                  actions: [
-                    TextButton(
-                      child: Text("Yes"), 
-                      onPressed: () async {
-                        await dbService.deleteHabit(habitId); // use habit id to delete
-                        Navigator.of(context).pop(); // Close the dialog
-                      },
-                    ),
-                  ],
-                  elevation: 24,
-                ),
-              );
-            }),
-            backgroundColor: Colors.red,
-            icon: Icons.delete,
-          )
-        ],
-      ),
-      // build the habit button
-      child: Container(
-        width: 600,
-        margin: EdgeInsets.symmetric(horizontal: 16.0),
-        // child: Expanded( //have Expanded in Container will cause Incorrect use of ParentDataWidget error
-          child: ElevatedButton.icon(
-            icon: const Icon(Icons.directions_run_rounded),
-            label: Text(
-              buttonText,
-              style: TextStyle(color: Colors.black), // Text color
-              overflow: TextOverflow.ellipsis,
-              softWrap: false,
-              maxLines: 100,
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.yellow, // Button color
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8), // Rounded corners
+Widget buildHabitButton({
+  required BuildContext context,
+  required String habitId,
+  required String buttonText,
+  required String leftIconPath,
+}) {
+  return Slidable(
+    endActionPane: ActionPane(
+      motion: StretchMotion(),
+      children: [
+        SlidableAction(
+          onPressed: ((context){
+            showDialog(
+              barrierDismissible: true, 
+              context: context, 
+              builder: (BuildContext context) => AlertDialog(
+                content: Text("Are you sure you want to delete this habit?"),
+                actions: [
+                  TextButton(
+                    child: Text("Cancel"), 
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Close the dialog
+                    },
+                  ),
+                  TextButton(
+                    child: Text("Yes"), 
+                    onPressed: () async {
+                      await dbService.deleteHabit(habitId); // use habit id to delete
+                      Navigator.of(context).pop(); // Close the dialog
+                    },
+                  ),
+                ],
+                elevation: 24,
               ),
-              alignment: Alignment.centerLeft, // Align the icon and text to the left
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0), // Padding inside the button
-            ),
-            onPressed: () {
-              Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute, arguments: habitId);
-            },
+            );
+          }),
+          backgroundColor: Colors.red,
+          icon: Icons.delete,
+        ),
+      ],
+    ),
+    startActionPane: ActionPane(
+      motion: StretchMotion(),
+      children: [
+        SlidableAction(
+          onPressed: ((context) {
+            _showStreakDialog(context, habitId);
+          }),
+          backgroundColor: Colors.green,
+          icon: Icons.check,
+        ),
+      ],
+    ),
+    // build the habit button
+    child: Container(
+      width: 600,
+      margin: EdgeInsets.symmetric(horizontal: 16.0),
+      // child: Expanded( //have Expanded in Container will cause Incorrect use of ParentDataWidget error
+      child: ElevatedButton.icon(
+        icon: const Icon(Icons.directions_run_rounded),
+        label: Text(
+          buttonText,
+          style: TextStyle(color: Colors.black), // Text color
+          overflow: TextOverflow.ellipsis,
+          softWrap: false,
+          maxLines: 100,
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.yellow, // Button color
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8), // Rounded corners
           ),
-        // ),
+          alignment: Alignment.centerLeft, // Align the icon and text to the left
+          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0), // Padding inside the button
+        ),
+        onPressed: () {
+          Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute, arguments: habitId);
+        },
       ),
-    );
-  }
+      // ),
+    ),
+  );
+}
+
+void _showStreakDialog(BuildContext context, String habitId) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return FutureBuilder<int>(
+        future: getStreak(habitId), // Fetch the streak value
+        builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // While waiting for the streak value, show a loading indicator
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            // If there's an error fetching the streak value, show an error message
+            return AlertDialog(
+              title: Text('Error'),
+              content: Text('Failed to fetch streak value.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                  child: Text('Close'),
+                ),
+              ],
+            );
+          } else {
+            // If streak value is fetched successfully, show the streak in the dialog
+            int curStreak = snapshot.data!;
+            return AlertDialog(
+              title: Text('Congratulations!'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('You have completed the habit.'),
+                  SizedBox(height: 13),
+                  Text("You have a " + curStreak.toString() + " day streak!"), // Display the streak value
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                  child: Text('Close'),
+                ),
+              ],
+            );
+          }
+        },
+      );
+    },
+  );
+}
+
+
+// Inside an asynchronous function
+Future<int> getStreak(habitId) async {
+  return await dbService.updateStreak(habitId);
+}
+
+
+
+
+
+
+  // Widget buildHabitButton({
+  //   required BuildContext context,
+  //   required String habitId,
+  //   required String buttonText,
+  //   required String leftIconPath,
+  // }) {
+  //   return Slidable(
+  //     endActionPane: ActionPane(
+  //       motion: StretchMotion(),
+  //       children: [
+  //         SlidableAction(
+  //           onPressed: ((context){
+  //             showDialog(
+  //               barrierDismissible: true, 
+  //               context: context, 
+  //               builder: (BuildContext context) => AlertDialog(
+  //                 content: Text("Are you sure you want to delete this habit?"),
+  //                 actions: [
+  //                   TextButton(
+  //                     child: Text("Yes"), 
+  //                     onPressed: () async {
+  //                       await dbService.deleteHabit(habitId); // use habit id to delete
+  //                       Navigator.of(context).pop(); // Close the dialog
+  //                     },
+  //                   ),
+  //                 ],
+  //                 elevation: 24,
+  //               ),
+  //             );
+  //           }),
+  //           backgroundColor: Colors.red,
+  //           icon: Icons.delete,
+  //         ),
+  //         SlidableAction(
+  //           onPressed: ((context){
+  //             showDialog(
+  //               barrierDismissible: true, 
+  //               context: context, 
+  //               builder: (BuildContext context) => AlertDialog(
+  //                 content: Text("Are you sure you want to delete this habit?"),
+  //                 actions: [
+  //                   TextButton(
+  //                     child: Text("Yes"), 
+  //                     onPressed: () async {
+  //                       await dbService.deleteHabit(habitId); // use habit id to delete
+  //                       Navigator.of(context).pop(); // Close the dialog
+  //                     },
+  //                   ),
+  //                 ],
+  //                 elevation: 24,
+  //               ),
+  //             );
+  //           }),
+  //           backgroundColor: Colors.red,
+  //           icon: Icons.delete,
+  //         )
+  //       ],
+  //     ),
+  //     // build the habit button
+  //     child: Container(
+  //       width: 600,
+  //       margin: EdgeInsets.symmetric(horizontal: 16.0),
+  //       // child: Expanded( //have Expanded in Container will cause Incorrect use of ParentDataWidget error
+  //         child: ElevatedButton.icon(
+  //           icon: const Icon(Icons.directions_run_rounded),
+  //           label: Text(
+  //             buttonText,
+  //             style: TextStyle(color: Colors.black), // Text color
+  //             overflow: TextOverflow.ellipsis,
+  //             softWrap: false,
+  //             maxLines: 100,
+  //           ),
+  //           style: ElevatedButton.styleFrom(
+  //             backgroundColor: Colors.yellow, // Button color
+  //             shape: RoundedRectangleBorder(
+  //               borderRadius: BorderRadius.circular(8), // Rounded corners
+  //             ),
+  //             alignment: Alignment.centerLeft, // Align the icon and text to the left
+  //             padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0), // Padding inside the button
+  //           ),
+  //           onPressed: () {
+  //             Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute, arguments: habitId);
+  //           },
+  //         ),
+  //       // ),
+  //     ),
+  //   );
+  // }
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(

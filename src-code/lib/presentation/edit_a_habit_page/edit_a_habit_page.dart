@@ -88,7 +88,13 @@ class _EditHabitPageState extends State<EditHabitPage> {
             String habitlaw = data['habitLaw'];
             if (habitNum == 1) {
               mio.add(habitlaw);
-            } 
+            } else if (habitNum == 2) {
+              mia.add(habitlaw);
+            } else if (habitNum == 3) {
+              mie.add(habitlaw);
+            } else if (habitNum == 4) {
+              mis.add(habitlaw);
+            }
          });
       } catch (e) {
         print("Error fetching habit details: $e");
