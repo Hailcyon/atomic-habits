@@ -17,15 +17,6 @@ class _HabitSearchPageState extends State<HabitSearchPage> {
   // Initialize dbService with the user's UID;
   @override
   Widget build(BuildContext context) {
-    // List allSuggestions;
-    // async() {
-
-    // }
-
-    // getClientStream async() {
-    //   await FirebaseFirestore.instance.collection('SuggestedHabits').orderBy(name).get;
-    // }
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Add a New Habit'),
@@ -33,51 +24,51 @@ class _HabitSearchPageState extends State<HabitSearchPage> {
       body: Center(
         child: Container(
           padding: const EdgeInsets.all(30),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _entryField('Search', TextEditingController()),
-              SizedBox(height: 10),
-              StreamBuilder<List<Map<String, String>>>(
-                  stream: dbService.getSuggestedHabits(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Text("Something went wrong: ${snapshot.error}");
-                    }
-                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return Text(
-                          "No habits found"); // Handle case where no data is available
-                    }
-                    List<Widget> habitWidgets = [];
-                    snapshot.data!.asMap().forEach((index, habit) {
-                      final habitId = habit['id']!; // Extract the habit ID
-
-                      // Add the habit button
-                      habitWidgets.add(_suggestedHabitButton(
-                        context: context,
-                        habitId: habitId, // Pass the habit ID
-                      ));
-
-                      // Add spacing after the button, but not after the last one
-                      if (index < snapshot.data!.length - 1) {
-                        habitWidgets.add(SizedBox(
-                            height:
-                                10)); // Adjust the height for desired spacing
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _entryField('Search', TextEditingController()),
+                SizedBox(height: 15),
+                StreamBuilder<List<Map<String, String>>>(
+                    stream: dbService.getSuggestedHabits(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Text("Something went wrong: ${snapshot.error}");
                       }
-                    });
+                      if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return Text(
+                            "No habits found"); // Handle case where no data is available
+                      }
+                      List<Widget> habitWidgets = [];
+                      snapshot.data!.asMap().forEach((index, habit) {
+                        final habitId = habit['id']!; // Extract the habit ID
 
-                    // Return a SingleChildScrollView containing a Column of habit buttons
-                    return SingleChildScrollView(
-                        child: Column(
-                      children: habitWidgets,
-                    ));
-                  }),
-              const Text('Not what you\'re looking for?',
-                  style: TextStyle(fontSize: 18)),
-              SizedBox(height: 30.v),
-              _customHabitButton(context),
-              SizedBox(height: 30.v),
-            ],
+                        // Add the habit button
+                        habitWidgets.add(_suggestedHabitButton(
+                          context: context,
+                          habitId: habitId, // Pass the habit ID
+                        ));
+
+                        // Add spacing after the button
+                        if (index < snapshot.data!.length) {
+                          habitWidgets.add(SizedBox(
+                              height:
+                                  10)); // Adjust the height for desired spacing
+                        }
+                      });
+                      return Column(
+                        children: habitWidgets,
+                      );
+                    }),
+                SizedBox(height: 10),
+                const Text('Not what you\'re looking for?',
+                    style: TextStyle(fontSize: 18)),
+                SizedBox(height: 30.v),
+                _customHabitButton(context),
+                SizedBox(height: 30.v),
+              ],
+            ),
           ),
         ),
       ),
