@@ -37,7 +37,7 @@ class _HabitSearchPageState extends State<HabitSearchPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _entryField('Search', TextEditingController()),
-              Spacer(),
+              SizedBox(height: 10),
               StreamBuilder<List<Map<String, String>>>(
                   stream: dbService.getSuggestedHabits(),
                   builder: (context, snapshot) {
@@ -67,9 +67,10 @@ class _HabitSearchPageState extends State<HabitSearchPage> {
                     });
 
                     // Return a SingleChildScrollView containing a Column of habit buttons
-                    return Column(
+                    return SingleChildScrollView(
+                        child: Column(
                       children: habitWidgets,
-                    );
+                    ));
                   }),
               const Text('Not what you\'re looking for?',
                   style: TextStyle(fontSize: 18)),
