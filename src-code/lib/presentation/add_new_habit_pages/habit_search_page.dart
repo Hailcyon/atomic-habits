@@ -1,8 +1,22 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:ahapp3/core/app_export.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:ahapp3/service/database.dart';
 
-class HabitSearchPage extends StatelessWidget {
+class HabitSearchPage extends StatefulWidget {
   const HabitSearchPage({Key? key}) : super(key: key);
+
+  @override
+  State<HabitSearchPage> createState() => _HabitSearchPageState();
+}
+
+class _HabitSearchPageState extends State<HabitSearchPage> {
+  // Initialize dbService with the user's ID;
+  final DatabaseService dbService =
+      DatabaseService(uid: FirebaseAuth.instance.currentUser?.uid ?? '');
+
+  TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -13,18 +27,80 @@ class HabitSearchPage extends StatelessWidget {
       body: Center(
         child: Container(
           padding: const EdgeInsets.all(30),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _entryField('Search', TextEditingController()),
-              Spacer(),
-              const Text('Not what you\'re looking for?',
-                  style: TextStyle(fontSize: 18)),
-              SizedBox(height: 30.v),
-              _customHabitButton(context),
-              SizedBox(height: 30.v),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _searchField('Search', _searchController),
+                SizedBox(height: 15),
+                _createHabitListDisplay(),
+                SizedBox(height: 25),
+                const Text('Not what you\'re looking for?',
+                    style: TextStyle(fontSize: 18)),
+                SizedBox(height: 30.v),
+                _customHabitButton(context),
+                SizedBox(height: 30.v),
+              ],
+            ),
           ),
+        ),
+      ),
+    );
+  }
+
+  StreamBuilder<List<Map<String, String>>> _createHabitListDisplay() {
+    return StreamBuilder<List<Map<String, String>>>(
+        stream: dbService.getSuggestedHabits(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text("Something went wrong: ${snapshot.error}");
+          }
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Text(
+                "No habits found"); // Handle case where no data is available
+          }
+
+          List<Widget> habitWidgets = [];
+          String searchQuery = _searchController.text.toLowerCase();
+
+          snapshot.data!.asMap().forEach((index, habit) {
+            final habitId = habit['id']!; // Extract the habit ID
+
+            // Add the habit button
+            if (habitId.toLowerCase().contains(searchQuery)) {
+              habitWidgets.add(_suggestedHabitButton(
+                context: context,
+                habitId: habitId, // Pass the habit ID
+              ));
+
+              // Add spacing after the button
+              if (index < snapshot.data!.length) {
+                habitWidgets.add(SizedBox(
+                    height: 10)); // Adjust the height for desired spacing
+              }
+            }
+          });
+          return Column(
+            children: habitWidgets,
+          );
+        });
+  }
+
+  Widget _suggestedHabitButton({
+    required BuildContext context,
+    required String habitId,
+  }) {
+    return ElevatedButton(
+      onPressed: () {
+        Navigator.of(context)
+            .pushNamed(AppRoutes.customHabitPageRoute, arguments: habitId);
+      },
+      child: Text(habitId, style: TextStyle(fontSize: 20, color: Colors.black)),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.yellow,
+        fixedSize: Size(300, 50),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10), // Larger corner radius
         ),
       ),
     );
@@ -46,15 +122,17 @@ class HabitSearchPage extends StatelessWidget {
     );
   }
 
-  Widget _entryField(
+  Widget _searchField(
     String title,
     TextEditingController controller,
   ) {
     return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: title,
-      ),
-    );
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: title,
+        ),
+        onChanged: (value) {
+          setState(() {});
+        });
   }
 }

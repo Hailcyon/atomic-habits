@@ -23,18 +23,23 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
     DayInWeek("Su", dayKey: "sunday"),
   ];
 
-  final TextEditingController _habitNameController = TextEditingController();
-  final TextEditingController _placeController = TextEditingController();
-
   TimeOfDay _startTime = TimeOfDay.now();
   TimeOfDay _endTime = TimeOfDay.now();
-  final DatabaseService dbService = DatabaseService(uid: FirebaseAuth.instance.currentUser?.uid ?? ''); // Initialize dbService with the user's UID;
+  final DatabaseService dbService = DatabaseService(
+      uid: FirebaseAuth.instance.currentUser?.uid ??
+          ''); // Initialize dbService with the user's UID;
+  String habitId = "";
 
+  TextEditingController _habitNameController = TextEditingController();
+  final TextEditingController _placeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     // final argDayOfWeek = ModalRoute.of(context)!.settings.arguments as String;
-
+    habitId = ModalRoute.of(context)?.settings.arguments as String? ??
+        ''; //habit name will be blank w/out arg
+    _habitNameController = TextEditingController(
+        text: habitId); //autofill with suggested habit clicked
     return Scaffold(
       appBar: _buildAppBar(context),
       body: Center(
@@ -42,34 +47,36 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
           padding: const EdgeInsets.symmetric(horizontal: 30.0),
           child: Container(
             // padding: const EdgeInsets.all(10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // _entryField('Habit Name', TextEditingController()),
-                _entryField('Habit Name', _habitNameController),
-                SizedBox(height: 40.v),
-                SelectWeekDays(
-                  days: _days,
-                  onSelect: (values) {},
-                  boxDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30.0),
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      // 10% of the width, so there are ten blinds.
-                      colors: [
-                        Color.fromARGB(255, 243, 220, 115),
-                        Color.fromARGB(255, 226, 192, 41),
-                      ],
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // _entryField('Habit Name', TextEditingController()),
+                  _entryField('Habit Name', _habitNameController),
+                  SizedBox(height: 40.v),
+                  SelectWeekDays(
+                    days: _days,
+                    onSelect: (values) {},
+                    boxDecoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30.0),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        // 10% of the width, so there are ten blinds.
+                        colors: [
+                          Color.fromARGB(255, 243, 220, 115),
+                          Color.fromARGB(255, 226, 192, 41),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(height: 40.v),
-                _addTime(context),
-                SizedBox(height: 40.v),
-                _addPlace(context),
-                SizedBox(height: 40.v),
-                _saveButton(),
-              ],
+                  SizedBox(height: 40.v),
+                  _addTime(context),
+                  SizedBox(height: 40.v),
+                  _addPlace(context),
+                  SizedBox(height: 40.v),
+                  _saveButton(),
+                ],
+              ),
             ),
           ),
         ),
@@ -90,13 +97,15 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
         Text(
           'Place: ',
           style: TextStyle(
-            fontSize: 16, // Optional: Adjust the font size according to your design
+            fontSize:
+                16, // Optional: Adjust the font size according to your design
           ),
         ),
         Expanded(
           // Wrap TextField in Expanded to ensure it takes the remaining space
           child: TextField(
-            controller: _placeController, // Use the TextEditingController for place
+            controller:
+                _placeController, // Use the TextEditingController for place
             decoration: InputDecoration(
               hintText: 'Place to perform habit action',
             ),
@@ -112,51 +121,40 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
     final _endHours = _endTime.hour.toString().padLeft(2, '0');
     final _endMinutes = _endTime.minute.toString().padLeft(2, '0');
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        // "Starts:" Section
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Starts: ', 
-                style: TextStyle(fontSize: 16)
-              ),
-              ElevatedButton(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          // "Starts:" Section
+          Expanded(
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text('Starts: ', style: TextStyle(fontSize: 16)),
+            ElevatedButton(
                 child: Text(
                   '${_startHours}:${_startMinutes}',
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.yellow,
                   shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8), // Rounded corners
-              ),
+                    borderRadius: BorderRadius.circular(8), // Rounded corners
+                  ),
                 ),
                 onPressed: () async {
                   TimeOfDay? _newStartTime = await showTimePicker(
-                    context: context, 
+                    context: context,
                     initialTime: _startTime,
                   );
                   //if 'CANCEL' in timepicker => null
                   if (_newStartTime == null) return;
                   //if 'OK' in timepicker => update _endTime
                   setState(() => _startTime = _newStartTime);
-                }
-              ),
-            ]
-          )
-        ),
-        // "Ends:" Section
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Ends: ', 
-                style: TextStyle(fontSize: 16)
-              ),
-              ElevatedButton(
+                }),
+          ])),
+          // "Ends:" Section
+          Expanded(
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text('Ends: ', style: TextStyle(fontSize: 16)),
+            ElevatedButton(
                 child: Text(
                   '${_endHours}:${_endMinutes}',
                 ),
@@ -168,30 +166,29 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
                 ),
                 onPressed: () async {
                   TimeOfDay? _newEndTime = await showTimePicker(
-                    context: context, 
+                    context: context,
                     initialTime: _endTime,
                   );
                   //if 'CANCEL' in timepicker => null
                   if (_newEndTime == null) return;
 
                   // Validation for end time being later than start time
-                  if (_newEndTime.hour < _startTime.hour || (_newEndTime.hour == _startTime.hour && _newEndTime.minute <= _startTime.minute)) {
+                  if (_newEndTime.hour < _startTime.hour ||
+                      (_newEndTime.hour == _startTime.hour &&
+                          _newEndTime.minute <= _startTime.minute)) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("End time must be later than start time.")),
+                      SnackBar(
+                          content:
+                              Text("End time must be later than start time.")),
                     );
                     return; // Prevent state update if validation fails
                   } else {
                     // //if 'OK' in timepicker => update _startTime
                     setState(() => _endTime = _newEndTime);
                   }
-                  
-                }
-              ),
-            ]
-          )
-        )
-      ]
-    );
+                }),
+          ]))
+        ]);
   }
 
   Widget _saveButton() {
@@ -200,7 +197,7 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
         _saveHabit(context);
       },
       child: Text(
-        'Save', 
+        'Save',
         style: TextStyle(
           fontSize: 20,
           color: Colors.white, // Set text color here
@@ -230,25 +227,28 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
 
   void _saveHabit(BuildContext context) {
     final String habitName = _habitNameController.text;
-    final List<String> selectedDays = _days.where((day) => day.isSelected).map((day) => day.dayKey).toList();
+    final List<String> selectedDays =
+        _days.where((day) => day.isSelected).map((day) => day.dayKey).toList();
     final String place = _placeController.text;
 
-    if(habitName.isEmpty) {
+    if (habitName.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Habit name is empty.")),
       );
-    } else if(selectedDays.isEmpty) {
+    } else if (selectedDays.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Days is empty.")),
       );
-    } else if(_endTime.hour < _startTime.hour || (_endTime.hour == _startTime.hour && _endTime.minute <= _startTime.minute)) {
+    } else if (_endTime.hour < _startTime.hour ||
+        (_endTime.hour == _startTime.hour &&
+            _endTime.minute <= _startTime.minute)) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("End time must be later than start time.")),
       );
     } else {
       final FirebaseAuth auth = FirebaseAuth.instance;
       final String uid = auth.currentUser?.uid ?? '';
-      
+
       // // Save the habit with start and end times to Firestore
       // // Before changing the habit id to habitx
       // dbService.saveHabit(habitName, selectedDays, _startTime!, _endTime!, place);
@@ -268,39 +268,38 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
 
       // Create a new Habit object without ID first
       Habit newHabit = Habit(
-          id: '',  // Temporarily empty, will be filled by Firestore's generated ID
-          name: habitName,
-          days: selectedDays,
-          startTime: _startTime,
-          endTime: _endTime,
-          place: place,
+        id: '', // Temporarily empty, will be filled by Firestore's generated ID
+        name: habitName,
+        days: selectedDays,
+        startTime: _startTime,
+        endTime: _endTime,
+        place: place,
       );
 
       // Save the habit and update the ID with the one generated by Firestore
-      dbService.saveHabit(newHabit.name, newHabit.days, newHabit.startTime, newHabit.endTime, newHabit.place)
-        .then((String newHabitId) {
-            // Update the habit's ID with the new one generated by Firestore
-            newHabit = Habit(
-                id: newHabitId, // Update with the generated ID
-                name: newHabit.name,
-                days: newHabit.days,
-                startTime: newHabit.startTime,
-                endTime: newHabit.endTime,
-                place: newHabit.place,
-            );
+      dbService
+          .saveHabit(newHabit.name, newHabit.days, newHabit.startTime,
+              newHabit.endTime, newHabit.place)
+          .then((String newHabitId) {
+        // Update the habit's ID with the new one generated by Firestore
+        newHabit = Habit(
+          id: newHabitId, // Update with the generated ID
+          name: newHabit.name,
+          days: newHabit.days,
+          startTime: newHabit.startTime,
+          endTime: newHabit.endTime,
+          place: newHabit.place,
+        );
 
-            // Here, you can now use newHabit with the complete data including its Firestore ID
-            // Navigator.of(context).pop();  // Optionally, go back or update UI
-        })
-        .catchError((error) {
-            print('Error saving habit: $error');
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Failed to save habit: $error"))
-            );
-        });
+        // Here, you can now use newHabit with the complete data including its Firestore ID
+        // Navigator.of(context).pop();  // Optionally, go back or update UI
+      }).catchError((error) {
+        print('Error saving habit: $error');
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Failed to save habit: $error")));
+      });
 
       Navigator.of(context).pop(); // Optionally pop back after saving
     }
   }
-
 }
