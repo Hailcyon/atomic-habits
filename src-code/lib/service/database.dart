@@ -80,83 +80,6 @@ Future<QuerySnapshot> getHabitLawDetails(String habitId) {
     await firestoreInstance.collection('Users').doc(uid).collection('Habits').doc(habitId).delete();
   }
 
-  // Future<int> updateStreak(String habitId) async {
-  //   DocumentReference habitRef = FirebaseFirestore.instance
-  //       .collection('Users')
-  //       .doc(uid)
-  //       .collection('Habits')
-  //       .doc(habitId);
-
-  //   DocumentSnapshot habitDoc = await getHabitDetails(habitId);
-  //   Map<String, dynamic> data = habitDoc.data() as Map<String, dynamic>;
-
-  //   List<dynamic> streak = List<dynamic>.from(data['streak'] ?? []);
-  //   streak = ['2024-02-25 14:38:35.112230']; //test for adding sunday in
-
-  //   if (streak.isNotEmpty && streak.last == _formattedDate(DateTime.now())) {
-  //     return streak.length; // Exit the function, no need to update streak
-  //   }
-
-  //   List<String> days = List<String>.from(data['days'] ?? []);
-
-  //   //int currentDayIndex = DateTime.now().weekday - 1; // 1 for Monday, 2 for Tuesday, etc.
-  //   DateTime currentDate = DateTime.now();
-  //   int currentDayIndex = currentDate.weekday;
-
-  //   // Calculate the last expected date based on the current day and the days array
-  //   int lastExpectedDayIndex = (currentDayIndex == 0) ? 6 : currentDayIndex - 1; // Index of yesterday
-  //   //String lastExpectedDay = days[lastExpectedDayIndex];
-
-  //   String lastExpectedDayName = days[lastExpectedDayIndex];
-
-
-  //   // Calculate the difference in days between the current day and the last expected day
-  //   int daysUntilLastExpectedDay = currentDayIndex - lastExpectedDayIndex;
-
-  //   // Adjust the difference to get the last occurrence of the last expected day before the current date
-  //   if (daysUntilLastExpectedDay < 0) {
-  //     daysUntilLastExpectedDay += 7; // Add 7 days to get the last occurrence of the last expected day
-  //   }
-
-  //   // Subtract the difference from the current date to get the last occurrence of the last expected day
-  //   DateTime lastExpectedDay = currentDate.subtract(Duration(days: daysUntilLastExpectedDay));
-
-  //   print('Last occurrence of $lastExpectedDayName before $currentDate: $lastExpectedDay');
-
-  //   // Check if the streak array is empty
-  //   if (streak.isEmpty) {
-  //     // If streak array is empty, add the current date
-  //     streak.add(DateTime.now().toString());
-  //   } else {
-  //     // Get the last date in the streak array
-  //     String lastDateInStreak = streak.last;
-
-  //     print("FORMATTED LAST DATE IN STREAK");
-  //     print(_formattedDate(DateTime.parse(lastDateInStreak)));
-  //     //print(lastDateInStreak);
-
-  //     print("LAST EXPECTED DAY");
-  //     print(lastExpectedDay);
-
-  //     // Check if the last date in the streak array matches the last expected date
-  //     if (lastDateInStreak == lastExpectedDay) {
-  //       print("IN == HERE");
-  //       // If it matches, continue the streak by adding the current date
-  //       streak.add(DateTime.now().toString());
-  //     } else {
-  //       print("IN != HERE");
-  //       // If it doesn't match, reset the streak with the current date
-  //       streak = [DateTime.now().toString()];
-  //     }
-  //   }
-
-  //   // Update the streak array in the habit document
-  //   await habitRef.update({'streak': streak});
-
-  //   print(streak);
-
-  //   return streak.length;
-  // }
 
   Future<int> updateStreak(String habitId) async {
     DocumentReference habitRef = FirebaseFirestore.instance
@@ -169,7 +92,7 @@ Future<QuerySnapshot> getHabitLawDetails(String habitId) {
     Map<String, dynamic> data = habitDoc.data() as Map<String, dynamic>;
 
     List<dynamic> streak = List<dynamic>.from(data['streak'] ?? []);
-    // streak = ['2024-02-25']; //test for sunday the 25th of Feb
+    //streak = ['2024-02-25']; //test for sunday the 25th of Feb
 
     // Get the current date
     DateTime currentDate = DateTime.now();
