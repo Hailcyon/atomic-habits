@@ -1,7 +1,7 @@
 import 'package:ahapp3/service/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class Auth{
+class Auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   User? get currentUser => _firebaseAuth.currentUser;
@@ -13,23 +13,25 @@ class Auth{
     required String password,
   }) async {
     await _firebaseAuth.signInWithEmailAndPassword(
-      email: email, 
-      password: password);
+      email: email,
+      password: password,
+    );
   }
 
   Future<void> createUserWithEmailAndPassword({
     required String email,
     required String password,
+    required String displayName, // Add display name parameter
   }) async {
     await _firebaseAuth.createUserWithEmailAndPassword(
-      email: email, 
-      password: password);
+      email: email,
+      password: password,
+    );
 
     if (_firebaseAuth.currentUser != null) {
-      print(_firebaseAuth.currentUser!.uid);
+      await _firebaseAuth.currentUser!.updateDisplayName(displayName); // Set user's display name
       await DatabaseService(uid: _firebaseAuth.currentUser!.uid).initializeUser();
     }
-
   }
 
   Future<void> signOut() async {

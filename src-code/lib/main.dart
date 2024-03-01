@@ -4,12 +4,17 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/app_export.dart';
 import 'package:ahapp3/presentation/widget_tree.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'service/notification_service.dart';
 
 var globalMessengerKey = GlobalKey<ScaffoldMessengerState>();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
+  //fire up the notification service
+  var notificationService = NotificationService();
+  await notificationService.init();
+  await notificationService.requestIOSPermissions();
 }
 
 class MyApp extends StatelessWidget {
