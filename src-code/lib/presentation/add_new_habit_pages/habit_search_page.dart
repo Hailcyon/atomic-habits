@@ -12,15 +12,11 @@ class HabitSearchPage extends StatefulWidget {
 }
 
 class _HabitSearchPageState extends State<HabitSearchPage> {
-  // Initialize dbService with the user's UID;
+  // Initialize dbService with the user's ID;
   final DatabaseService dbService =
       DatabaseService(uid: FirebaseAuth.instance.currentUser?.uid ?? '');
 
   TextEditingController _searchController = TextEditingController();
-
-  // Filtered items based on search query
-  //List<String> suggestedHabits = dbService.getSuggestedHabits();
-  //List<String> filteredHabits = [];
 
   @override
   Widget build(BuildContext context) {
@@ -90,8 +86,6 @@ class _HabitSearchPageState extends State<HabitSearchPage> {
         });
   }
 
-  // List<String> getSuggestedHabitNameList
-
   Widget _suggestedHabitButton({
     required BuildContext context,
     required String habitId,
@@ -138,12 +132,7 @@ class _HabitSearchPageState extends State<HabitSearchPage> {
           labelText: title,
         ),
         onChanged: (value) {
-          setState(() {
-            // filteredItems = items
-            //     .where(
-            //         (item) => item.toLowerCase().contains(value.toLowerCase()))
-            //     .toList();
-          });
+          setState(() {});
         });
   }
 }
