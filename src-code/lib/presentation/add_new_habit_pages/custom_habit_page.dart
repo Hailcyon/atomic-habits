@@ -36,8 +36,10 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
   @override
   Widget build(BuildContext context) {
     // final argDayOfWeek = ModalRoute.of(context)!.settings.arguments as String;
-    habitId = ModalRoute.of(context)?.settings.arguments as String? ?? '';
-    _habitNameController = TextEditingController(text: habitId);
+    habitId = ModalRoute.of(context)?.settings.arguments as String? ??
+        ''; //habit name will be blank w/out arg
+    _habitNameController = TextEditingController(
+        text: habitId); //autofill with suggested habit clicked
     return Scaffold(
       appBar: _buildAppBar(context),
       body: Center(
@@ -45,34 +47,36 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
           padding: const EdgeInsets.symmetric(horizontal: 30.0),
           child: Container(
             // padding: const EdgeInsets.all(10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // _entryField('Habit Name', TextEditingController()),
-                _entryField('Habit Name', _habitNameController),
-                SizedBox(height: 40.v),
-                SelectWeekDays(
-                  days: _days,
-                  onSelect: (values) {},
-                  boxDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30.0),
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      // 10% of the width, so there are ten blinds.
-                      colors: [
-                        Color.fromARGB(255, 243, 220, 115),
-                        Color.fromARGB(255, 226, 192, 41),
-                      ],
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // _entryField('Habit Name', TextEditingController()),
+                  _entryField('Habit Name', _habitNameController),
+                  SizedBox(height: 40.v),
+                  SelectWeekDays(
+                    days: _days,
+                    onSelect: (values) {},
+                    boxDecoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30.0),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        // 10% of the width, so there are ten blinds.
+                        colors: [
+                          Color.fromARGB(255, 243, 220, 115),
+                          Color.fromARGB(255, 226, 192, 41),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(height: 40.v),
-                _addTime(context),
-                SizedBox(height: 40.v),
-                _addPlace(context),
-                SizedBox(height: 40.v),
-                _saveButton(),
-              ],
+                  SizedBox(height: 40.v),
+                  _addTime(context),
+                  SizedBox(height: 40.v),
+                  _addPlace(context),
+                  SizedBox(height: 40.v),
+                  _saveButton(),
+                ],
+              ),
             ),
           ),
         ),
