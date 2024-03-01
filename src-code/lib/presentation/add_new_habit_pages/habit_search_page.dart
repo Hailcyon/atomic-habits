@@ -12,9 +12,16 @@ class HabitSearchPage extends StatefulWidget {
 }
 
 class _HabitSearchPageState extends State<HabitSearchPage> {
+  // Initialize dbService with the user's UID;
   final DatabaseService dbService =
       DatabaseService(uid: FirebaseAuth.instance.currentUser?.uid ?? '');
-  // Initialize dbService with the user's UID;
+
+  TextEditingController _searchController = TextEditingController();
+
+  // Filtered items based on search query
+  //List<String> suggestedHabits = dbService.getSuggestedHabits();
+  //List<String> filteredHabits = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,40 +35,10 @@ class _HabitSearchPageState extends State<HabitSearchPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _entryField('Search', TextEditingController()),
+                _searchField('Search', _searchController),
                 SizedBox(height: 15),
-                StreamBuilder<List<Map<String, String>>>(
-                    stream: dbService.getSuggestedHabits(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        return Text("Something went wrong: ${snapshot.error}");
-                      }
-                      if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Text(
-                            "No habits found"); // Handle case where no data is available
-                      }
-                      List<Widget> habitWidgets = [];
-                      snapshot.data!.asMap().forEach((index, habit) {
-                        final habitId = habit['id']!; // Extract the habit ID
-
-                        // Add the habit button
-                        habitWidgets.add(_suggestedHabitButton(
-                          context: context,
-                          habitId: habitId, // Pass the habit ID
-                        ));
-
-                        // Add spacing after the button
-                        if (index < snapshot.data!.length) {
-                          habitWidgets.add(SizedBox(
-                              height:
-                                  10)); // Adjust the height for desired spacing
-                        }
-                      });
-                      return Column(
-                        children: habitWidgets,
-                      );
-                    }),
-                SizedBox(height: 10),
+                _createHabitListDisplay(),
+                SizedBox(height: 25),
                 const Text('Not what you\'re looking for?',
                     style: TextStyle(fontSize: 18)),
                 SizedBox(height: 30.v),
@@ -74,6 +51,46 @@ class _HabitSearchPageState extends State<HabitSearchPage> {
       ),
     );
   }
+
+  StreamBuilder<List<Map<String, String>>> _createHabitListDisplay() {
+    return StreamBuilder<List<Map<String, String>>>(
+        stream: dbService.getSuggestedHabits(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text("Something went wrong: ${snapshot.error}");
+          }
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Text(
+                "No habits found"); // Handle case where no data is available
+          }
+
+          List<Widget> habitWidgets = [];
+          String searchQuery = _searchController.text.toLowerCase();
+
+          snapshot.data!.asMap().forEach((index, habit) {
+            final habitId = habit['id']!; // Extract the habit ID
+
+            // Add the habit button
+            if (habitId.toLowerCase().contains(searchQuery)) {
+              habitWidgets.add(_suggestedHabitButton(
+                context: context,
+                habitId: habitId, // Pass the habit ID
+              ));
+
+              // Add spacing after the button
+              if (index < snapshot.data!.length) {
+                habitWidgets.add(SizedBox(
+                    height: 10)); // Adjust the height for desired spacing
+              }
+            }
+          });
+          return Column(
+            children: habitWidgets,
+          );
+        });
+  }
+
+  // List<String> getSuggestedHabitNameList
 
   Widget _suggestedHabitButton({
     required BuildContext context,
@@ -111,15 +128,22 @@ class _HabitSearchPageState extends State<HabitSearchPage> {
     );
   }
 
-  Widget _entryField(
+  Widget _searchField(
     String title,
     TextEditingController controller,
   ) {
     return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: title,
-      ),
-    );
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: title,
+        ),
+        onChanged: (value) {
+          setState(() {
+            // filteredItems = items
+            //     .where(
+            //         (item) => item.toLowerCase().contains(value.toLowerCase()))
+            //     .toList();
+          });
+        });
   }
 }
