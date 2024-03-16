@@ -19,7 +19,8 @@ import 'package:ahapp3/widgets/app_bar/custom_app_bar.dart';
 
 
 class EditHabitPage extends StatefulWidget {
-  const EditHabitPage({Key? key}) : super(key: key);
+  final String habitId;
+  const EditHabitPage({Key? key, required this.habitId}) : super(key: key);
 
   @override
   State<EditHabitPage> createState() => _EditHabitPageState();
@@ -27,7 +28,7 @@ class EditHabitPage extends StatefulWidget {
 
 class _EditHabitPageState extends State<EditHabitPage> {
   final DatabaseService dbService = DatabaseService(uid: FirebaseAuth.instance.currentUser?.uid ?? ''); 
-  String habitId = "";
+  // String habitId = "";
   // Define variables for habit details
   String _habitName = "";
   String _startTime = "";
@@ -56,7 +57,7 @@ class _EditHabitPageState extends State<EditHabitPage> {
   void getHabitDetails() async {
     //print("TEST")
     try {
-        DocumentSnapshot habitDoc = await dbService.getHabitDetails(habitId);
+        DocumentSnapshot habitDoc = await dbService.getHabitDetails(widget.habitId);
         if (habitDoc.exists) {
           // Assuming 'name' is the field where the habit's name is stored
           // habitName = habitDoc['name'];
@@ -76,40 +77,42 @@ class _EditHabitPageState extends State<EditHabitPage> {
       }
     }
 
-  void getHabitLawDetails() async {
-    //print("TEST");
-    try {
-        QuerySnapshot habitLawDoc = await dbService.getHabitLawDetails(habitId);
-          habitLawDoc.docs.forEach((doc) {
-            Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-            // Access other fields by their keys
-            int habitNum = data['habitNum'];
-            String habitLawNum = data['habitLawNum'];
-            String habitlaw = data['habitLaw'];
-            if (habitNum == 1) {
-              mio.add(habitlaw);
-            } else if (habitNum == 2) {
-              mia.add(habitlaw);
-            } else if (habitNum == 3) {
-              mie.add(habitlaw);
-            } else if (habitNum == 4) {
-              mis.add(habitlaw);
-            }
-         });
-      } catch (e) {
-        print("Error fetching habit details: $e");
-        // Optionally, handle the error e.g., show a message
-      }
-  }
+  // void getHabitLawDetails() async {
+  //   //print("TEST");
+  //   try {
+  //       QuerySnapshot habitLawDoc = await dbService.getHabitLawDetails(widget.habitId);
+  //         habitLawDoc.docs.forEach((doc) {
+  //           Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+  //           // Access other fields by their keys
+  //           int habitNum = data['habitNum'];
+  //           String habitLawNum = data['habitLawNum'];
+  //           String habitlaw = data['habitLaw'];
+  //           if (habitNum == 1) {
+  //             mio.add(habitlaw);
+  //           } else if (habitNum == 2) {
+  //             mia.add(habitlaw);
+  //           } else if (habitNum == 3) {
+  //             mie.add(habitlaw);
+  //           } else if (habitNum == 4) {
+  //             mis.add(habitlaw);
+  //           }
+  //        });
+  //     } catch (e) {
+  //       print("Error fetching habit details: $e");
+  //       // Optionally, handle the error e.g., show a message
+  //     }
+  // }
     
   @override
   Widget build(BuildContext context) {
 
+    // final habitId = ModalRoute.of(context)?.settings.arguments as String;
+
     //print(mio);
 
     // Retrieve the habit name passed as an argument
-    habitId = ModalRoute.of(context)?.settings.arguments as String? ?? 'Default Habit Name';
-    getHabitDetails();
+    // habitId = ModalRoute.of(context)?.settings.arguments as String? ?? 'Default Habit Name';
+    // getHabitDetails();
     String impt_int_act = "Habit Action: $_habitName on ${_days.join(", ")} from $_startTime to $_endTime on $_place";
 
     // List<String> dummy_mio = [impt_int_act, "Put running shoes near the front door"];
@@ -120,10 +123,10 @@ class _EditHabitPageState extends State<EditHabitPage> {
 
     //print("Test");
 
-    if (!habitLawDetailsFetched) {
-      getHabitLawDetails();
-      habitLawDetailsFetched = true;
-    }
+    // if (!habitLawDetailsFetched) {
+    //   getHabitLawDetails();
+    //   habitLawDetailsFetched = true;
+    // }
     //print(mio);
 
 
@@ -136,30 +139,65 @@ class _EditHabitPageState extends State<EditHabitPage> {
           child: ListView(
             physics: BouncingScrollPhysics(),
             children: [
-              _buildLaw(habitLaws: mio, 
-                buttonText: "Make it Obvious", 
-                context: context, 
-                onPressed: (){
-                  Navigator.of(context).pushNamed(AppRoutes.lawOnePageRoute, arguments: habitId,);
-                }),
-              _buildLaw(habitLaws: mia, 
-                buttonText: "Make it Attractive", 
-                context: context, 
-                onPressed: (){
-                  Navigator.of(context).pushNamed(AppRoutes.lawTwoPageRoute);
-                }),
-              _buildLaw(habitLaws: mie, 
-                buttonText: "Make it Easy", 
-                context: context, 
-                onPressed: (){
-                  Navigator.of(context).pushNamed(AppRoutes.lawThreePageRout);
-                }),
-              _buildLaw(habitLaws: mis, 
-                buttonText: "Make it Satisfying", 
-                context: context, 
-                onPressed: (){
-                  Navigator.of(context).pushNamed(AppRoutes.lawFourPageRoute);
-                }),
+              StreamBuilder<List<Map<String, dynamic>>>(
+                stream: dbService.getHabitLawDetailsStream(widget.habitId),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  }
+                  if (!snapshot.hasData) {
+                    return Text("No habit laws found");
+                  }
+                  final mio = snapshot.data!
+                      .where((law) => law['habitNum'] == 1)
+                      .map((law) => law['habitLaw'] as String)
+                      .toList();
+                  final mia = snapshot.data!
+                      .where((law) => law['habitNum'] == 2)
+                      .map((law) => law['habitLaw'] as String)
+                      .toList();
+                  final mie = snapshot.data!
+                      .where((law) => law['habitNum'] == 3)
+                      .map((law) => law['habitLaw'] as String)
+                      .toList();
+                  final mis = snapshot.data!
+                      .where((law) => law['habitNum'] == 4)
+                      .map((law) => law['habitLaw'] as String)
+                      .toList();
+                  // Continue for mie and mis...
+
+                  // Return widgets that display habit laws
+                  return Column(
+                    children: [
+                      _buildLaw(habitLaws: mio, 
+                        buttonText: "Make it Obvious", 
+                        context: context, 
+                        onPressed: (){
+                          Navigator.of(context).pushNamed(AppRoutes.lawOnePageRoute, arguments: widget.habitId,);
+                        }),
+                      _buildLaw(habitLaws: mia, 
+                        buttonText: "Make it Attractive", 
+                        context: context, 
+                        onPressed: (){
+                          Navigator.of(context).pushNamed(AppRoutes.lawTwoPageRoute);
+                        }),
+                      _buildLaw(habitLaws: mie, 
+                        buttonText: "Make it Easy", 
+                        context: context, 
+                        onPressed: (){
+                          Navigator.of(context).pushNamed(AppRoutes.lawThreePageRout);
+                        }),
+                      _buildLaw(habitLaws: mis, 
+                        buttonText: "Make it Satisfying", 
+                        context: context, 
+                        onPressed: (){
+                          Navigator.of(context).pushNamed(AppRoutes.lawFourPageRoute);
+                        }),
+                    ],
+                  );
+                },
+              ),
+              
             ],
           ),
         ),

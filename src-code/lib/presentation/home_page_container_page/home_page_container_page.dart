@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'bloc/home_page_container_bloc.dart';
 import 'models/home_page_container_model.dart';
-import 'package:ahapp3/presentation/funAlertDialog.dart';
+// import 'package:ahapp3/presentation/funAlertDialog.dart';
 
 import 'package:ahapp3/core/app_export.dart';
 import 'package:ahapp3/widgets/app_bar/appbar_leading_image.dart';
@@ -386,7 +386,7 @@ Widget buildHabitButton({
       children: [
         SlidableAction(
           onPressed: ((context) {
-            _showStreakDialog(context, habitId);
+            _showStreakDialog(context, habitId, currentDateTime);
           }),
           backgroundColor: Colors.green,
           icon: Icons.check,
@@ -424,12 +424,12 @@ Widget buildHabitButton({
   );
 }
 
-void _showStreakDialog(BuildContext context, String habitId) {
+void _showStreakDialog(BuildContext context, String habitId, DateTime chosenDateTime) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return FutureBuilder<int>(
-        future: getStreak(habitId), // Fetch the streak value
+        future: getStreak(habitId, chosenDateTime), // Fetch the streak value
         builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While waiting for the streak value, show a loading indicator
@@ -479,11 +479,72 @@ void _showStreakDialog(BuildContext context, String habitId) {
 
 
 // Inside an asynchronous function
-Future<int> getStreak(habitId) async {
-  return await dbService.updateStreak(habitId);
+Future<int> getStreak(habitId, DateTime chosenDateTime) async {
+  return await dbService.updateStreak(habitId, chosenDateTime);
 }
 
 
+
+PreferredSizeWidget _buildAppBar(BuildContext context) {
+    return CustomAppBar(
+        title: Text('Atomic Habits', style: TextStyle(color: Colors.black)),
+        height: 70.v,
+        leadingWidth: 100.h,
+        leading: AppbarLeadingImage(
+            imagePath: ImageConstant.imgProfile,
+            margin: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 10)),
+        centerTitle: true,
+        actions: [
+          AppbarTrailingImage(
+              imagePath: ImageConstant.imgCalendarPic,
+              margin: EdgeInsets.only(right: 20),
+              onTap: () {
+                buildCalendar(context);
+              })
+        ]);
+  }
+
+  buildCalendar(BuildContext context) {
+    DateTime dateTime;
+    // make sure month/year in calendar stay updated
+    if(initialDateTimeChanged) {
+      dateTime = currentDateTime;   
+      print("dateTime is $dateTime");
+    } else {
+      dateTime = DateTime.now();
+    }
+    // curDayOfWeekFullName = getDayOfWeekFullName(dateTime);
+    showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) => SizedBox(
+        height: 250,
+        width: MediaQuery.of(context).size.width,
+        child: CupertinoDatePicker(
+          backgroundColor: Colors.white,
+          initialDateTime: dateTime,
+          onDateTimeChanged: (DateTime newTime) {
+            // dateTime = newTime;
+            initialDateTimeChanged = true;
+            setState(() {
+              // currentDateTime = DateTime(newTime.year, newTime.month);
+              currentDateTime = newTime;
+
+              // update current dayOfWeek full name
+              curDayOfWeekFullName = getDayOfWeekFullName(currentDateTime);
+
+              currentMonthList = date_util.DateUtils.daysInMonth(currentDateTime);
+              // Make sure to remove duplicates and sort if necessary, like in initState
+              currentMonthList.sort((a, b) => a.day.compareTo(b.day));
+            });
+          },
+          use24hFormat: true,
+          mode: CupertinoDatePickerMode.date,
+          // mode: CupertinoDatePickerMode.monthYear,
+        ),
+      )
+    );
+  }
+}
 
 
 
@@ -577,62 +638,4 @@ Future<int> getStreak(habitId) async {
   //   );
   // }
 
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
-    return CustomAppBar(
-        title: Text('Atomic Habits', style: TextStyle(color: Colors.black)),
-        height: 70.v,
-        leadingWidth: 100.h,
-        leading: AppbarLeadingImage(
-            imagePath: ImageConstant.imgProfile,
-            margin: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 10)),
-        centerTitle: true,
-        actions: [
-          AppbarTrailingImage(
-              imagePath: ImageConstant.imgCalendarPic,
-              margin: EdgeInsets.only(right: 20),
-              onTap: () {
-                buildCalendar(context);
-              })
-        ]);
-  }
-
-  buildCalendar(BuildContext context) {
-    DateTime dateTime;
-    // make sure month/year in calendar stay updated
-    if(initialDateTimeChanged) {
-      dateTime = currentDateTime;   
-    } else {
-      dateTime = DateTime.now();
-    }
-    // curDayOfWeekFullName = getDayOfWeekFullName(dateTime);
-    showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) => SizedBox(
-        height: 250,
-        width: MediaQuery.of(context).size.width,
-        child: CupertinoDatePicker(
-          backgroundColor: Colors.white,
-          initialDateTime: dateTime,
-          onDateTimeChanged: (DateTime newTime) {
-            // dateTime = newTime;
-            initialDateTimeChanged = true;
-            setState(() {
-              // currentDateTime = DateTime(newTime.year, newTime.month);
-              currentDateTime = newTime;
-
-              // update current dayOfWeek full name
-              curDayOfWeekFullName = getDayOfWeekFullName(currentDateTime);
-
-              currentMonthList = date_util.DateUtils.daysInMonth(currentDateTime);
-              // Make sure to remove duplicates and sort if necessary, like in initState
-              currentMonthList.sort((a, b) => a.day.compareTo(b.day));
-            });
-          },
-          use24hFormat: true,
-          mode: CupertinoDatePickerMode.date,
-          // mode: CupertinoDatePickerMode.monthYear,
-        ),
-      )
-    );
-  }
-}
+  
