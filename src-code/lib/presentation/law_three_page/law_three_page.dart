@@ -36,14 +36,15 @@ class _LawThreePageState extends State<LawThreePage> {
         child: ListView(
           physics: BouncingScrollPhysics(),
           children: [
-            // _buildHabitLaw(context,
-            //               "Reduce Friction",
-            //               "Minimize obstacles to make starting habits effortless.",
-            //               (){Navigator.of(context).push(MaterialPageRoute(
-            //                     builder: (context) => ReduceFrictionPage(
-            //                     onSave: updateFrictionText,
-            //                     ),
-            //                 ));}),
+            _buildHabitLaw(context, "Reduce Friction",
+                "Minimize obstacles to make starting habits effortless.", () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ReduceFrictionPage(
+                  onSave: updateFrictionText,
+                  habitId: _habitId,
+                ),
+              ));
+            }),
             _buildHabitLaw(context, "Two Minute Rule",
                 "Begin habits with tasks taking two minutes or less.", () {
               Navigator.of(context).push(MaterialPageRoute(
@@ -53,16 +54,17 @@ class _LawThreePageState extends State<LawThreePage> {
                 ),
               ));
             }),
-            // _buildHabitLaw(context,
-            //               "Habit Automation",
-            //               "Use technology and routines to automate habits.",
-            //               (){Navigator.of(context).push(MaterialPageRoute(
-            //                     builder: (context) => HabAutoPage(
-            //                     onSave: updateFrictionText,
-            //                     ),
-            //                 ));}),
+            _buildHabitLaw(context, "Habit Automation",
+                "Use technology and routines to automate habits.", () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => HabAutoPage(
+                  onSave: updateFrictionText,
+                  habitId: _habitId,
+                ),
+              ));
+            }),
             _buildHabitLaw(context, "Environment Priming",
-                "Shape surroundings to support desired habits.", () {
+                "Shape surroundings to make desired habits easier.", () {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => EnvPrimingPage(
                   onSave: updateFrictionText,
