@@ -25,60 +25,59 @@ class _LawThreePageState extends State<LawThreePage> {
 
   @override
   Widget build(BuildContext context) {
+    final String _habitId =
+        ModalRoute.of(context)?.settings.arguments as String? ??
+            'Default Habit Name';
     return Scaffold(
       // backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text(
-          'Make It Easy')
-      ),
+      appBar: AppBar(title: Text('Make It Easy')),
       body: Container(
         //color: Color.fromARGB(255, 246, 240, 230),
         child: ListView(
           physics: BouncingScrollPhysics(),
           children: [
-            // _buildHabitLaw(context, 
-            //               "Reduce Friction", 
+            // _buildHabitLaw(context,
+            //               "Reduce Friction",
             //               "Minimize obstacles to make starting habits effortless.",
             //               (){Navigator.of(context).push(MaterialPageRoute(
             //                     builder: (context) => ReduceFrictionPage(
             //                     onSave: updateFrictionText,
             //                     ),
             //                 ));}),
-            _buildHabitLaw(context, 
-                          "Two Minute Rule", 
-                          "Begin habits with tasks taking two minutes or less.",
-                          (){Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => TwoMinPage(
-                                onSave: updateFrictionText,
-                                ),
-                            ));}),
-            // _buildHabitLaw(context, 
-            //               "Habit Automation", 
+            _buildHabitLaw(context, "Two Minute Rule",
+                "Begin habits with tasks taking two minutes or less.", () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => TwoMinPage(
+                  onSave: updateFrictionText,
+                  habitId: _habitId,
+                ),
+              ));
+            }),
+            // _buildHabitLaw(context,
+            //               "Habit Automation",
             //               "Use technology and routines to automate habits.",
             //               (){Navigator.of(context).push(MaterialPageRoute(
             //                     builder: (context) => HabAutoPage(
             //                     onSave: updateFrictionText,
             //                     ),
             //                 ));}),
-            _buildHabitLaw(context, 
-                          "Environment Priming", 
-                          "Shape surroundings to support desired habits.",
-                          (){Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => EnvPrimingPage(
-                                onSave: updateFrictionText,
-                                ),
-                            ));}),
+            _buildHabitLaw(context, "Environment Priming",
+                "Shape surroundings to support desired habits.", () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => EnvPrimingPage(
+                  onSave: updateFrictionText,
+                  habitId: _habitId,
+                ),
+              ));
+            }),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildHabitLaw(
-      BuildContext context,
-      String buttonText,
-      String buttonDescription,
-      VoidCallback onPressed) {
+  Widget _buildHabitLaw(BuildContext context, String buttonText,
+      String buttonDescription, VoidCallback onPressed) {
     return ExpansionTile(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -95,10 +94,13 @@ class _LawThreePageState extends State<LawThreePage> {
         Align(
           alignment: Alignment.topLeft,
           child: Padding(
-            padding: EdgeInsets.only(right: 0.0, left: 0.0),  // Right padding to match childrenPadding
-            child: frictionResult.isNotEmpty 
-            ? Text(frictionResult) // Display the frictionResult text if it's not empty
-            : Text(buttonDescription), 
+            padding: EdgeInsets.only(
+                right: 0.0,
+                left: 0.0), // Right padding to match childrenPadding
+            child: frictionResult.isNotEmpty
+                ? Text(
+                    frictionResult) // Display the frictionResult text if it's not empty
+                : Text(buttonDescription),
             //Text('Reduce friction explained xxxxxxxx xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj.'),
           ),
         ),
@@ -106,7 +108,8 @@ class _LawThreePageState extends State<LawThreePage> {
         Align(
           alignment: Alignment.topLeft,
           child: Padding(
-            padding: EdgeInsets.only(right: 16.0),  // Right padding to match childrenPadding
+            padding: EdgeInsets.only(
+                right: 16.0), // Right padding to match childrenPadding
             child: ElevatedButton.icon(
               onPressed: onPressed,
               icon: Icon(
@@ -118,7 +121,8 @@ class _LawThreePageState extends State<LawThreePage> {
                 backgroundColor: const Color.fromARGB(255, 1, 82, 148),
                 fixedSize: Size(500, 20),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5), // Larger corner radius
+                  borderRadius:
+                      BorderRadius.circular(5), // Larger corner radius
                 ),
               ),
             ),

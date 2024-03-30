@@ -4,13 +4,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:ahapp3/service/database.dart';
 
-
 class HabSta extends StatefulWidget {
   // const ReduceFrictionPage({Key? key}) : super(key: key);
   final Function(String) onSave;
 
   const HabSta({Key? key, required this.onSave}) : super(key: key);
-
 
   @override
   State<HabSta> createState() => _HabSta();
@@ -48,7 +46,7 @@ class _HabSta extends State<HabSta> {
     );
   }
 
-  Widget _reduceFrictionDetail(BuildContext context){
+  Widget _reduceFrictionDetail(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -76,7 +74,6 @@ class _HabSta extends State<HabSta> {
             ),
           ),
           SizedBox(height: 16.0),
-
           ...additionalInputs,
           MaterialButton(
             onPressed: () {
@@ -120,7 +117,6 @@ class _HabSta extends State<HabSta> {
               ),
             ),
           ),
-          
           MaterialButton(
             onPressed: () {
               //widget.onSave("I will make going for a run easier by ${userInputController.text}");
@@ -196,8 +192,6 @@ class _HabSta extends State<HabSta> {
   //   );
   // }
 
-
-
   // Widget _reduceFrictionSugguestion(BuildContext context){
   //   return Padding(
   //     padding: EdgeInsets.symmetric(horizontal: 16),
@@ -241,4 +235,5 @@ class _HabSta extends State<HabSta> {
   //   );
   // }
 
+  //TODO add save method
 }

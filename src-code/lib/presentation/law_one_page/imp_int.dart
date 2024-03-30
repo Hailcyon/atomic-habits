@@ -14,7 +14,8 @@ class ImpInt extends StatefulWidget {
   //use to get specific habit in database
   final String habitId;
 
-  const ImpInt({Key? key, required this.onSave, required this.habitId}) : super(key: key);
+  const ImpInt({Key? key, required this.onSave, required this.habitId})
+      : super(key: key);
 
   @override
   State<ImpInt> createState() => _ImpInt();
@@ -22,11 +23,11 @@ class ImpInt extends StatefulWidget {
 
 class _ImpInt extends State<ImpInt> {
   final userInputController = TextEditingController();
-  final List<String> suggestions = [
-    "Suggestion 1: ..."
-  ];
+  final List<String> suggestions = ["Suggestion 1: ..."];
 
-  final DatabaseService dbService = DatabaseService(uid: FirebaseAuth.instance.currentUser?.uid ?? ''); // Initialize dbService with the user's UID;
+  final DatabaseService dbService = DatabaseService(
+      uid: FirebaseAuth.instance.currentUser?.uid ??
+          ''); // Initialize dbService with the user's UID;
   final whatHabitController = TextEditingController();
   final whatDayController = TextEditingController();
   final startTimeController = TextEditingController();
@@ -41,12 +42,13 @@ class _ImpInt extends State<ImpInt> {
   @override
   void initState() {
     super.initState();
-    getHabitDetails();  // Example usage: fetching data from a database.
+    getHabitDetails(); // Example usage: fetching data from a database.
   }
 
   void getHabitDetails() async {
     try {
-      DocumentSnapshot habitDoc = await dbService.getHabitDetails(widget.habitId);
+      DocumentSnapshot habitDoc =
+          await dbService.getHabitDetails(widget.habitId);
       if (habitDoc.exists) {
         Map<String, dynamic> data = habitDoc.data() as Map<String, dynamic>;
         _habitName = habitDoc['name'];
@@ -109,7 +111,7 @@ class _ImpInt extends State<ImpInt> {
     );
   }
 
-  Widget _editHabit(BuildContext context){
+  Widget _editHabit(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -222,20 +224,18 @@ class _ImpInt extends State<ImpInt> {
             onPressed: () {
               // habit name
               if (whatHabitController.text.isNotEmpty) {
-                  dbService.updateHabitName(widget.habitId, whatHabitController.text)
-                      .then((_) {
-                          // Show a confirmation message or perform other actions on success
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Habit name updated successfully"))
-                          );
-                      })
-                      .catchError((error) {
-                          // Handle any errors here
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Failed to update habit name: $error"))
-                          );
-                      });
-              } 
+                dbService
+                    .updateHabitName(widget.habitId, whatHabitController.text)
+                    .then((_) {
+                  // Show a confirmation message or perform other actions on success
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Habit name updated successfully")));
+                }).catchError((error) {
+                  // Handle any errors here
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Failed to update habit name: $error")));
+                });
+              }
               // else {
               //     // Handle the case where the text field is empty
               //     ScaffoldMessenger.of(context).showSnackBar(
@@ -244,43 +244,44 @@ class _ImpInt extends State<ImpInt> {
               // }
 
               // Validate start and end times
-              if (!isStartEndTimeValid(startTimeController.text, endTimeController.text)) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid time format or end time is not after start time")));
+              if (!isStartEndTimeValid(
+                  startTimeController.text, endTimeController.text)) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(
+                        "Invalid time format or end time is not after start time")));
                 return;
               }
 
               // start time
               if (startTimeController.text.isNotEmpty) {
-                  dbService.updateStartTime(widget.habitId, startTimeController.text)
-                      .then((_) {
-                          // Show a confirmation message or perform other actions on success
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Habit start time updated successfully"))
-                          );
-                      })
-                      .catchError((error) {
-                          // Handle any errors here
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Failed to update habit start time: $error"))
-                          );
-                      });
-              } 
+                dbService
+                    .updateStartTime(widget.habitId, startTimeController.text)
+                    .then((_) {
+                  // Show a confirmation message or perform other actions on success
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Habit start time updated successfully")));
+                }).catchError((error) {
+                  // Handle any errors here
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content:
+                          Text("Failed to update habit start time: $error")));
+                });
+              }
               // end time
               if (endTimeController.text.isNotEmpty) {
-                  dbService.updateEndTime(widget.habitId, endTimeController.text)
-                      .then((_) {
-                          // Show a confirmation message or perform other actions on success
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Habit end time updated successfully"))
-                          );
-                      })
-                      .catchError((error) {
-                          // Handle any errors here
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Failed to update habit end time: $error"))
-                          );
-                      });
-              } 
+                dbService
+                    .updateEndTime(widget.habitId, endTimeController.text)
+                    .then((_) {
+                  // Show a confirmation message or perform other actions on success
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Habit end time updated successfully")));
+                }).catchError((error) {
+                  // Handle any errors here
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content:
+                          Text("Failed to update habit end time: $error")));
+                });
+              }
             },
             color: Color.fromARGB(255, 1, 82, 148),
             shape: RoundedRectangleBorder(
@@ -300,47 +301,51 @@ class _ImpInt extends State<ImpInt> {
     );
   }
 
-  Widget _reduceFrictionSugguestion(BuildContext context){
+  Widget _reduceFrictionSugguestion(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-          padding: EdgeInsets.only(bottom:0), // Space between the label and the first suggestion
-          child: Text(
-            "Suggestions:", // The label text
-            style: TextStyle(
-              color: Colors.black, // Color of the label
-              fontSize: 20, // Size of the label text
-              // fontWeight: FontWeight.bold, // Bold text for the label
-            ),
-          ),
-        ),
-        ...suggestions.map((suggestion) => InkWell(
-          onTap: () {
-            setState(() {
-              userInputController.text = suggestion;
-            });
-          },
-          child: Container(
-            margin: EdgeInsets.only(top: 20),
-            padding: EdgeInsets.all(10),
-            color: Color.fromARGB(255, 237, 207, 116),
+            padding: EdgeInsets.only(
+                bottom: 0), // Space between the label and the first suggestion
             child: Text(
-              suggestion,
+              "Suggestions:", // The label text
               style: TextStyle(
-                color: Colors.black,
-                fontSize: 16,
+                color: Colors.black, // Color of the label
+                fontSize: 20, // Size of the label text
+                // fontWeight: FontWeight.bold, // Bold text for the label
               ),
-              // softWrap: true, // Allow text wrapping
-              // overflow: TextOverflow.visible, // Show all text
             ),
           ),
-        )).toList(),
+          ...suggestions
+              .map((suggestion) => InkWell(
+                    onTap: () {
+                      setState(() {
+                        userInputController.text = suggestion;
+                      });
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(top: 20),
+                      padding: EdgeInsets.all(10),
+                      color: Color.fromARGB(255, 237, 207, 116),
+                      child: Text(
+                        suggestion,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                        // softWrap: true, // Allow text wrapping
+                        // overflow: TextOverflow.visible, // Show all text
+                      ),
+                    ),
+                  ))
+              .toList(),
         ],
       ),
     );
   }
 
+  //TODO add save method
 }

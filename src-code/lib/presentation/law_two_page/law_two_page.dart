@@ -23,44 +23,45 @@ class _LawTwoPage extends State<LawTwoPage> {
 
   @override
   Widget build(BuildContext context) {
+    final String _habitId =
+        ModalRoute.of(context)?.settings.arguments as String? ??
+            'Default Habit Name';
     return Scaffold(
       // backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text(
-          'Make It Attractive')
-      ),
+      appBar: AppBar(title: Text('Make It Attractive')),
       body: Container(
         //color: Color.fromARGB(255, 246, 240, 230),
         child: ListView(
           physics: BouncingScrollPhysics(),
           children: [
-            _buildHabitLaw(context, 
-                          "Temptation Bundling", 
-                          "Combining a desired activity with a necessary one to make the latter more appealing.",
-                          (){Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => TemptBundle(
-                                onSave: updateFrictionText,
-                                ),
-                            ));}),
-            _buildHabitLaw(context, 
-                          "Motivation Ritual", 
-                          "A pre-habit enjoyable routine designed to increase motivation for a challenging task.",
-                          (){Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => MotiRitual(
-                                onSave: updateFrictionText,
-                                ),
-                            ));}),
+            _buildHabitLaw(context, "Temptation Bundling",
+                "Combining a desired activity with a necessary one to make the latter more appealing.",
+                () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => TemptBundle(
+                  onSave: updateFrictionText,
+                  habitId: _habitId,
+                ),
+              ));
+            }),
+            _buildHabitLaw(context, "Motivation Ritual",
+                "A pre-habit enjoyable routine designed to increase motivation for a challenging task.",
+                () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => MotiRitual(
+                  onSave: updateFrictionText,
+                  habitId: _habitId,
+                ),
+              ));
+            }),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildHabitLaw(
-      BuildContext context,
-      String buttonText,
-      String buttonDescription,
-      VoidCallback onPressed) {
+  Widget _buildHabitLaw(BuildContext context, String buttonText,
+      String buttonDescription, VoidCallback onPressed) {
     return ExpansionTile(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -77,10 +78,13 @@ class _LawTwoPage extends State<LawTwoPage> {
         Align(
           alignment: Alignment.topLeft,
           child: Padding(
-            padding: EdgeInsets.only(right: 0.0, left: 0.0),  // Right padding to match childrenPadding
-            child: frictionResult.isNotEmpty 
-            ? Text(frictionResult) // Display the frictionResult text if it's not empty
-            : Text(buttonDescription), 
+            padding: EdgeInsets.only(
+                right: 0.0,
+                left: 0.0), // Right padding to match childrenPadding
+            child: frictionResult.isNotEmpty
+                ? Text(
+                    frictionResult) // Display the frictionResult text if it's not empty
+                : Text(buttonDescription),
             //Text('Reduce friction explained xxxxxxxx xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj.'),
           ),
         ),
@@ -88,7 +92,8 @@ class _LawTwoPage extends State<LawTwoPage> {
         Align(
           alignment: Alignment.topLeft,
           child: Padding(
-            padding: EdgeInsets.only(right: 16.0),  // Right padding to match childrenPadding
+            padding: EdgeInsets.only(
+                right: 16.0), // Right padding to match childrenPadding
             child: ElevatedButton.icon(
               onPressed: onPressed,
               icon: Icon(
@@ -100,7 +105,8 @@ class _LawTwoPage extends State<LawTwoPage> {
                 backgroundColor: const Color.fromARGB(255, 1, 82, 148),
                 fixedSize: Size(500, 20),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5), // Larger corner radius
+                  borderRadius:
+                      BorderRadius.circular(5), // Larger corner radius
                 ),
               ),
             ),

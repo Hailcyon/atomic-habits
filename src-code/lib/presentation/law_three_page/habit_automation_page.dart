@@ -9,7 +9,6 @@ class HabAutoPage extends StatefulWidget {
 
   const HabAutoPage({Key? key, required this.onSave}) : super(key: key);
 
-
   @override
   State<HabAutoPage> createState() => _HabAutoPage();
 }
@@ -43,7 +42,7 @@ class _HabAutoPage extends State<HabAutoPage> {
     );
   }
 
-  Widget _reduceFrictionDetail(BuildContext context){
+  Widget _reduceFrictionDetail(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -93,47 +92,51 @@ class _HabAutoPage extends State<HabAutoPage> {
     );
   }
 
-  Widget _reduceFrictionSugguestion(BuildContext context){
+  Widget _reduceFrictionSugguestion(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-          padding: EdgeInsets.only(bottom:0), // Space between the label and the first suggestion
-          child: Text(
-            "Suggestions:", // The label text
-            style: TextStyle(
-              color: Colors.black, // Color of the label
-              fontSize: 20, // Size of the label text
-              // fontWeight: FontWeight.bold, // Bold text for the label
-            ),
-          ),
-        ),
-        ...suggestions.map((suggestion) => InkWell(
-          onTap: () {
-            setState(() {
-              userInputController.text = suggestion;
-            });
-          },
-          child: Container(
-            margin: EdgeInsets.only(top: 20),
-            padding: EdgeInsets.all(10),
-            color: Color.fromARGB(255, 237, 207, 116),
+            padding: EdgeInsets.only(
+                bottom: 0), // Space between the label and the first suggestion
             child: Text(
-              suggestion,
+              "Suggestions:", // The label text
               style: TextStyle(
-                color: Colors.black,
-                fontSize: 16,
+                color: Colors.black, // Color of the label
+                fontSize: 20, // Size of the label text
+                // fontWeight: FontWeight.bold, // Bold text for the label
               ),
-              // softWrap: true, // Allow text wrapping
-              // overflow: TextOverflow.visible, // Show all text
             ),
           ),
-        )).toList(),
+          ...suggestions
+              .map((suggestion) => InkWell(
+                    onTap: () {
+                      setState(() {
+                        userInputController.text = suggestion;
+                      });
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(top: 20),
+                      padding: EdgeInsets.all(10),
+                      color: Color.fromARGB(255, 237, 207, 116),
+                      child: Text(
+                        suggestion,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                        // softWrap: true, // Allow text wrapping
+                        // overflow: TextOverflow.visible, // Show all text
+                      ),
+                    ),
+                  ))
+              .toList(),
         ],
       ),
     );
   }
 
+  //TODO add save method
 }

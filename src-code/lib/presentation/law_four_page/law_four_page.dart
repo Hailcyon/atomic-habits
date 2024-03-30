@@ -23,27 +23,30 @@ class _LawFourPage extends State<LawFourPage> {
 
   @override
   Widget build(BuildContext context) {
+    final String _habitId =
+        ModalRoute.of(context)?.settings.arguments as String? ??
+            'Default Habit Name';
+
     return Scaffold(
       // backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text(
-          'Make It Satisfying')
-      ),
+      appBar: AppBar(title: Text('Make It Satisfying')),
       body: Container(
         //color: Color.fromARGB(255, 246, 240, 230),
         child: ListView(
           physics: BouncingScrollPhysics(),
           children: [
-            _buildHabitLaw(context, 
-                          "Reinforcement", 
-                          "Using immediate rewards to increase the likelihood of repeating a habit.",
-                          (){Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => Reinforcement(
-                                onSave: updateFrictionText,
-                                ),
-                            ));}),
-            // _buildHabitLaw(context, 
-            //               "Use a Habit Tracker", 
+            _buildHabitLaw(context, "Reinforcement",
+                "Using immediate rewards to increase the likelihood of repeating a habit.",
+                () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => Reinforcement(
+                  onSave: updateFrictionText,
+                  habitId: _habitId,
+                ),
+              ));
+            }),
+            // _buildHabitLaw(context,
+            //               "Use a Habit Tracker",
             //               "A tool for visually recording your habits to provide instant satisfaction and motivation.",
             //               (){}),
           ],
@@ -52,11 +55,8 @@ class _LawFourPage extends State<LawFourPage> {
     );
   }
 
-  Widget _buildHabitLaw(
-      BuildContext context,
-      String buttonText,
-      String buttonDescription,
-      VoidCallback onPressed) {
+  Widget _buildHabitLaw(BuildContext context, String buttonText,
+      String buttonDescription, VoidCallback onPressed) {
     return ExpansionTile(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -73,10 +73,13 @@ class _LawFourPage extends State<LawFourPage> {
         Align(
           alignment: Alignment.topLeft,
           child: Padding(
-            padding: EdgeInsets.only(right: 0.0, left: 0.0),  // Right padding to match childrenPadding
-            child: frictionResult.isNotEmpty 
-            ? Text(frictionResult) // Display the frictionResult text if it's not empty
-            : Text(buttonDescription), 
+            padding: EdgeInsets.only(
+                right: 0.0,
+                left: 0.0), // Right padding to match childrenPadding
+            child: frictionResult.isNotEmpty
+                ? Text(
+                    frictionResult) // Display the frictionResult text if it's not empty
+                : Text(buttonDescription),
             //Text('Reduce friction explained xxxxxxxx xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj.'),
           ),
         ),
@@ -84,7 +87,8 @@ class _LawFourPage extends State<LawFourPage> {
         Align(
           alignment: Alignment.topLeft,
           child: Padding(
-            padding: EdgeInsets.only(right: 16.0),  // Right padding to match childrenPadding
+            padding: EdgeInsets.only(
+                right: 16.0), // Right padding to match childrenPadding
             child: ElevatedButton.icon(
               onPressed: onPressed,
               icon: Icon(
@@ -96,7 +100,8 @@ class _LawFourPage extends State<LawFourPage> {
                 backgroundColor: const Color.fromARGB(255, 1, 82, 148),
                 fixedSize: Size(500, 20),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5), // Larger corner radius
+                  borderRadius:
+                      BorderRadius.circular(5), // Larger corner radius
                 ),
               ),
             ),
