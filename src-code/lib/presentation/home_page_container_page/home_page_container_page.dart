@@ -323,9 +323,10 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0, // Index of the currently selected tab
         onTap: (int index) {
-          if (index == 0) {
-          } else if (index == 1) {
+          if (index == 1) {
             Navigator.of(context).pushNamed(AppRoutes.newHabitPageRoute);
+          } else if (index == 2) {
+            Navigator.of(context).pushNamed(AppRoutes.statisticsPageRoute);
           } else {}
           // Handle tab selection
         },
