@@ -490,9 +490,12 @@ PreferredSizeWidget _buildAppBar(BuildContext context) {
         title: Text('Atomic Habits', style: TextStyle(color: Colors.black)),
         height: 70.v,
         leadingWidth: 100.h,
-        leading: AppbarLeadingImage(
-            imagePath: ImageConstant.imgProfile,
-            margin: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 10)),
+        leading: IconButton(
+          icon: Icon(Icons.settings, size: 40),
+          onPressed: () {
+            Navigator.of(context).pushNamed(AppRoutes.settingsPageRoute);
+          },
+        ),
         centerTitle: true,
         actions: [
           AppbarTrailingImage(
