@@ -1,9 +1,13 @@
+import 'dart:ffi' hide Size;
+// import 'dart:ui';
+
 import 'package:ahapp3/model/habit.dart';
 import 'package:ahapp3/service/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:ahapp3/core/app_export.dart';
 import 'package:day_picker/day_picker.dart';
+// import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 
 class CustomHabitPage extends StatefulWidget {
   CustomHabitPage({Key? key}) : super(key: key);
@@ -13,6 +17,85 @@ class CustomHabitPage extends StatefulWidget {
 }
 
 class _CustomHabitPageState extends State<CustomHabitPage> {
+  IconData _defaultIcon = Icons.question_mark;
+  IconData? selectedIcon;
+  // Icon? _icon;
+  Future<IconData?> showIconPicker(
+    {required BuildContext context, IconData? defaultIcon}) async{
+      final List<IconData> allIcons = [
+      Icons.umbrella_sharp,
+      Icons.favorite,
+      Icons.headphones,
+      Icons.home,
+      Icons.car_repair,
+      Icons.settings,
+      Icons.flight,
+      Icons.ac_unit,
+      Icons.run_circle,
+      Icons.book,
+      Icons.sports_bar_rounded,
+      Icons.alarm,
+      Icons.call,
+      Icons.hearing,
+      Icons.music_note,
+      Icons.note,
+      Icons.edit,
+      Icons.sunny,
+      Icons.radar,
+      ];
+
+      await showDialog(
+        context: context, 
+        builder: (_) => AlertDialog(
+          title: const Text(
+            "Pick an Icon",
+          ),
+          content: Container(
+            height: 320,
+            width: 400,
+            alignment: Alignment.center,
+            child: GridView.builder(
+              itemCount: allIcons.length,
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 60, 
+                childAspectRatio: 1/1, 
+                crossAxisSpacing: 10, 
+                mainAxisSpacing: 10), 
+              itemBuilder: (_, index) => Container(
+                padding: EdgeInsets.all(10),
+                child: Center(
+                  child: IconButton(
+                    color: selectedIcon == allIcons[index]
+                      ? Colors.orange
+                      : const Color.fromARGB(255, 146, 83, 137),
+                    onPressed: () {
+                      selectedIcon = allIcons[index];
+                      Navigator.of(context).pop();
+                    },
+                    icon: Icon(allIcons[index])
+                  ),
+                ),
+              ),
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: (){
+                Navigator.of(context).pop();
+              }, 
+              child: const Text(
+                "close"
+              ),
+            ),
+          ],
+        ),
+      );
+      return selectedIcon;
+    }
+
+    IconData? selected;
+  
+
   final List<DayInWeek> _days = [
     DayInWeek("Mo", dayKey: "monday"),
     DayInWeek("Tu", dayKey: "tuesday"),
@@ -34,12 +117,21 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
   final TextEditingController _placeController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    habitId = '';
+    _habitNameController = TextEditingController(text: habitId);
+  }
+
+  @override
   Widget build(BuildContext context) {
     // final argDayOfWeek = ModalRoute.of(context)!.settings.arguments as String;
-    habitId = ModalRoute.of(context)?.settings.arguments as String? ??
-        ''; //habit name will be blank w/out arg
-    _habitNameController = TextEditingController(
-        text: habitId); //autofill with suggested habit clicked
+
+    // habitId = ModalRoute.of(context)?.settings.arguments as String? ??
+    //     ''; //habit name will be blank w/out arg
+    // _habitNameController = TextEditingController(
+    //     text: habitId); //autofill with suggested habit clicked
+
     return Scaffold(
       appBar: _buildAppBar(context),
       body: Center(
@@ -52,7 +144,7 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // _entryField('Habit Name', TextEditingController()),
-                  _entryField('Habit Name', _habitNameController),
+                  _entryField(context, 'Habit Name', _habitNameController),
                   SizedBox(height: 40.v),
                   SelectWeekDays(
                     days: _days,
@@ -213,15 +305,57 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
     );
   }
 
-  Widget _entryField(
-    String title,
-    TextEditingController controller,
-  ) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: title,
-      ),
+  // Widget _entryField(
+  //   String title,
+  //   TextEditingController controller,
+  // ) {
+  //   return TextField(
+  //     controller: controller,
+  //     decoration: InputDecoration(
+  //       labelText: title,
+  //     ),
+  //   );
+  // }
+
+  Future<void> _iconPicker(BuildContext context) async {
+    try {
+    IconData? newIcon = await showIconPicker(context: context, defaultIcon: selected);
+    if (newIcon != null) {
+      setState(() {
+        _defaultIcon = newIcon; // 更新默认图标为新选中的图标
+      });
+    }
+  } catch (e) {
+    print("Icon picker error: $e");
+  }
+  }
+
+  Widget _entryField(BuildContext context, String title, TextEditingController controller) {
+    return Row(
+      children: <Widget>[
+        // 正方形按钮
+        ElevatedButton.icon(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.white, // Button color
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8), // Rounded corners
+            ),
+          ),
+          onPressed:() => _iconPicker(context), // 更新图标的方法
+          icon: Icon(_defaultIcon, size: 15), // 使用选中的图标替换问号图标
+          label: Text(''), // 这里没有文本
+        ),
+        SizedBox(width: 10),  // 在按钮和文本字段之间添加一些空间
+        Expanded(
+          // 使用 Expanded 包装文本字段，确保它填满剩余空间
+          child: TextField(
+            controller: controller,
+            decoration: InputDecoration(
+              labelText: title,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -303,3 +437,5 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
     }
   }
 }
+
+
