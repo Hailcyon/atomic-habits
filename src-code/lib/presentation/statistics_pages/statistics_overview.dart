@@ -1,3 +1,4 @@
+import 'package:ahapp3/presentation/statistics_pages/statistics_details.dart';
 import 'package:ahapp3/service/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
@@ -61,8 +62,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
                       context: context,
                       habitName: habitName, // Pass the habit name
                       habitStreak: habitStreak,
+                      streakList: streakList,
                     ));
-
                     // Add spacing after the button
                     if (index < snapshot.data!.length) {
                       habitWidgets.add(SizedBox(
@@ -106,11 +107,16 @@ class _StatisticsPageState extends State<StatisticsPage> {
     required BuildContext context,
     required String habitName,
     required int habitStreak,
+    required List<String> streakList,
   }) {
     return ElevatedButton(
       onPressed: () {
-        // Navigator.of(context)
-        //     .pushNamed(AppRoutes.customHabitPageRoute, arguments: habitId);
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => StatisticsDetailPage(
+              habitName: habitName,
+              habitStreak: habitStreak,
+              streakList: streakList),
+        ));
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

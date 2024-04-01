@@ -1,5 +1,6 @@
 import 'package:ahapp3/presentation/add_new_habit_pages/habit_search_page.dart';
 import 'package:ahapp3/presentation//edit_a_habit_page/edit_a_habit_page.dart';
+import 'package:ahapp3/presentation/statistics_pages/statistics_details.dart';
 import 'package:ahapp3/presentation/statistics_pages/statistics_overview.dart';
 import 'package:flutter/material.dart';
 import 'package:ahapp3/presentation/widget_tree.dart';
