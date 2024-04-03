@@ -21,6 +21,8 @@ import 'package:ahapp3/presentation/auth.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:ahapp3/utils/date_utils.dart' as date_util;
 
+import 'package:flutter_svg/flutter_svg.dart';
+
 class HomePageContainerPage extends StatefulWidget {
   HomePageContainerPage({Key? key}) : super(key: key);
 
@@ -55,9 +57,6 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
   TextEditingController controller = TextEditingController();
   String curDayOfWeekFullName = '';
 
-  // final monthList = ['January','Febuary','March','April','May','June','July','August','September','October','November','December'];
-  // final yearList 
-
   Future<void> signOut() async {
     await Auth().signOut();
   }
@@ -80,20 +79,6 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     return daysOfWeekAbbrev[dateTime.weekday - 1];
   }
 
-  // Widget _newHabitButton(BuildContext context) {
-  //   // String dayOfWeekAbbrev = getDayOfWeekAbbreviation(currentDateTime); // This will be from Mon - Sun
-  //   return TextButton(
-  //     //add a new habit button
-  //     child: Icon(Icons.add_rounded, size: 40),
-  //     onPressed: () {
-  //       Navigator.of(context).pushNamed(AppRoutes.newHabitPageRoute);
-  //     },
-  //     style: TextButton.styleFrom(
-  //         backgroundColor: Colors.green,
-  //         foregroundColor: Colors.black,
-  //         shape: CircleBorder()),
-  //   );
-  // }
 
   @override
   void initState() {
@@ -145,9 +130,6 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
       child: Text(
-        // date_util.DateUtils.months[currentDateTime.month - 1] +
-        //     ' ' +
-        //     currentDateTime.year.toString(),
         date_util.DateUtils.months[currentDateTime.month - 1] + ' ' + currentDateTime.year.toString(),
         style: const TextStyle(
             color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
@@ -262,7 +244,7 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
           SizedBox(height: 10),
           Expanded(  // Use Expanded to fill the remaining space
             child: ListView(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               children: <Widget>[
                 StreamBuilder<List<Map<String, String>>>(
                   stream: dbService.getHabitsAscending(curDayOfWeekFullName),
@@ -279,18 +261,18 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
                     snapshot.data!.asMap().forEach((index, habit) {
                       final habitId = habit['id']!;  // Extract the habit ID
                       final habitName = habit['name']!;  // Extract the habit name
-
+                      final iconPath = habit['iconPath']; // Extract the icon path
                       // Add the habit button
                       habitWidgets.add(buildHabitButton(
                         context: context,
                         habitId: habitId,  // Pass the habit ID
                         buttonText: habitName,  // Pass the habit name
-                        leftIconPath: ImageConstant.imgIconDirectionsRun,
+                        leftIconPath: iconPath!,
                       ));
 
                       // Add spacing after the button, but not after the last one
                       if (index < snapshot.data!.length - 1) {
-                        habitWidgets.add(SizedBox(height: 10));  // Adjust the height for desired spacing
+                        habitWidgets.add(SizedBox(height: 15));  // Adjust the height for desired spacing
                       }
                     });
 
@@ -301,10 +283,6 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
                   },
                 ),
                 SizedBox(height: 100.v),
-                //_newHabitButton(context),
-                // SizedBox(height: 300.v),
-                //_userUid(),
-                //_signOutButton(),
               ]
             ),
           ),
@@ -399,7 +377,13 @@ Widget buildHabitButton({
       margin: EdgeInsets.symmetric(horizontal: 16.0),
       // child: Expanded( //have Expanded in Container will cause Incorrect use of ParentDataWidget error
       child: ElevatedButton.icon(
-        icon: const Icon(Icons.directions_run_rounded),
+        // icon: const Icon(Icons.directions_run_rounded),
+        icon: SvgPicture.asset(
+          leftIconPath, 
+          width: 24, // set icon width
+          height: 24, // set icon height
+          color: Colors.pink, // set icon color
+        ),
         label: Text(
           buttonText,
           style: TextStyle(color: Colors.black), // Text color
@@ -539,7 +523,6 @@ PreferredSizeWidget _buildAppBar(BuildContext context) {
           },
           use24hFormat: true,
           mode: CupertinoDatePickerMode.date,
-          // mode: CupertinoDatePickerMode.monthYear,
         ),
       )
     );
@@ -548,94 +531,3 @@ PreferredSizeWidget _buildAppBar(BuildContext context) {
 
 
 
-
-  // Widget buildHabitButton({
-  //   required BuildContext context,
-  //   required String habitId,
-  //   required String buttonText,
-  //   required String leftIconPath,
-  // }) {
-  //   return Slidable(
-  //     endActionPane: ActionPane(
-  //       motion: StretchMotion(),
-  //       children: [
-  //         SlidableAction(
-  //           onPressed: ((context){
-  //             showDialog(
-  //               barrierDismissible: true, 
-  //               context: context, 
-  //               builder: (BuildContext context) => AlertDialog(
-  //                 content: Text("Are you sure you want to delete this habit?"),
-  //                 actions: [
-  //                   TextButton(
-  //                     child: Text("Yes"), 
-  //                     onPressed: () async {
-  //                       await dbService.deleteHabit(habitId); // use habit id to delete
-  //                       Navigator.of(context).pop(); // Close the dialog
-  //                     },
-  //                   ),
-  //                 ],
-  //                 elevation: 24,
-  //               ),
-  //             );
-  //           }),
-  //           backgroundColor: Colors.red,
-  //           icon: Icons.delete,
-  //         ),
-  //         SlidableAction(
-  //           onPressed: ((context){
-  //             showDialog(
-  //               barrierDismissible: true, 
-  //               context: context, 
-  //               builder: (BuildContext context) => AlertDialog(
-  //                 content: Text("Are you sure you want to delete this habit?"),
-  //                 actions: [
-  //                   TextButton(
-  //                     child: Text("Yes"), 
-  //                     onPressed: () async {
-  //                       await dbService.deleteHabit(habitId); // use habit id to delete
-  //                       Navigator.of(context).pop(); // Close the dialog
-  //                     },
-  //                   ),
-  //                 ],
-  //                 elevation: 24,
-  //               ),
-  //             );
-  //           }),
-  //           backgroundColor: Colors.red,
-  //           icon: Icons.delete,
-  //         )
-  //       ],
-  //     ),
-  //     // build the habit button
-  //     child: Container(
-  //       width: 600,
-  //       margin: EdgeInsets.symmetric(horizontal: 16.0),
-  //       // child: Expanded( //have Expanded in Container will cause Incorrect use of ParentDataWidget error
-  //         child: ElevatedButton.icon(
-  //           icon: const Icon(Icons.directions_run_rounded),
-  //           label: Text(
-  //             buttonText,
-  //             style: TextStyle(color: Colors.black), // Text color
-  //             overflow: TextOverflow.ellipsis,
-  //             softWrap: false,
-  //             maxLines: 100,
-  //           ),
-  //           style: ElevatedButton.styleFrom(
-  //             backgroundColor: Colors.yellow, // Button color
-  //             shape: RoundedRectangleBorder(
-  //               borderRadius: BorderRadius.circular(8), // Rounded corners
-  //             ),
-  //             alignment: Alignment.centerLeft, // Align the icon and text to the left
-  //             padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0), // Padding inside the button
-  //           ),
-  //           onPressed: () {
-  //             Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute, arguments: habitId);
-  //           },
-  //         ),
-  //       // ),
-  //     ),
-  //   );
-  // }
-
-  
