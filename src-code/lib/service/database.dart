@@ -7,12 +7,10 @@ class DatabaseService {
   final String uid;
   DatabaseService({required this.uid});
 
-  // final firestoreInstance = FirebaseFirestore.instance.collection('Users');
   final firestoreInstance = FirebaseFirestore.instance;
 
   initializeUser() async {
 
-    // firestoreInstance.collection('Users').doc(uid).collection('Habits').doc('Habit1').set({"date": "2023"});
     await firestoreInstance.collection('Users').doc(uid).set({
       // Set initial data for the user document. For example, registration date.
       "registrationDate": FieldValue.serverTimestamp(),
@@ -32,49 +30,50 @@ class DatabaseService {
       "start time": startTime,
       "end time": endTime,
       "place": place,
-      "icon path": iconPath, // 新增字段保存图标路径
+      "icon path": iconPath,
       "streak": [],
+      "skipped": []
     });
 
     return ref.id;
   }
 
 
-Future<String> saveHabitLaw(String habitId, int habitNum, String habitLawNum, String habitLaw) async {
+  Future<String> saveHabitLaw(String habitId, int habitNum, String habitLawNum, String habitLaw) async {
 
     DocumentReference ref = await firestoreInstance
-                                    .collection('Users')
-                                    .doc(uid)
-                                    .collection('Habits')
-                                    .doc(habitId)
-                                    .collection('HabitLaws')
-                                    .add({
-      "habitNum": habitNum,
-      "habitLawNum": habitLawNum,
-      "habitLaw": habitLaw,
-    });
-
-    return ref.id;
-}
-
-
-Stream<List<Map<String, dynamic>>> getHabitLawDetailsStream(String habitId) {
-  return firestoreInstance
       .collection('Users')
       .doc(uid)
       .collection('Habits')
       .doc(habitId)
       .collection('HabitLaws')
-      .snapshots()
-      .map((snapshot) => snapshot.docs
-          .map((doc) => {
-                'id': doc.id,
-                'habitNum': doc.data()['habitNum'] as int,
-                'habitLawNum': doc.data()['habitLawNum'] as String,
-                'habitLaw': doc.data()['habitLaw'] as String,
-              })
-          .toList());
-}
+      .add({
+        "habitNum": habitNum,
+        "habitLawNum": habitLawNum,
+        "habitLaw": habitLaw,
+      });
+
+    return ref.id;
+  }
+
+
+  Stream<List<Map<String, dynamic>>> getHabitLawDetailsStream(String habitId) {
+    return firestoreInstance
+        .collection('Users')
+        .doc(uid)
+        .collection('Habits')
+        .doc(habitId)
+        .collection('HabitLaws')
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => {
+                  'id': doc.id,
+                  'habitNum': doc.data()['habitNum'] as int,
+                  'habitLawNum': doc.data()['habitLawNum'] as String,
+                  'habitLaw': doc.data()['habitLaw'] as String,
+                })
+            .toList());
+  }
 
 
   Stream<List<Map<String, String>>> getHabitsAscending(String dayOfWeek) {
@@ -114,6 +113,120 @@ Stream<List<Map<String, dynamic>>> getHabitLawDetailsStream(String habitId) {
         .doc(habitId)
         .delete();
   }
+
+  /**
+   * Add chosen date to selected habit's streak list,
+   * delete chosen date in selected habit's skipped list
+   */
+  Future<void> markHabitAsCompleted(String habitId, DateTime date) async {
+    String dateString = DateFormat('yyyy-MM-dd').format(date);
+    DocumentReference habitRef = firestoreInstance
+      .collection('Users')
+      .doc(uid)
+      .collection('Habits')
+      .doc(habitId);
+
+    DocumentSnapshot habitDoc = await habitRef.get();
+    if (!habitDoc.exists) return;
+
+    Map<String, dynamic> data = habitDoc.data() as Map<String, dynamic>;
+    List<dynamic> currentStreak = data['streak'] ?? [];
+    List<dynamic> currentSkipped = data['skipped'] ?? [];
+
+    // update streak list
+    if (!currentStreak.contains(dateString)) {
+      await habitRef.update({
+        'streak': FieldValue.arrayUnion([dateString])
+      });
+    }
+
+    // update skipped list
+    if (currentSkipped.contains(dateString)) {
+      await habitRef.update({
+        'skipped': FieldValue.arrayRemove([dateString])
+      });
+    }
+  }
+
+
+  /**
+   * Add chosen date to the selected habit's skipped list
+   */
+  Future<void> addSkipDate(String habitId, DateTime date) async {
+    String dateString = DateFormat('yyyy-MM-dd').format(date);
+    DocumentReference habitRef = FirebaseFirestore.instance
+        .collection('Users')
+        .doc(uid)
+        .collection('Habits')
+        .doc(habitId);
+
+    await habitRef.update({
+      'skipped': FieldValue.arrayUnion([dateString])
+    });
+  }
+
+  /**
+   * Loop through every habit of the user on specific day of week,
+   * which is all habits in the chosen date home page,
+   * return a list that stores the habits in the current homepageand 
+   * and their corresponding skip status.
+   */
+  Future<List<Map<String, dynamic>>> getHabitsWithSkipStatus(String dayOfWeek, DateTime currentDate) async {
+    String currentDateStr = DateFormat('yyyy-MM-dd').format(currentDate);
+
+    QuerySnapshot snapshot = await firestoreInstance
+        .collection('Users')
+        .doc(uid)
+        .collection('Habits')
+        .where("days", arrayContains: dayOfWeek)
+        .orderBy("name")
+        .get();
+
+    // a list to store habits and their corresponding skip status
+    List<Map<String, dynamic>> habitsWithStatus = [];
+
+    // loop through every habit of the user on specific day of week
+    // which is all habits in the chosen date home page
+    for (var doc in snapshot.docs) {
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+      // check if chosen date in is the habit's skipped list
+      bool isSkipped = (data['skipped'] as List<dynamic>?)?.contains(currentDateStr) ?? false;
+
+      habitsWithStatus.add({
+        'id': doc.id,
+        'name': data['name'],
+        'isSkipped': isSkipped,
+      });
+    }
+    return habitsWithStatus;
+  }
+
+
+  /**
+   * When skip a habit on a chosen date, remove the chosen date
+   * from the sreak list of the selected habit.
+   */
+  Future<void> skipHabitDate(String habitId, DateTime chosenDateTime) async {
+    DocumentReference habitRef = FirebaseFirestore.instance
+        .collection('Users')
+        .doc(uid)
+        .collection('Habits')
+        .doc(habitId);
+
+    DocumentSnapshot habitDoc = await habitRef.get();
+    Map<String, dynamic> data = habitDoc.data() as Map<String, dynamic>;
+
+    List<String> streakList = List<String>.from(data['streak'] ?? []).map((e) => e.toString()).toList();
+    String formattedChosenDate = DateFormat('yyyy-MM-dd').format(chosenDateTime);
+
+    // Remove the chosen date from the streak list
+    streakList.remove(formattedChosenDate);
+
+    // Update the streak list in Firestore
+    await habitRef.update({'streak': streakList});
+  }
+
 
   Future<int> updateStreak(String habitId, DateTime chosenDateTime) async {
     DocumentReference habitRef = FirebaseFirestore.instance
