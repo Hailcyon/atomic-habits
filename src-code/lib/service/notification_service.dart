@@ -122,9 +122,19 @@ class NotificationService {
       [DateTimeComponents? dateTimeComponents]) async {
     //convert days to a set a repeating scheduled events on a weekly basis
     //time to schedule activity, being the day plus the time in hours and minutes
+    const Map<String, int> daysOfWeek = {
+      "monday": 1,
+      "tuesday": 2,
+      "wednesday": 3,
+      "thursday": 4,
+      "friday": 5,
+      "saturday": 6,
+      "sunday": 7,
+    };
     for (final day in days) {
       //this is our day of the week, a number starting at 1 for monday and 7 for sunday
-      int todayoffset = (eventDate.weekday % 7) + 1;
+      int daynum = daysOfWeek[day]!;
+      int todayoffset = (daynum % 7) + 1;
       //offset the modified date to accomodate weekday
       final finalDate = eventDate.add(Duration(days: todayoffset));
       dateTimeComponents = DateTimeComponents.dayOfWeekAndTime;
