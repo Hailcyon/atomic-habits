@@ -1,3 +1,4 @@
+import 'package:day_picker/day_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -62,7 +63,7 @@ class NotificationService {
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) {
-        // Handle notification response here
+        onSelectNotification(response.payload);
       },
     );
   }
@@ -108,6 +109,28 @@ class NotificationService {
       payload: payload,
       matchDateTimeComponents: dateTimeComponents,
     );
+  }
+
+  Future<void> repeatingNotification(
+      int id,
+      String title,
+      String body,
+      DateTime eventDate,
+      TimeOfDay eventTime,
+      String payload,
+      List<DayInWeek> days,
+      [DateTimeComponents? dateTimeComponents]) async {
+    //convert days to a set a repeating scheduled events on a weekly basis
+    //time to schedule activity, being the day plus the time in hours and minutes
+    for (final day in days) {
+      //this is our day of the week, a number starting at 1 for monday and 7 for sunday
+      int todayoffset = (eventDate.weekday % 7) + 1;
+      //offset the modified date to accomodate weekday
+      final finalDate = eventDate.add(Duration(days: todayoffset));
+      dateTimeComponents = DateTimeComponents.dayOfWeekAndTime;
+      scheduleNotification(
+          id, title, body, finalDate, eventTime, payload, dateTimeComponents);
+    }
   }
 
   Future<void> cancelNotification(int id) async {
