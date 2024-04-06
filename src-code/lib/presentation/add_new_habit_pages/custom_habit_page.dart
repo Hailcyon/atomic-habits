@@ -290,7 +290,16 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
           endTime: newHabit.endTime,
           place: newHabit.place,
         );
-
+        //going to add in the notification creation here
+        notificationService.repeatingNotification(
+            newHabitId.hashCode,
+            newHabit.name,
+            newHabit.place,
+            DateTime.now(),
+            newHabit.startTime,
+            "",
+            List<DayInWeek>.from(newHabit
+                .days)); //casting here shouldn't be an issue since dayinweek is just a string type
         // Here, you can now use newHabit with the complete data including its Firestore ID
         // Navigator.of(context).pop();  // Optionally, go back or update UI
       }).catchError((error) {
