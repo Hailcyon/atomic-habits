@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:ahapp3/core/app_export.dart';
 import 'package:day_picker/day_picker.dart';
+import 'package:ahapp3/service/notification_service.dart';
 
 class CustomHabitPage extends StatefulWidget {
   CustomHabitPage({Key? key}) : super(key: key);
@@ -29,7 +30,7 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
       uid: FirebaseAuth.instance.currentUser?.uid ??
           ''); // Initialize dbService with the user's UID;
   String habitId = "";
-
+  NotificationService notificationService = new NotificationService();
   TextEditingController _habitNameController = TextEditingController();
   final TextEditingController _placeController = TextEditingController();
 

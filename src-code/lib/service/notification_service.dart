@@ -1,10 +1,12 @@
 import 'package:day_picker/day_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import '../main.dart';
 import '../presentation/log_in_screen/log_in_screen.dart';
+import '../routes/app_routes.dart';
 
 class NotificationService {
   // Singleton pattern
@@ -63,10 +65,53 @@ class NotificationService {
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) {
-        onSelectNotification(response.payload);
+        onSelectNotification;
       },
     );
   }
+
+  // void onSelectNotification(
+  //     int id, String? title, String? body, String? payload) async {
+  //   // display a dialog with the notification details, tap ok to go to another page
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) => CupertinoAlertDialog(
+  //       title: Text(title ?? ''),
+  //       content: Text(body ?? ''),
+  //       actions: [
+  //         CupertinoDialogAction(
+  //           isDefaultAction: true,
+  //           child: Text('Ok'),
+  //           onPressed: () async {
+  //             Navigator.of(context, rootNavigator: true).pop();
+  //             await Navigator.push(
+  //               context,
+  //               MaterialPageRoute(
+  //                 builder: (BuildContext context) => CupertinoAlertDialog(
+  //                   title: Text(title ?? ''),
+  //                   content: Text(body ?? ''),
+  //                   actions: [
+  //                     CupertinoDialogAction(
+  //                       isDefaultAction: true,
+  //                       child: Text('Ok'),
+  //                       onPressed: () async {
+  //                         Navigator.of(context, rootNavigator: true).pop();
+  //                         await Navigator.pushNamed(
+  //                             context,
+  //                             AppRoutes
+  //                                 .homePageRoute); // Replace homePageRoute with the actual route name
+  //                       },
+  //                     )
+  //                   ],
+  //                 ),
+  //               ),
+  //             );
+  //           },
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Future<void> requestIOSPermissions() async {
     await flutterLocalNotificationsPlugin
