@@ -1,5 +1,9 @@
+// import 'dart:js';
+
 import 'package:ahapp3/presentation/add_new_habit_pages/habit_search_page.dart';
 import 'package:ahapp3/presentation//edit_a_habit_page/edit_a_habit_page.dart';
+import 'package:ahapp3/presentation/statistics_page/statistics_page.dart';
+import 'package:ahapp3/presentation/statistics_page/habit_statistics_page.dart';
 import 'package:flutter/material.dart';
 import 'package:ahapp3/presentation/widget_tree.dart';
 import 'package:ahapp3/presentation/log_in_screen/log_in_screen.dart';
@@ -26,6 +30,8 @@ class AppRoutes {
   static const String initialRoute = widgetTreeRoute;
   static const String profilePageRoute = '/profile_page.dart';
   static const String homePageRoute = '/home_page_container_page.dart';
+  static const String statisticsPageRoute = '/statistics_page.dart';
+  // static const String habitStatisticsPageRoute = '/habit_statistics_page.dart';
 
   static const String lawThreePageRout = '/law_three_page.dart';
   static const String lawOnePageRoute = '/law_one_page.dart';
@@ -37,6 +43,8 @@ class AppRoutes {
 
   static Map<String, WidgetBuilder> get routes => {
         widgetTreeRoute: (context) => WidgetTree(),
+        statisticsPageRoute: (context) => StatisticsPage(),
+        // habitStatisticsPageRoute: (context) => HabitStatisticsPage(),
         profilePageRoute: (context) => ProfilePage(),
         loginScreenRoute: (context) => LoginPage(),
         customHabitPageRoute: (context) => CustomHabitPage(),

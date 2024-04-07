@@ -8,6 +8,7 @@ import "package:flutter/material.dart";
 import 'package:ahapp3/core/app_export.dart';
 import 'package:day_picker/day_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 // import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 
 class CustomHabitPage extends StatefulWidget {
@@ -332,6 +333,8 @@ Widget _resetTimeButton() {
     final List<String> selectedDays =
         _days.where((day) => day.isSelected).map((day) => day.dayKey).toList();
     final String place = _placeController.text;
+    // 获取和格式化当前日期
+    String createDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
     // Convert the time displayed as "--:--" to an empty string
     final String startTimeToSave = _startTime != '--:--' ? _startTime : '';
@@ -374,7 +377,7 @@ Widget _resetTimeButton() {
       }
 
       dbService
-          .saveHabit(habitName, selectedDays, startTimeToSave, endTimeToSave, place, selectedIconPath!)
+          .saveHabit(habitName, selectedDays, startTimeToSave, endTimeToSave, place, selectedIconPath!, createDate)
           .then((String newHabitId) {
       }).catchError((error) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Failed to save habit: $error")));

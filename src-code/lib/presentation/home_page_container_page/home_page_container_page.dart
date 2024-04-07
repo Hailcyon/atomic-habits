@@ -318,6 +318,7 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
               Navigator.of(context).pushNamed(AppRoutes.newHabitPageRoute);
             } else {
               Navigator.pushNamedAndRemoveUntil(context, AppRoutes.profilePageRoute, (route) => false);
+              // Navigator.of(context).pushNamed(AppRoutes.statisticsPageRoute);
             }
             // Handle tab selection
           },

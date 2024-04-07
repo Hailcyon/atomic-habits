@@ -17,8 +17,155 @@ class DatabaseService {
     });
   }
 
+  Future<List<Map<String, String>>> getUserHabits() async {
+    try {
+      QuerySnapshot habitSnapshot = await firestoreInstance
+        .collection('Users')
+        .doc(uid)
+        .collection('Habits')
+        .get();
 
-  Future<String> saveHabit(String habitName, List<String> days, String startTime, String endTime, String place, String iconPath) async {
+      List<Map<String, String>> habits = habitSnapshot.docs.map((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        return {
+          'id': doc.id, 
+          'name': data['name'] is String ? data['name'] as String : 'Unnamed Habit',
+        };
+      }).toList();
+
+      return habits;
+    } catch (e) {
+      print("Error fetching habits: $e");
+      return []; 
+    }
+  }
+
+  Future<DateTime> getHabitStartDate(String habitId) async {
+    DocumentSnapshot habitDoc = await firestoreInstance
+      .collection('Users')
+      .doc(uid)
+      .collection('Habits')
+      .doc(habitId)
+      .get();
+
+    if (habitDoc.exists) {
+      Map<String, dynamic> habitData = habitDoc.data() as Map<String, dynamic>;
+      String startDateStr = habitData['create date'];
+      // Assuming 'createDate' is in 'yyyy-MM-dd' format
+      DateTime startDate = DateFormat('yyyy-MM-dd').parse(startDateStr);
+      return startDate;
+    } else {
+      throw Exception('Habit not found');
+    }
+  }
+
+  Future<List<int>> getHabitDaysOfWeek(String habitId) async {
+    DocumentSnapshot habitDoc = await firestoreInstance
+      .collection('Users')
+      .doc(uid)
+      .collection('Habits')
+      .doc(habitId)
+      .get();
+
+    if (habitDoc.exists) {
+      Map<String, dynamic> habitData = habitDoc.data() as Map<String, dynamic>;
+      List<dynamic> daysStrList = habitData['days'] ?? [];
+      
+      List<int> daysOfWeek = daysStrList.map((day) {
+        switch(day) {
+          case "monday": return DateTime.monday;
+          case "tuesday": return DateTime.tuesday;
+          case "wednesday": return DateTime.wednesday;
+          case "thursday": return DateTime.thursday;
+          case "friday": return DateTime.friday;
+          case "saturday": return DateTime.saturday;
+          case "sunday": return DateTime.sunday;
+          default: return null;
+        }
+      }).where((day) => day != null).cast<int>().toList();
+
+      return daysOfWeek;
+    } else {
+      throw Exception('Habit not found');
+    }
+  }
+
+  List<String> convertDaysIntToString(List<int> daysOfWeekInt) {
+    Map<int, String> dayMapping = {
+      DateTime.monday: "monday",
+      DateTime.tuesday: "tuesday",
+      DateTime.wednesday: "wednesday",
+      DateTime.thursday: "thursday",
+      DateTime.friday: "friday",
+      DateTime.saturday: "saturday",
+      DateTime.sunday: "sunday",
+    };
+
+    List<String> daysOfWeekStr = daysOfWeekInt.map((day) => dayMapping[day]!).toList();
+    return daysOfWeekStr;
+  }
+
+  Future<int> getHabitStreakCount(String habitId) async {
+    DocumentSnapshot habitDoc = await firestoreInstance
+      .collection('Users')
+      .doc(uid)
+      .collection('Habits')
+      .doc(habitId)
+      .get();
+
+    if (habitDoc.exists) {
+      Map<String, dynamic> habitData = habitDoc.data() as Map<String, dynamic>;
+      List<int> daysOfWeekInt = await getHabitDaysOfWeek(habitId);
+
+      List<String> daysOfWeekStr = convertDaysIntToString(daysOfWeekInt);
+
+      List<String> streakList = List<String>.from(habitData['streak'] ?? []);
+
+      int streakCount = calculateStreakCount(streakList, daysOfWeekStr);
+
+      return streakCount;
+    } else {
+      throw Exception('Habit not found');
+    }
+  }
+
+  Future<List<String>> getSkippedDates(String habitId) async {
+    DocumentSnapshot habitDoc = await firestoreInstance
+      .collection('Users')
+      .doc(uid)
+      .collection('Habits')
+      .doc(habitId)
+      .get();
+
+    if (habitDoc.exists) {
+      Map<String, dynamic> data = habitDoc.data() as Map<String, dynamic>;
+      List<String> skipped = List<String>.from(data['skipped'] ?? []);
+      return skipped;
+    } else {
+      throw Exception('Habit not found');
+    }
+  }
+
+  Future<List<String>> getStreakDates(String habitId) async {
+    DocumentSnapshot habitDoc = await firestoreInstance
+      .collection('Users')
+      .doc(uid)
+      .collection('Habits')
+      .doc(habitId)
+      .get();
+
+    if (habitDoc.exists) {
+      Map<String, dynamic> data = habitDoc.data() as Map<String, dynamic>;
+      List<String> streak = List<String>.from(data['streak'] ?? []);
+      return streak;
+    } else {
+      throw Exception('Habit not found');
+    }
+  }
+
+
+
+  Future<String> saveHabit(String habitName, List<String> days, String startTime, String endTime, String place, String iconPath, String createDate) async {
     // Directly use startTime and endTime as they're already strings
     DocumentReference ref = await firestoreInstance
         .collection('Users')
@@ -32,7 +179,8 @@ class DatabaseService {
       "place": place,
       "icon path": iconPath,
       "streak": [],
-      "skipped": []
+      "skipped": [],
+      "create date": createDate, 
     });
 
     return ref.id;
