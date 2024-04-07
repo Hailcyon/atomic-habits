@@ -7,7 +7,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
 class LawOnePage extends StatefulWidget {
-  const LawOnePage({Key? key}) : super(key: key);
+  final String habitId;
+  final String habitName;
+  const LawOnePage({Key? key, required this.habitId, required this.habitName})
+      : super(key: key);
 
   @override
   State<LawOnePage> createState() => _LawOnePage();
@@ -25,9 +28,9 @@ class _LawOnePage extends State<LawOnePage> {
   @override
   Widget build(BuildContext context) {
     // Retrieve the habitName passed as an argument
-    final String _habitId =
-        ModalRoute.of(context)?.settings.arguments as String? ??
-            'Default Habit Name';
+    // final String _habitId =
+    //     ModalRoute.of(context)?.settings.arguments as String? ??
+    //         'Default Habit Name';
 
     return Scaffold(
       // backgroundColor: Colors.white,
@@ -42,7 +45,7 @@ class _LawOnePage extends State<LawOnePage> {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ImpInt(
                   onSave: updateFrictionText,
-                  habitId: _habitId,
+                  habitId: widget.habitId,
                 ),
               ));
             }),
@@ -52,7 +55,7 @@ class _LawOnePage extends State<LawOnePage> {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => HabSta(
                   onSave: updateFrictionText,
-                  habitId: _habitId,
+                  habitId: widget.habitId,
                 ),
               ));
             }),
@@ -61,7 +64,8 @@ class _LawOnePage extends State<LawOnePage> {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => EnvDes(
                   onSave: updateFrictionText,
-                  habitId: _habitId,
+                  habitId: widget.habitId,
+                  habitName: widget.habitName,
                 ),
               ));
             }),

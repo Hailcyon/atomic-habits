@@ -11,7 +11,6 @@ class DatabaseService {
   final firestoreInstance = FirebaseFirestore.instance;
 
   initializeUser() async {
-
     // firestoreInstance.collection('Users').doc(uid).collection('Habits').doc('Habit1').set({"date": "2023"});
     await firestoreInstance.collection('Users').doc(uid).set({
       // Set initial data for the user document. For example, registration date.
@@ -46,45 +45,44 @@ class DatabaseService {
     return ref.id;
   }
 
-Future<String> saveHabitLaw(String habitId, int habitNum, String habitLawNum, String habitLaw) async {
-
+  Future<String> saveHabitLaw(
+      String habitId, int habitNum, String habitLawNum, String habitLaw) async {
     DocumentReference ref = await firestoreInstance
-                                    .collection('Users')
-                                    .doc(uid)
-                                    .collection('Habits')
-                                    .doc(habitId)
-                                    .collection('HabitLaws')
-                                    .add({
+        .collection('Users')
+        .doc(uid)
+        .collection('Habits')
+        .doc(habitId)
+        .collection('HabitLaws')
+        .add({
       "habitNum": habitNum,
       "habitLawNum": habitLawNum,
       "habitLaw": habitLaw,
     });
 
     return ref.id;
-}
+  }
 
 // Future<QuerySnapshot> getHabitLawDetails(String habitId) {
 //   return firestoreInstance.collection('Users').doc(uid).collection('Habits').doc(habitId).collection('HabitLaws').get();
 // }
 
-Stream<List<Map<String, dynamic>>> getHabitLawDetailsStream(String habitId) {
-  return firestoreInstance
-      .collection('Users')
-      .doc(uid)
-      .collection('Habits')
-      .doc(habitId)
-      .collection('HabitLaws')
-      .snapshots()
-      .map((snapshot) => snapshot.docs
-          .map((doc) => {
-                'id': doc.id,
-                'habitNum': doc.data()['habitNum'] as int,
-                'habitLawNum': doc.data()['habitLawNum'] as String,
-                'habitLaw': doc.data()['habitLaw'] as String,
-              })
-          .toList());
-}
-
+  Stream<List<Map<String, dynamic>>> getHabitLawDetailsStream(String habitId) {
+    return firestoreInstance
+        .collection('Users')
+        .doc(uid)
+        .collection('Habits')
+        .doc(habitId)
+        .collection('HabitLaws')
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => {
+                  'id': doc.id,
+                  'habitNum': doc.data()['habitNum'] as int,
+                  'habitLawNum': doc.data()['habitLawNum'] as String,
+                  'habitLaw': doc.data()['habitLaw'] as String,
+                })
+            .toList());
+  }
 
   Stream<List<Map<String, String>>> getHabitsAscending(String dayOfWeek) {
     return firestoreInstance
@@ -113,6 +111,93 @@ Stream<List<Map<String, dynamic>>> getHabitLawDetailsStream(String habitId) {
             .toList());
   }
 
+  // Future<String> getHabitName(String habitId) async {
+  //   var snapshot = await FirebaseFirestore.instance
+  //       .collection('Users')
+  //       .doc(uid)
+  //       .collection('Habits')
+  //       .doc(habitId)
+  //       .get();
+
+  //   Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+
+  //   return data['name'] ?? [] as String;
+  // }
+
+  // Stream<String> getHabitName(String habitId) {
+  //   return FirebaseFirestore.instance
+  //       .collection('Users')
+  //       .doc(uid)
+  //       .collection('Habits')
+  //       .doc(habitId)
+  //       .snapshots()
+  //       .map((snapshot) {
+  //     if (snapshot.exists) {
+  //       Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+  //       return data['name'] as String? ?? '';
+  //     } else {
+  //       return ''; // Or handle non-existence of habit data as you prefer
+  //     }
+  //   });
+  // }
+
+  Stream<List<String>> getSuggestedHabitLawActions(
+      String habitName, String habitLaw, String habitLawAction) {
+    // String? habitName;
+    // StreamBuilder<String>(
+    //     stream: getHabitName(habitId),
+    //     builder: (context, snapshot) {
+    //       if (snapshot.hasError) {
+    //         return Text("Something went wrong: ${snapshot.error}");
+    //       }
+    //       if (!snapshot.hasData || snapshot.data!.isEmpty) {
+    //         return Text(
+    //             "No habit found"); // Handle case where no data is available
+    //       }
+    //       habitName = snapshot.data;
+    //       return Text("${habitName}");
+    //     });
+
+    return firestoreInstance
+        .collection('SuggestedHabits')
+        .doc(habitName)
+        .collection('HabitLaws')
+        .doc(habitLaw)
+        .collection('HabitLawActions')
+        .doc(habitLawAction)
+        .snapshots()
+        .map((snapshot) {
+      var data = snapshot.data();
+      if (data != null && data.containsKey('suggestions')) {
+        return List<String>.from(data['suggestions'] as List<dynamic>);
+      } else {
+        return [];
+      }
+    });
+  }
+
+  // Stream<List<String>> getSuggestedHabitLawActions(String habitId,
+  //     String habitName, String habitLaw, String habitLawAction) {
+  //   return getHabitName(habitId).switchMap((habitName) {
+  //     return firestoreInstance
+  //         .collection('SuggestedHabits')
+  //         .doc(habitName)
+  //         .collection('HabitLaws')
+  //         .doc(habitLaw)
+  //         .collection('HabitLawActions')
+  //         .doc(habitLawAction)
+  //         .snapshots()
+  //         .map((snapshot) {
+  //       var data = snapshot.data();
+  //       if (data != null && data.containsKey('suggestions')) {
+  //         return List<String>.from(data['suggestions'] as List<dynamic>);
+  //       } else {
+  //         return [];
+  //       }
+  //     });
+  //   });
+  // }
+
   // have auto generated id
   Future<void> deleteHabit(String habitId) async {
     await firestoreInstance
@@ -122,7 +207,6 @@ Stream<List<Map<String, dynamic>>> getHabitLawDetailsStream(String habitId) {
         .doc(habitId)
         .delete();
   }
-
 
   // Future<int> updateStreak(String habitId, DateTime chosenDateTime) async {
   //   DocumentReference habitRef = FirebaseFirestore.instance
@@ -142,7 +226,7 @@ Stream<List<Map<String, dynamic>>> getHabitLawDetailsStream(String habitId) {
 
   //   // Get the name of the last expected day from the 'days' array
   //   List<String> days = List<String>.from(data['days'] ?? []);
-    
+
   //   int currentDayIndex = currentDate.weekday - 1; // 1 for Monday, 2 for Tuesday, etc.
   //   int lastExpectedDayIndex = (currentDayIndex == 0) ? 6 : currentDayIndex - 1; // Index of yesterday
   //   String lastExpectedDayName = days[lastExpectedDayIndex];
@@ -161,7 +245,6 @@ Stream<List<Map<String, dynamic>>> getHabitLawDetailsStream(String habitId) {
 
   //   //int c = currentDate.weekday;
   //   int? lastExpectedDayInd = daysMap[lastExpectedDayName];
-
 
   //   //print("lastExpectedDayIndex is $lastExpectedDayIndex");
 
@@ -235,7 +318,6 @@ Stream<List<Map<String, dynamic>>> getHabitLawDetailsStream(String habitId) {
 //     };
 //     List<int> daysAsNumbers = days.map((day) => daysOfWeek[day]!).toList();
 
-
 //     // 检查chosenDateTime是否是设定的执行日期之一
 //     String chosenDayOfWeek = DateFormat('EEEE').format(chosenDateTime).toLowerCase(); // 获取星期几，例如 'thursday'
 //     if (!days.contains(chosenDayOfWeek)) {
@@ -287,14 +369,20 @@ Stream<List<Map<String, dynamic>>> getHabitLawDetailsStream(String habitId) {
     DocumentSnapshot habitDoc = await habitRef.get();
     Map<String, dynamic> data = habitDoc.data() as Map<String, dynamic>;
 
-    List<String> streakList = List<String>.from(data['streak'] ?? []).map((e) => e.toString()).toList();
-    List<String> days = List<String>.from(data['days'] ?? []); // Example: ['thursday', 'friday', 'saturday']
+    List<String> streakList = List<String>.from(data['streak'] ?? [])
+        .map((e) => e.toString())
+        .toList();
+    List<String> days = List<String>.from(
+        data['days'] ?? []); // Example: ['thursday', 'friday', 'saturday']
 
-    String formattedChosenDate = DateFormat('yyyy-MM-dd').format(chosenDateTime);
+    String formattedChosenDate =
+        DateFormat('yyyy-MM-dd').format(chosenDateTime);
 
     // Ensure all valid dates are included in the streak list
-    if (!streakList.contains(formattedChosenDate) && days.contains(DateFormat('EEEE').format(chosenDateTime).toLowerCase())) {
-        streakList.add(formattedChosenDate);
+    if (!streakList.contains(formattedChosenDate) &&
+        days.contains(
+            DateFormat('EEEE').format(chosenDateTime).toLowerCase())) {
+      streakList.add(formattedChosenDate);
     }
 
     // Always sort the streak list to maintain chronological order
@@ -305,11 +393,11 @@ Stream<List<Map<String, dynamic>>> getHabitLawDetailsStream(String habitId) {
 
     // Update the streak in Firestore if necessary
     if (!ListEquality().equals(streakList, data['streak'])) {
-        await habitRef.update({'streak': streakList});
+      await habitRef.update({'streak': streakList});
     }
 
     return newStreakCount; // Return the length of the continuous streak
-}
+  }
 
 //   // Assume streakList is already sorted and contains all valid dates
 // int calculateStreakCount(List<String> streakList, List<String> validDays) {
@@ -339,69 +427,67 @@ Stream<List<Map<String, dynamic>>> getHabitLawDetailsStream(String habitId) {
 //     return longestStreak;
 // }
 
-int calculateStreakCount(List<String> streakList, List<String> validDays) {
+  int calculateStreakCount(List<String> streakList, List<String> validDays) {
     if (streakList.isEmpty) return 0;
 
     // Convert string dates to DateTime objects for easier comparison
-    List<DateTime> streakDates = streakList.map((date) => DateFormat('yyyy-MM-dd').parse(date)).toList();
+    List<DateTime> streakDates =
+        streakList.map((date) => DateFormat('yyyy-MM-dd').parse(date)).toList();
 
     // Start from the end of the list (the most recent date)
     DateTime lastDate = streakDates.last;
     int streakCount = 1; // Streak starts with the latest date
-    
+
     for (int i = streakDates.length - 2; i >= 0; i--) {
-        DateTime currentDate = streakDates[i];
+      DateTime currentDate = streakDates[i];
 
-        // Calculate the difference in days and check if the current date is a valid habit day
-        int diff = lastDate.difference(currentDate).inDays;
-        String dayOfWeek = DateFormat('EEEE').format(currentDate).toLowerCase();
+      // Calculate the difference in days and check if the current date is a valid habit day
+      int diff = lastDate.difference(currentDate).inDays;
+      String dayOfWeek = DateFormat('EEEE').format(currentDate).toLowerCase();
 
-        if (diff > 7) {
-            // More than a week difference means automatic break
-            break;
-        } else if (validDays.contains(dayOfWeek)) {
-            // If the current date is part of the habit days and is in sequence
-            if (isNextValidHabitDay(currentDate, lastDate, validDays)) {
-                streakCount++;
-                lastDate = currentDate; // Update the lastDate to current as we're moving backwards
-            } else {
-                // If it's a valid day but not in sequence, break the streak
-                break;
-            }
+      if (diff > 7) {
+        // More than a week difference means automatic break
+        break;
+      } else if (validDays.contains(dayOfWeek)) {
+        // If the current date is part of the habit days and is in sequence
+        if (isNextValidHabitDay(currentDate, lastDate, validDays)) {
+          streakCount++;
+          lastDate =
+              currentDate; // Update the lastDate to current as we're moving backwards
+        } else {
+          // If it's a valid day but not in sequence, break the streak
+          break;
         }
+      }
     }
     return streakCount;
-}
+  }
 
-bool isNextValidHabitDay(DateTime prevDate, DateTime nextDate, List<String> validDays) {
+  bool isNextValidHabitDay(
+      DateTime prevDate, DateTime nextDate, List<String> validDays) {
     // Calculate the difference in days
     int diff = nextDate.difference(prevDate).inDays;
 
     // Iterate through the days between prevDate and nextDate
     for (int i = 1; i <= diff; i++) {
-        DateTime tempDate = prevDate.add(Duration(days: i));
-        String dayOfWeek = DateFormat('EEEE').format(tempDate).toLowerCase();
-        
-        // If we hit a valid habit day before reaching nextDate, it breaks the streak
-        if (validDays.contains(dayOfWeek) && tempDate.isBefore(nextDate)) {
-            return false;
-        }
+      DateTime tempDate = prevDate.add(Duration(days: i));
+      String dayOfWeek = DateFormat('EEEE').format(tempDate).toLowerCase();
+
+      // If we hit a valid habit day before reaching nextDate, it breaks the streak
+      if (validDays.contains(dayOfWeek) && tempDate.isBefore(nextDate)) {
+        return false;
+      }
     }
-    
+
     // If the nextDate is a valid habit day (and we didn't find another habit day before it),
     // then it's considered continuous.
-    return validDays.contains(DateFormat('EEEE').format(nextDate).toLowerCase());
-}
-
-
-
-
+    return validDays
+        .contains(DateFormat('EEEE').format(nextDate).toLowerCase());
+  }
 
   String _formattedDate(DateTime dateTime) {
     return dateTime.toString().split(' ')[0]; // Extract YYYY-MM-DD format
   }
-
-
 
   Future<void> updateHabitName(String habitId, String newHabitName) async {
     return firestoreInstance
@@ -438,5 +524,4 @@ bool isNextValidHabitDay(DateTime prevDate, DateTime nextDate, List<String> vali
         .doc(habitId)
         .get();
   }
-
 }

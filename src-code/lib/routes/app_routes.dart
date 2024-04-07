@@ -34,7 +34,6 @@ class AppRoutes {
   static String currentPageID = '';
   // static const String reduceFrictionRoute = '/reduce_friction_page.dart';
 
-
   static Map<String, WidgetBuilder> get routes => {
         widgetTreeRoute: (context) => WidgetTree(),
         profilePageRoute: (context) => ProfilePage(),
@@ -48,14 +47,30 @@ class AppRoutes {
           final args = ModalRoute.of(context)!.settings.arguments;
           // Check if the args is indeed the expected string (habitId)
           if (args is String) {
-            return EditHabitPage(habitId: args); // Pass the habitId to the constructor
+            return EditHabitPage(
+                habitId: args); // Pass the habitId to the constructor
           } else {
             // You can return an error page or any default page if the arguments are not correct
-            throw Exception('EditHabitPage requires a habitId string as an argument');
+            throw Exception(
+                'EditHabitPage requires a habitId string as an argument');
           }
         },
         lawThreePageRout: (context) => LawThreePage(),
-        lawOnePageRoute: (context) => LawOnePage(),
+        lawOnePageRoute: (context) {
+          // Extract the arguments from the current settings
+          final args = ModalRoute.of(context)!.settings.arguments;
+          // Check if the args is indeed the expected string (habitId)
+          if (args is Set<String>) {
+            return LawOnePage(
+              habitId: args.first,
+              habitName: args.last,
+            ); // Pass the habitId to the constructor
+          } else {
+            // You can return an error page or any default page if the arguments are not correct
+            throw Exception(
+                'LawOnePage requires a habitId and habitName string as an argument');
+          }
+        },
         lawTwoPageRoute: (context) => LawTwoPage(),
         lawFourPageRoute: (context) => LawFourPage(),
         homePageRoute: (context) => HomePageContainerPage(),
