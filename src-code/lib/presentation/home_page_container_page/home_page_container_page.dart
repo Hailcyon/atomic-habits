@@ -40,7 +40,8 @@ class HomePageContainerPage extends StatefulWidget {
 }
 
 class _HomePageContainerPageState extends State<HomePageContainerPage> {
-   Map<String, bool> skippedHabits = {}; // Track skip status for each habit on specific date
+  Map<String, bool> skippedHabits =
+      {}; // Track skip status for each habit on specific date
   final User? user = Auth().currentUser;
 
   List<String> habitNames = [];
@@ -89,7 +90,6 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     return daysOfWeekAbbrev[dateTime.weekday - 1];
   }
 
-
   @override
   void initState() {
     currentMonthList = date_util.DateUtils.daysInMonth(currentDateTime);
@@ -104,13 +104,14 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     fetchHabitsWithStatus();
   }
 
-
   void fetchHabitsWithStatus() async {
-    String currentDayOfWeek = DateFormat('EEEE').format(currentDateTime).toLowerCase();
+    String currentDayOfWeek =
+        DateFormat('EEEE').format(currentDateTime).toLowerCase();
     DateTime currentDate = currentDateTime;
     String currentDateStr = DateFormat('yyyy-MM-dd').format(currentDate);
 
-    var habitsWithStatus = await dbService.getHabitsWithSkipStatus(currentDayOfWeek, currentDate);
+    var habitsWithStatus =
+        await dbService.getHabitsWithSkipStatus(currentDayOfWeek, currentDate);
 
     setState(() {
       // Do not clear the current skip state map
@@ -121,8 +122,6 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
       }
     });
   }
-
-
 
   // the grey box to show days
   Widget topView() {
@@ -268,18 +267,18 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: _buildAppBar(context),
-      body: Column(
-        children: <Widget>[
-          topView(),
-          SizedBox(height: 10),
-          Text(
-            "Habits", 
-            style: theme.textTheme.headlineLarge,
-            textAlign: TextAlign.center, // Align text to the center
-          ),
-          SizedBox(height: 10),
-          Expanded(  // Use Expanded to fill the remaining space
-            child: ListView(
+      body: Column(children: <Widget>[
+        topView(),
+        SizedBox(height: 10),
+        Text(
+          "Habits",
+          style: theme.textTheme.headlineLarge,
+          textAlign: TextAlign.center, // Align text to the center
+        ),
+        SizedBox(height: 10),
+        Expanded(
+          // Use Expanded to fill the remaining space
+          child: ListView(
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               children: <Widget>[
                 StreamBuilder<List<Map<String, String>>>(
@@ -290,40 +289,43 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
                     }
                     if (!snapshot.hasData || snapshot.data!.isEmpty) {
                       return Center(
-                        child: Text("No habits found"),  // Handle case where no data is available
+                        child: Text(
+                            "No habits found"), // Handle case where no data is available
                       );
                     }
                     List<Widget> habitWidgets = [];
                     snapshot.data!.asMap().forEach((index, habit) {
-                      final habitId = habit['id']!;  // Extract the habit ID
-                      final habitName = habit['name']!;  // Extract the habit name
-                      final iconPath = habit['iconPath']; // Extract the icon path
+                      final habitId = habit['id']!; // Extract the habit ID
+                      final habitName =
+                          habit['name']!; // Extract the habit name
+                      final iconPath =
+                          habit['iconPath']; // Extract the icon path
                       // Add the habit button
                       habitWidgets.add(buildHabitButton(
                         context: context,
-                        habitId: habitId,  // Pass the habit ID
-                        buttonText: habitName,  // Pass the habit name
+                        habitId: habitId, // Pass the habit ID
+                        buttonText: habitName, // Pass the habit name
                         leftIconPath: iconPath!,
                       ));
 
                       // Add spacing after the button, but not after the last one
                       if (index < snapshot.data!.length - 1) {
-                        habitWidgets.add(SizedBox(height: 15));  // Adjust the height for desired spacing
+                        habitWidgets.add(SizedBox(
+                            height:
+                                15)); // Adjust the height for desired spacing
                       }
                     });
 
                     // Return a SingleChildScrollView containing a Column of habit buttons
                     return Column(
-                        children: habitWidgets,
+                      children: habitWidgets,
                     );
                   },
                 ),
                 SizedBox(height: 100.v),
-              ]
-            ),
-          ),
-        ]  
-      ),
+              ]),
+        ),
+      ]),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0, // Index of the currently selected tab
         onTap: (int index) {
@@ -351,49 +353,52 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
       ),
     );
   }
- 
+
   Widget buildHabitButton({
     required BuildContext context,
     required String habitId,
     required String buttonText,
     required String leftIconPath,
   }) {
-  // set color based on the chosen date habit skipped status
-  String currentDateStr = DateFormat('yyyy-MM-dd').format(currentDateTime);
-  String habitDateKey = '${habitId}_$currentDateStr';
-  Color buttonColor = skippedHabits[habitDateKey] ?? false ? Colors.yellow.withOpacity(0.2) : Colors.yellow;
-  
+    // set color based on the chosen date habit skipped status
+    String currentDateStr = DateFormat('yyyy-MM-dd').format(currentDateTime);
+    String habitDateKey = '${habitId}_$currentDateStr';
+    Color buttonColor = skippedHabits[habitDateKey] ?? false
+        ? Colors.yellow.withOpacity(0.2)
+        : Colors.yellow;
+
     return SlidableAutoCloseBehavior(
       closeWhenOpened: true,
       closeWhenTapped: true,
-      
       child: Slidable(
         closeOnScroll: true,
         endActionPane: ActionPane(
           motion: StretchMotion(),
           children: [
             SlidableAction(
-              onPressed: ((context){
+              onPressed: ((context) {
                 showDialog(
-                  barrierDismissible: true, 
-                  context: context, 
+                  barrierDismissible: true,
+                  context: context,
                   builder: (BuildContext context) => AlertDialog(
                     content: Text("Are you sure you want to skip this habit?"),
                     actions: [
                       TextButton(
-                        child: Text("Cancel"), 
+                        child: Text("Cancel"),
                         onPressed: () {
                           Navigator.of(context).pop(); // Close the dialog
                         },
                       ),
                       TextButton(
-                        child: Text("Yes"), 
+                        child: Text("Yes"),
                         onPressed: () async {
                           // delete chosen date in selected habit's streak list, maintain streak caculation
-                          await dbService.skipHabitDate(habitId, currentDateTime);
+                          await dbService.skipHabitDate(
+                              habitId, currentDateTime);
                           // add chosen date to skipped list of the selected habit
                           await dbService.addSkipDate(habitId, currentDateTime);
-                          String currentDateStr = DateFormat('yyyy-MM-dd').format(currentDateTime);
+                          String currentDateStr =
+                              DateFormat('yyyy-MM-dd').format(currentDateTime);
                           String habitDateKey = '${habitId}_$currentDateStr';
                           setState(() {
                             // immediately set selected habit skip status to True on chosen date
@@ -416,13 +421,14 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
           motion: StretchMotion(),
           children: [
             SlidableAction(
-              onPressed: ((context) async{
+              onPressed: ((context) async {
                 _showStreakDialog(context, habitId, currentDateTime);
                 // add chosen date to selected habit's streak list
                 // delete chosen date in selected habit's skipped list
                 await dbService.markHabitAsCompleted(habitId, currentDateTime);
-      
-                String currentDateStr = DateFormat('yyyy-MM-dd').format(currentDateTime);
+
+                String currentDateStr =
+                    DateFormat('yyyy-MM-dd').format(currentDateTime);
                 String habitDateKey = '${habitId}_$currentDateStr';
                 setState(() {
                   // immediately set selected habit skip status to False on chosen date
@@ -442,7 +448,7 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
           child: ElevatedButton.icon(
             // icon: const Icon(Icons.directions_run_rounded),
             icon: SvgPicture.asset(
-              leftIconPath, 
+              leftIconPath,
               width: 24, // set icon width
               height: 24, // set icon height
               color: Colors.pink, // set icon color
@@ -460,11 +466,15 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8), // Rounded corners
               ),
-              alignment: Alignment.centerLeft, // Align the icon and text to the left
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0), // Padding inside the button
+              alignment:
+                  Alignment.centerLeft, // Align the icon and text to the left
+              padding: EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 16.0), // Padding inside the button
             ),
             onPressed: () {
-              Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute, arguments: habitId);
+              Navigator.of(context)
+                  .pushNamed(AppRoutes.editHabitPageRoute, arguments: habitId);
             },
           ),
           // ),
@@ -473,7 +483,8 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     );
   }
 
-  void _showStreakDialog(BuildContext context, String habitId, DateTime chosenDateTime) {
+  void _showStreakDialog(
+      BuildContext context, String habitId, DateTime chosenDateTime) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -507,7 +518,9 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
                   children: [
                     Text('You have completed the habit.'),
                     SizedBox(height: 13),
-                    Text("You have a " + curStreak.toString() + " day streak!"), // Display the streak value
+                    Text("You have a " +
+                        curStreak.toString() +
+                        " day streak!"), // Display the streak value
                   ],
                 ),
                 actions: [
@@ -532,7 +545,6 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
         title: Text('Atomic Habits', style: TextStyle(color: Colors.black)),
         height: 70.v,
@@ -540,7 +552,8 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
         leading: IconButton(
           icon: Icon(Icons.settings, size: 40),
           onPressed: () {
-            Navigator.of(context).pushNamed(AppRoutes.settingsPageRoute);
+            //Navigator.of(context).pushNamed(AppRoutes.settingsPageRoute);
+            Navigator.of(context).pushNamed(AppRoutes.profilePageRoute);
           },
         ),
         centerTitle: true,
@@ -565,35 +578,32 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     }
     // curDayOfWeekFullName = getDayOfWeekFullName(dateTime);
     showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext context) => SizedBox(
-        height: 250,
-        width: MediaQuery.of(context).size.width,
-        child: CupertinoDatePicker(
-          backgroundColor: Colors.white,
-          initialDateTime: dateTime,
-          onDateTimeChanged: (DateTime newTime) {
-            // dateTime = newTime;
-            initialDateTimeChanged = true;
-            setState(() {
-              currentDateTime = newTime;
+        context: context,
+        builder: (BuildContext context) => SizedBox(
+              height: 250,
+              width: MediaQuery.of(context).size.width,
+              child: CupertinoDatePicker(
+                backgroundColor: Colors.white,
+                initialDateTime: dateTime,
+                onDateTimeChanged: (DateTime newTime) {
+                  // dateTime = newTime;
+                  initialDateTimeChanged = true;
+                  setState(() {
+                    currentDateTime = newTime;
 
                     // update current dayOfWeek full name
                     curDayOfWeekFullName =
                         getDayOfWeekFullName(currentDateTime);
 
-              currentMonthList = date_util.DateUtils.daysInMonth(currentDateTime);
-              // Make sure to remove duplicates and sort if necessary, like in initState
-              currentMonthList.sort((a, b) => a.day.compareTo(b.day));
-            });
-          },
-          use24hFormat: true,
-          mode: CupertinoDatePickerMode.date,
-        ),
-      )
-    );
+                    currentMonthList =
+                        date_util.DateUtils.daysInMonth(currentDateTime);
+                    // Make sure to remove duplicates and sort if necessary, like in initState
+                    currentMonthList.sort((a, b) => a.day.compareTo(b.day));
+                  });
+                },
+                use24hFormat: true,
+                mode: CupertinoDatePickerMode.date,
+              ),
+            ));
   }
 }
-
-
-

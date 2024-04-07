@@ -2,8 +2,8 @@
 
 import 'package:ahapp3/presentation/add_new_habit_pages/habit_search_page.dart';
 import 'package:ahapp3/presentation//edit_a_habit_page/edit_a_habit_page.dart';
-import 'package:ahapp3/presentation/statistics_page/statistics_page.dart';
-import 'package:ahapp3/presentation/statistics_page/habit_statistics_page.dart';
+//import 'package:ahapp3/presentation/statistics_page/statistics_page.dart';
+//import 'package:ahapp3/presentation/statistics_page/habit_statistics_page.dart';
 import 'package:ahapp3/presentation/statistics_pages/statistics_details.dart';
 import 'package:ahapp3/presentation/statistics_pages/statistics_overview.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +35,7 @@ class AppRoutes {
   static const String homePageRoute = '/home_page_container_page.dart';
   //static const String statisticsPageRoute = '/statistics_page.dart';
   // static const String habitStatisticsPageRoute = '/habit_statistics_page.dart';
-  static const String statisticsPageRoute = '/statistics_overview_page.dart';
+  static const String statisticsPageRoute = '/statistics_overview.dart';
 
   static const String lawThreePageRout = '/law_three_page.dart';
   static const String lawOnePageRoute = '/law_one_page.dart';

@@ -3,6 +3,7 @@ import 'package:ahapp3/service/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:ahapp3/core/app_export.dart';
+import 'package:ahapp3/presentation/statistics_page/habit_statistics_page.dart';
 
 class StatisticsPage extends StatefulWidget {
   const StatisticsPage({Key? key}) : super(key: key);
@@ -47,7 +48,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
                   for (int index = 0; index < habitsToAdd; index++) {
                     final habit = snapshot.data![index];
-                    final habitName = habit['name']!; // Extract the habit ID
+                    final habitName = habit['name']!; // Extract the habit name
+                    final habitId = habit['id']!;
 
                     List<String> streakList =
                         List<String>.from(habit['streak'] ?? [])
@@ -57,12 +59,14 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         []); // Example: ['thursday', 'friday', 'saturday']
                     final habitStreak =
                         dbService.calculateStreakCount(streakList, days);
+
                     // Add the habit button
                     habitWidgets.add(_habitButton(
                       context: context,
                       habitName: habitName, // Pass the habit name
                       habitStreak: habitStreak,
                       streakList: streakList,
+                      habitId: habitId,
                     ));
                     // Add spacing after the button
                     if (index < snapshot.data!.length) {
@@ -108,15 +112,25 @@ class _StatisticsPageState extends State<StatisticsPage> {
     required String habitName,
     required int habitStreak,
     required List<String> streakList,
+    required habitId,
   }) {
     return ElevatedButton(
       onPressed: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => StatisticsDetailPage(
+        // Navigator.of(context).push(MaterialPageRoute(
+        //   builder: (context) => StatisticsDetailPage(
+        //       habitName: habitName,
+        //       habitStreak: habitStreak,
+        //       streakList: streakList),
+        // ));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HabitStatisticsPage(
+              habitId: habitId,
               habitName: habitName,
-              habitStreak: habitStreak,
-              streakList: streakList),
-        ));
+            ),
+          ),
+        );
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
