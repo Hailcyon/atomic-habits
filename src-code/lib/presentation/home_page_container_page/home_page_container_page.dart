@@ -45,8 +45,10 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
 
   List<String> habitNames = [];
 
-  final DatabaseService dbService = DatabaseService(uid: FirebaseAuth.instance.currentUser?.uid ?? ''); // Initialize dbService with the user's UID;
-  
+  final DatabaseService dbService = DatabaseService(
+      uid: FirebaseAuth.instance.currentUser?.uid ??
+          ''); // Initialize dbService with the user's UID;
+
   // new calendar
   double width = 0.0;
   double height = 0.0;
@@ -62,7 +64,6 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     await Auth().signOut();
   }
 
-
   Widget _userUid() {
     return Text(user?.email ?? "User email");
   }
@@ -75,7 +76,15 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
   }
 
   String getDayOfWeekFullName(DateTime dateTime) {
-    List<String> daysOfWeekAbbrev = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+    List<String> daysOfWeekAbbrev = [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday"
+    ];
     // DateTime.weekday returns an integer from 1 (Monday) to 7 (Sunday)
     return daysOfWeekAbbrev[dateTime.weekday - 1];
   }
@@ -150,7 +159,12 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
       child: Text(
-        date_util.DateUtils.months[currentDateTime.month - 1] + ' ' + currentDateTime.year.toString(),
+        // date_util.DateUtils.months[currentDateTime.month - 1] +
+        //     ' ' +
+        //     currentDateTime.year.toString(),
+        date_util.DateUtils.months[currentDateTime.month - 1] +
+            ' ' +
+            currentDateTime.year.toString(),
         style: const TextStyle(
             color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
       ),
@@ -177,9 +191,10 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
 
   Widget capsuleView(int index) {
     bool isSelected = currentMonthList[index].day == currentDateTime.day &&
-                    currentMonthList[index].month == currentDateTime.month &&
-                    currentMonthList[index].year == currentDateTime.year; // Ensure the month and year match too
-    
+        currentMonthList[index].month == currentDateTime.month &&
+        currentMonthList[index].year ==
+            currentDateTime.year; // Ensure the month and year match too
+
     return Padding(
         padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
         child: GestureDetector(
@@ -195,25 +210,25 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    // colors: (currentMonthList[index].day != currentDateTime.day)
-                    colors: !isSelected
-                        ? [
-                            Colors.white.withOpacity(0.8),
-                            Colors.white.withOpacity(0.7),
-                            Colors.white.withOpacity(0.6)
-                          ]
-                        : [
-                            Colors.green.withOpacity(0.8),
-                            Colors.green.withOpacity(0.7),
-                            Colors.green.withOpacity(0.6)
-                          ],
-                    begin: const FractionalOffset(0.0, 0.0),
-                    end: const FractionalOffset(0.0, 1.0),
-                    stops: const [0.0, 0.5, 1.0],
-                    tileMode: TileMode.clamp),
-                borderRadius: BorderRadius.circular(40),
-                ),
+              gradient: LinearGradient(
+                  // colors: (currentMonthList[index].day != currentDateTime.day)
+                  colors: !isSelected
+                      ? [
+                          Colors.white.withOpacity(0.8),
+                          Colors.white.withOpacity(0.7),
+                          Colors.white.withOpacity(0.6)
+                        ]
+                      : [
+                          Colors.green.withOpacity(0.8),
+                          Colors.green.withOpacity(0.7),
+                          Colors.green.withOpacity(0.6)
+                        ],
+                  begin: const FractionalOffset(0.0, 0.0),
+                  end: const FractionalOffset(0.0, 1.0),
+                  stops: const [0.0, 0.5, 1.0],
+                  tileMode: TileMode.clamp),
+              borderRadius: BorderRadius.circular(40),
+            ),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -310,33 +325,30 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
         ]  
       ),
       bottomNavigationBar: BottomNavigationBar(
-          currentIndex: 0, // Index of the currently selected tab
-          onTap: (int index) {
-            if (index == 0) {
-
-            } else if (index == 1) {
-              Navigator.of(context).pushNamed(AppRoutes.newHabitPageRoute);
-            } else {
-              Navigator.pushNamedAndRemoveUntil(context, AppRoutes.profilePageRoute, (route) => false);
-              // Navigator.of(context).pushNamed(AppRoutes.statisticsPageRoute);
-            }
-            // Handle tab selection
-          },
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.add),
-              label: 'Add Habit',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
-            ),
-          ],
-        ),
+        currentIndex: 0, // Index of the currently selected tab
+        onTap: (int index) {
+          if (index == 1) {
+            Navigator.of(context).pushNamed(AppRoutes.newHabitPageRoute);
+          } else if (index == 2) {
+            Navigator.of(context).pushNamed(AppRoutes.statisticsPageRoute);
+          } else {}
+          // Handle tab selection
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add),
+            label: 'Add Habit',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bar_chart_rounded),
+            label: 'Statistics',
+          ),
+        ],
+      ),
     );
   }
  
@@ -514,14 +526,12 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     );
   }
 
-
-  // Inside an asynchronous function
+// Inside an asynchronous function
   Future<int> getStreak(habitId, DateTime chosenDateTime) async {
     return await dbService.updateStreak(habitId, chosenDateTime);
   }
 
-
-
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
         title: Text('Atomic Habits', style: TextStyle(color: Colors.black)),
@@ -547,8 +557,8 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
   buildCalendar(BuildContext context) {
     DateTime dateTime;
     // make sure month/year in calendar stay updated
-    if(initialDateTimeChanged) {
-      dateTime = currentDateTime;   
+    if (initialDateTimeChanged) {
+      dateTime = currentDateTime;
       print("dateTime is $dateTime");
     } else {
       dateTime = DateTime.now();
@@ -568,8 +578,9 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
             setState(() {
               currentDateTime = newTime;
 
-              // update current dayOfWeek full name
-              curDayOfWeekFullName = getDayOfWeekFullName(currentDateTime);
+                    // update current dayOfWeek full name
+                    curDayOfWeekFullName =
+                        getDayOfWeekFullName(currentDateTime);
 
               currentMonthList = date_util.DateUtils.daysInMonth(currentDateTime);
               // Make sure to remove duplicates and sort if necessary, like in initState

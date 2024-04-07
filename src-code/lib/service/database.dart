@@ -203,6 +203,7 @@ class DatabaseService {
 
     return ref.id;
   }
+  }
 
 
   Stream<List<Map<String, dynamic>>> getHabitLawDetailsStream(String habitId) {
@@ -222,7 +223,6 @@ class DatabaseService {
                 })
             .toList());
   }
-
 
   Stream<List<Map<String, String>>> getHabitsAscending(String dayOfWeek) {
     return firestoreInstance
@@ -248,6 +248,22 @@ class DatabaseService {
         .map((snapshot) => snapshot.docs
             .map((doc) => {
                   'id': doc.id, // Get the document ID, which is the habit name
+                })
+            .toList());
+  }
+
+  Stream<List<Map<String, dynamic>>> getAllUserHabits() {
+    return firestoreInstance
+        .collection('Users')
+        .doc(uid)
+        .collection('Habits')
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => {
+                  'name': doc.data()['name'] as String, // Get the habit name
+                  'streak':
+                      doc.data()['streak'] as List<dynamic>, //Get habit streak
+                  'days': doc.data()['days'] as List<dynamic>,
                 })
             .toList());
   }

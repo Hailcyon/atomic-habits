@@ -57,7 +57,8 @@ class _LawOnePage extends State<LawOnePage> {
               ));
             }),
             _buildHabitLaw(context, "Environment Design",
-                "Arrange surroundings to make habits visible and easy.", () {
+                "Arrange surroundings to make habits visible and easy to remember.",
+                () {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => EnvDes(
                   onSave: updateFrictionText,
