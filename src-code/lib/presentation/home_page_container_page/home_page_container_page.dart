@@ -2,6 +2,7 @@
 
 import 'package:ahapp3/service/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 import 'bloc/home_page_container_bloc.dart';
 import 'models/home_page_container_model.dart';
@@ -21,6 +22,8 @@ import 'package:ahapp3/presentation/auth.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:ahapp3/utils/date_utils.dart' as date_util;
 
+import 'package:flutter_svg/flutter_svg.dart';
+
 class HomePageContainerPage extends StatefulWidget {
   HomePageContainerPage({Key? key}) : super(key: key);
 
@@ -37,9 +40,9 @@ class HomePageContainerPage extends StatefulWidget {
 }
 
 class _HomePageContainerPageState extends State<HomePageContainerPage> {
+   Map<String, bool> skippedHabits = {}; // Track skip status for each habit on specific date
   final User? user = Auth().currentUser;
 
-  // final String uid = FirebaseAuth.instance.currentUser?.uid ?? '';
   List<String> habitNames = [];
 
   final DatabaseService dbService = DatabaseService(uid: FirebaseAuth.instance.currentUser?.uid ?? ''); // Initialize dbService with the user's UID;
@@ -54,9 +57,6 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
   bool initialDateTimeChanged = false;
   TextEditingController controller = TextEditingController();
   String curDayOfWeekFullName = '';
-
-  // final monthList = ['January','Febuary','March','April','May','June','July','August','September','October','November','December'];
-  // final yearList 
 
   Future<void> signOut() async {
     await Auth().signOut();
@@ -80,20 +80,6 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     return daysOfWeekAbbrev[dateTime.weekday - 1];
   }
 
-  // Widget _newHabitButton(BuildContext context) {
-  //   // String dayOfWeekAbbrev = getDayOfWeekAbbreviation(currentDateTime); // This will be from Mon - Sun
-  //   return TextButton(
-  //     //add a new habit button
-  //     child: Icon(Icons.add_rounded, size: 40),
-  //     onPressed: () {
-  //       Navigator.of(context).pushNamed(AppRoutes.newHabitPageRoute);
-  //     },
-  //     style: TextButton.styleFrom(
-  //         backgroundColor: Colors.green,
-  //         foregroundColor: Colors.black,
-  //         shape: CircleBorder()),
-  //   );
-  // }
 
   @override
   void initState() {
@@ -106,9 +92,28 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     curDayOfWeekFullName = getDayOfWeekFullName(currentDateTime);
 
     super.initState();
-    // loadHabits();
-    // dbService = DatabaseService(uid: uid); // Initialize dbService with the user's UID
+    fetchHabitsWithStatus();
   }
+
+
+  void fetchHabitsWithStatus() async {
+    String currentDayOfWeek = DateFormat('EEEE').format(currentDateTime).toLowerCase();
+    DateTime currentDate = currentDateTime;
+    String currentDateStr = DateFormat('yyyy-MM-dd').format(currentDate);
+
+    var habitsWithStatus = await dbService.getHabitsWithSkipStatus(currentDayOfWeek, currentDate);
+
+    setState(() {
+      // Do not clear the current skip state map
+      // Only update or add custom skip status for the current date
+      for (var habit in habitsWithStatus) {
+        String habitDateKey = '${habit['id']}_$currentDateStr';
+        skippedHabits[habitDateKey] = habit['isSkipped'];
+      }
+    });
+  }
+
+
 
   // the grey box to show days
   Widget topView() {
@@ -145,9 +150,6 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
       child: Text(
-        // date_util.DateUtils.months[currentDateTime.month - 1] +
-        //     ' ' +
-        //     currentDateTime.year.toString(),
         date_util.DateUtils.months[currentDateTime.month - 1] + ' ' + currentDateTime.year.toString(),
         style: const TextStyle(
             color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
@@ -186,6 +188,7 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
               currentDateTime = currentMonthList[index];
               // update current dayOfWeek full name
               curDayOfWeekFullName = getDayOfWeekFullName(currentDateTime);
+              fetchHabitsWithStatus(); // make sure that when app reopen, button is still grayed
             });
           },
           child: Container(
@@ -262,7 +265,7 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
           SizedBox(height: 10),
           Expanded(  // Use Expanded to fill the remaining space
             child: ListView(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               children: <Widget>[
                 StreamBuilder<List<Map<String, String>>>(
                   stream: dbService.getHabitsAscending(curDayOfWeekFullName),
@@ -279,18 +282,18 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
                     snapshot.data!.asMap().forEach((index, habit) {
                       final habitId = habit['id']!;  // Extract the habit ID
                       final habitName = habit['name']!;  // Extract the habit name
-
+                      final iconPath = habit['iconPath']; // Extract the icon path
                       // Add the habit button
                       habitWidgets.add(buildHabitButton(
                         context: context,
                         habitId: habitId,  // Pass the habit ID
                         buttonText: habitName,  // Pass the habit name
-                        leftIconPath: ImageConstant.imgIconDirectionsRun,
+                        leftIconPath: iconPath!,
                       ));
 
                       // Add spacing after the button, but not after the last one
                       if (index < snapshot.data!.length - 1) {
-                        habitWidgets.add(SizedBox(height: 10));  // Adjust the height for desired spacing
+                        habitWidgets.add(SizedBox(height: 15));  // Adjust the height for desired spacing
                       }
                     });
 
@@ -301,10 +304,6 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
                   },
                 ),
                 SizedBox(height: 100.v),
-                //_newHabitButton(context),
-                // SizedBox(height: 300.v),
-                //_userUid(),
-                //_signOutButton(),
               ]
             ),
           ),
@@ -319,6 +318,7 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
               Navigator.of(context).pushNamed(AppRoutes.newHabitPageRoute);
             } else {
               Navigator.pushNamedAndRemoveUntil(context, AppRoutes.profilePageRoute, (route) => false);
+              // Navigator.of(context).pushNamed(AppRoutes.statisticsPageRoute);
             }
             // Handle tab selection
           },
@@ -339,153 +339,190 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
         ),
     );
   }
+ 
+  Widget buildHabitButton({
+    required BuildContext context,
+    required String habitId,
+    required String buttonText,
+    required String leftIconPath,
+  }) {
+  // set color based on the chosen date habit skipped status
+  String currentDateStr = DateFormat('yyyy-MM-dd').format(currentDateTime);
+  String habitDateKey = '${habitId}_$currentDateStr';
+  Color buttonColor = skippedHabits[habitDateKey] ?? false ? Colors.yellow.withOpacity(0.2) : Colors.yellow;
+  
+    return SlidableAutoCloseBehavior(
+      closeWhenOpened: true,
+      closeWhenTapped: true,
+      
+      child: Slidable(
+        closeOnScroll: true,
+        endActionPane: ActionPane(
+          motion: StretchMotion(),
+          children: [
+            SlidableAction(
+              onPressed: ((context){
+                showDialog(
+                  barrierDismissible: true, 
+                  context: context, 
+                  builder: (BuildContext context) => AlertDialog(
+                    content: Text("Are you sure you want to skip this habit?"),
+                    actions: [
+                      TextButton(
+                        child: Text("Cancel"), 
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Close the dialog
+                        },
+                      ),
+                      TextButton(
+                        child: Text("Yes"), 
+                        onPressed: () async {
+                          // delete chosen date in selected habit's streak list, maintain streak caculation
+                          await dbService.skipHabitDate(habitId, currentDateTime);
+                          // add chosen date to skipped list of the selected habit
+                          await dbService.addSkipDate(habitId, currentDateTime);
+                          String currentDateStr = DateFormat('yyyy-MM-dd').format(currentDateTime);
+                          String habitDateKey = '${habitId}_$currentDateStr';
+                          setState(() {
+                            // immediately set selected habit skip status to True on chosen date
+                            skippedHabits[habitDateKey] = true;
+                          });
+                          Navigator.of(context).pop(); // Close the dialog
+                        },
+                      ),
+                    ],
+                    elevation: 24,
+                  ),
+                );
+              }),
+              backgroundColor: Colors.red,
+              icon: Icons.clear_outlined,
+            ),
+          ],
+        ),
+        startActionPane: ActionPane(
+          motion: StretchMotion(),
+          children: [
+            SlidableAction(
+              onPressed: ((context) async{
+                _showStreakDialog(context, habitId, currentDateTime);
+                // add chosen date to selected habit's streak list
+                // delete chosen date in selected habit's skipped list
+                await dbService.markHabitAsCompleted(habitId, currentDateTime);
+      
+                String currentDateStr = DateFormat('yyyy-MM-dd').format(currentDateTime);
+                String habitDateKey = '${habitId}_$currentDateStr';
+                setState(() {
+                  // immediately set selected habit skip status to False on chosen date
+                  skippedHabits[habitDateKey] = false;
+                });
+              }),
+              backgroundColor: Colors.green,
+              icon: Icons.check,
+            ),
+          ],
+        ),
+        // build the habit button
+        child: Container(
+          width: 600,
+          margin: EdgeInsets.symmetric(horizontal: 16.0),
+          // child: Expanded( //have Expanded in Container will cause Incorrect use of ParentDataWidget error
+          child: ElevatedButton.icon(
+            // icon: const Icon(Icons.directions_run_rounded),
+            icon: SvgPicture.asset(
+              leftIconPath, 
+              width: 24, // set icon width
+              height: 24, // set icon height
+              color: Colors.pink, // set icon color
+            ),
+            label: Text(
+              buttonText,
+              style: TextStyle(color: Colors.black), // Text color
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
+              maxLines: 100,
+            ),
+            style: ElevatedButton.styleFrom(
+              // backgroundColor: Colors.yellow, // Button color
+              backgroundColor: buttonColor, // Button color
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8), // Rounded corners
+              ),
+              alignment: Alignment.centerLeft, // Align the icon and text to the left
+              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0), // Padding inside the button
+            ),
+            onPressed: () {
+              Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute, arguments: habitId);
+            },
+          ),
+          // ),
+        ),
+      ),
+    );
+  }
 
-Widget buildHabitButton({
-  required BuildContext context,
-  required String habitId,
-  required String buttonText,
-  required String leftIconPath,
-}) {
-  return Slidable(
-    endActionPane: ActionPane(
-      motion: StretchMotion(),
-      children: [
-        SlidableAction(
-          onPressed: ((context){
-            showDialog(
-              barrierDismissible: true, 
-              context: context, 
-              builder: (BuildContext context) => AlertDialog(
-                content: Text("Are you sure you want to delete this habit?"),
+  void _showStreakDialog(BuildContext context, String habitId, DateTime chosenDateTime) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return FutureBuilder<int>(
+          future: getStreak(habitId, chosenDateTime), // Fetch the streak value
+          builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              // While waiting for the streak value, show a loading indicator
+              return CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              // If there's an error fetching the streak value, show an error message
+              return AlertDialog(
+                title: Text('Error'),
+                content: Text('Failed to fetch streak value.'),
                 actions: [
                   TextButton(
-                    child: Text("Cancel"), 
                     onPressed: () {
                       Navigator.of(context).pop(); // Close the dialog
                     },
+                    child: Text('Close'),
                   ),
+                ],
+              );
+            } else {
+              // If streak value is fetched successfully, show the streak in the dialog
+              int curStreak = snapshot.data!;
+              return AlertDialog(
+                title: Text('Congratulations!'),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('You have completed the habit.'),
+                    SizedBox(height: 13),
+                    Text("You have a " + curStreak.toString() + " day streak!"), // Display the streak value
+                  ],
+                ),
+                actions: [
                   TextButton(
-                    child: Text("Yes"), 
-                    onPressed: () async {
-                      await dbService.deleteHabit(habitId); // use habit id to delete
+                    onPressed: () {
                       Navigator.of(context).pop(); // Close the dialog
                     },
+                    child: Text('Close'),
                   ),
                 ],
-                elevation: 24,
-              ),
-            );
-          }),
-          backgroundColor: Colors.red,
-          icon: Icons.delete,
-        ),
-      ],
-    ),
-    startActionPane: ActionPane(
-      motion: StretchMotion(),
-      children: [
-        SlidableAction(
-          onPressed: ((context) {
-            _showStreakDialog(context, habitId, currentDateTime);
-          }),
-          backgroundColor: Colors.green,
-          icon: Icons.check,
-        ),
-      ],
-    ),
-    // build the habit button
-    child: Container(
-      width: 600,
-      margin: EdgeInsets.symmetric(horizontal: 16.0),
-      // child: Expanded( //have Expanded in Container will cause Incorrect use of ParentDataWidget error
-      child: ElevatedButton.icon(
-        icon: const Icon(Icons.directions_run_rounded),
-        label: Text(
-          buttonText,
-          style: TextStyle(color: Colors.black), // Text color
-          overflow: TextOverflow.ellipsis,
-          softWrap: false,
-          maxLines: 100,
-        ),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.yellow, // Button color
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8), // Rounded corners
-          ),
-          alignment: Alignment.centerLeft, // Align the icon and text to the left
-          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0), // Padding inside the button
-        ),
-        onPressed: () {
-          Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute, arguments: habitId);
-        },
-      ),
-      // ),
-    ),
-  );
-}
-
-void _showStreakDialog(BuildContext context, String habitId, DateTime chosenDateTime) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return FutureBuilder<int>(
-        future: getStreak(habitId, chosenDateTime), // Fetch the streak value
-        builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // While waiting for the streak value, show a loading indicator
-            return CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            // If there's an error fetching the streak value, show an error message
-            return AlertDialog(
-              title: Text('Error'),
-              content: Text('Failed to fetch streak value.'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(); // Close the dialog
-                  },
-                  child: Text('Close'),
-                ),
-              ],
-            );
-          } else {
-            // If streak value is fetched successfully, show the streak in the dialog
-            int curStreak = snapshot.data!;
-            return AlertDialog(
-              title: Text('Congratulations!'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('You have completed the habit.'),
-                  SizedBox(height: 13),
-                  Text("You have a " + curStreak.toString() + " day streak!"), // Display the streak value
-                ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(); // Close the dialog
-                  },
-                  child: Text('Close'),
-                ),
-              ],
-            );
-          }
-        },
-      );
-    },
-  );
-}
+              );
+            }
+          },
+        );
+      },
+    );
+  }
 
 
-// Inside an asynchronous function
-Future<int> getStreak(habitId, DateTime chosenDateTime) async {
-  return await dbService.updateStreak(habitId, chosenDateTime);
-}
+  // Inside an asynchronous function
+  Future<int> getStreak(habitId, DateTime chosenDateTime) async {
+    return await dbService.updateStreak(habitId, chosenDateTime);
+  }
 
 
 
-PreferredSizeWidget _buildAppBar(BuildContext context) {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
         title: Text('Atomic Habits', style: TextStyle(color: Colors.black)),
         height: 70.v,
@@ -529,7 +566,6 @@ PreferredSizeWidget _buildAppBar(BuildContext context) {
             // dateTime = newTime;
             initialDateTimeChanged = true;
             setState(() {
-              // currentDateTime = DateTime(newTime.year, newTime.month);
               currentDateTime = newTime;
 
               // update current dayOfWeek full name
@@ -542,7 +578,6 @@ PreferredSizeWidget _buildAppBar(BuildContext context) {
           },
           use24hFormat: true,
           mode: CupertinoDatePickerMode.date,
-          // mode: CupertinoDatePickerMode.monthYear,
         ),
       )
     );
@@ -551,94 +586,3 @@ PreferredSizeWidget _buildAppBar(BuildContext context) {
 
 
 
-
-  // Widget buildHabitButton({
-  //   required BuildContext context,
-  //   required String habitId,
-  //   required String buttonText,
-  //   required String leftIconPath,
-  // }) {
-  //   return Slidable(
-  //     endActionPane: ActionPane(
-  //       motion: StretchMotion(),
-  //       children: [
-  //         SlidableAction(
-  //           onPressed: ((context){
-  //             showDialog(
-  //               barrierDismissible: true, 
-  //               context: context, 
-  //               builder: (BuildContext context) => AlertDialog(
-  //                 content: Text("Are you sure you want to delete this habit?"),
-  //                 actions: [
-  //                   TextButton(
-  //                     child: Text("Yes"), 
-  //                     onPressed: () async {
-  //                       await dbService.deleteHabit(habitId); // use habit id to delete
-  //                       Navigator.of(context).pop(); // Close the dialog
-  //                     },
-  //                   ),
-  //                 ],
-  //                 elevation: 24,
-  //               ),
-  //             );
-  //           }),
-  //           backgroundColor: Colors.red,
-  //           icon: Icons.delete,
-  //         ),
-  //         SlidableAction(
-  //           onPressed: ((context){
-  //             showDialog(
-  //               barrierDismissible: true, 
-  //               context: context, 
-  //               builder: (BuildContext context) => AlertDialog(
-  //                 content: Text("Are you sure you want to delete this habit?"),
-  //                 actions: [
-  //                   TextButton(
-  //                     child: Text("Yes"), 
-  //                     onPressed: () async {
-  //                       await dbService.deleteHabit(habitId); // use habit id to delete
-  //                       Navigator.of(context).pop(); // Close the dialog
-  //                     },
-  //                   ),
-  //                 ],
-  //                 elevation: 24,
-  //               ),
-  //             );
-  //           }),
-  //           backgroundColor: Colors.red,
-  //           icon: Icons.delete,
-  //         )
-  //       ],
-  //     ),
-  //     // build the habit button
-  //     child: Container(
-  //       width: 600,
-  //       margin: EdgeInsets.symmetric(horizontal: 16.0),
-  //       // child: Expanded( //have Expanded in Container will cause Incorrect use of ParentDataWidget error
-  //         child: ElevatedButton.icon(
-  //           icon: const Icon(Icons.directions_run_rounded),
-  //           label: Text(
-  //             buttonText,
-  //             style: TextStyle(color: Colors.black), // Text color
-  //             overflow: TextOverflow.ellipsis,
-  //             softWrap: false,
-  //             maxLines: 100,
-  //           ),
-  //           style: ElevatedButton.styleFrom(
-  //             backgroundColor: Colors.yellow, // Button color
-  //             shape: RoundedRectangleBorder(
-  //               borderRadius: BorderRadius.circular(8), // Rounded corners
-  //             ),
-  //             alignment: Alignment.centerLeft, // Align the icon and text to the left
-  //             padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0), // Padding inside the button
-  //           ),
-  //           onPressed: () {
-  //             Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute, arguments: habitId);
-  //           },
-  //         ),
-  //       // ),
-  //     ),
-  //   );
-  // }
-
-  
