@@ -12,8 +12,13 @@ class EnvDes extends StatefulWidget {
   final Function(String) onSave;
 
   final String habitId;
+  final String habitName;
 
-  const EnvDes({Key? key, required this.onSave, required this.habitId})
+  const EnvDes(
+      {Key? key,
+      required this.onSave,
+      required this.habitId,
+      required this.habitName})
       : super(key: key);
 
   @override
@@ -22,14 +27,15 @@ class EnvDes extends StatefulWidget {
 
 class _EnvDes extends State<EnvDes> {
   final userInputController = TextEditingController();
-  final List<String> suggestions = [
-    "Put running shoes near the door",
-    "Water bottle on bedside table"
-    // Add more suggestions as needed
-  ];
   final DatabaseService dbService = DatabaseService(
       uid: FirebaseAuth.instance.currentUser?.uid ??
           ''); // Initialize dbService with the user's UID;
+
+  // final List<String> suggestions = [
+  //   "Put running shoes near the door",
+  //   "Water bottle on bedside table"
+  //   // Add more suggestions as needed
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +52,7 @@ class _EnvDes extends State<EnvDes> {
           children: [
             _reduceFrictionDetail(context),
             SizedBox(height: 50.0),
-            _reduceFrictionSugguestion(context),
+            generateSuggestions(context),
           ],
         ),
       ),
@@ -60,8 +66,9 @@ class _EnvDes extends State<EnvDes> {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(height: 16.0),
           Text(
-            "How can I change my environment optimize this habit?",
+            "How can I change my environment to remind me of this habit?",
             style: TextStyle(
               fontSize: 20.0,
             ),
@@ -104,27 +111,45 @@ class _EnvDes extends State<EnvDes> {
     );
   }
 
-  Widget _reduceFrictionSugguestion(BuildContext context) {
-    //TODO typo
+  Widget generateSuggestions(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: EdgeInsets.only(
-                bottom: 0), // Space between the label and the first suggestion
-            child: Text(
-              "Examples:", // The label text
-              style: TextStyle(
-                color: Colors.black, // Color of the label
-                fontSize: 20, // Size of the label text
-                // fontWeight: FontWeight.bold, // Bold text for the label
-              ),
-            ),
-          ),
-          ...suggestions
-              .map((suggestion) => InkWell(
+          StreamBuilder<List<String>>(
+              stream: dbService.getSuggestedHabitLawActions(
+                  widget.habitName, "MakeItObvious", "EnvironmentDesign"),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Text("Something went wrong: ${snapshot.error}");
+                }
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Text(""); // Handle case where no data is available
+                }
+                List<Widget> suggestionWidgets = [];
+
+                suggestionWidgets.add(
+                  Padding(
+                    padding: EdgeInsets.only(
+                        bottom:
+                            0), // Space between the label and the first suggestion
+                    child: Text(
+                      "Suggestions:", // The label text
+                      style: TextStyle(
+                        color: Colors.black, // Color of the label
+                        fontSize: 20, // Size of the label text
+                        // fontWeight: FontWeight.bold, // Bold text for the label
+                      ),
+                    ),
+                  ),
+                );
+
+                for (int index = 0; index < snapshot.data!.length; index++) {
+                  final suggestion = snapshot.data![index];
+
+                  // Add the suggestion button
+                  suggestionWidgets.add(InkWell(
                     onTap: () {
                       setState(() {
                         userInputController.text = suggestion;
@@ -140,12 +165,21 @@ class _EnvDes extends State<EnvDes> {
                           color: Colors.black,
                           fontSize: 16,
                         ),
-                        // softWrap: true, // Allow text wrapping
-                        // overflow: TextOverflow.visible, // Show all text
                       ),
                     ),
-                  ))
-              .toList(),
+                  ));
+
+                  // Add spacing after the button
+                  // if (index < snapshot.data!.length) {
+                  //   suggestionWidgets.add(SizedBox(
+                  //       height: 5)); // Adjust the height for desired spacing
+                  // }
+                }
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: suggestionWidgets,
+                );
+              }),
         ],
       ),
     );

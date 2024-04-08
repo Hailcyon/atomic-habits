@@ -284,6 +284,26 @@ class DatabaseService {
             .toList());
   }
 
+  Stream<List<String>> getSuggestedHabitLawActions(
+      String habitName, String habitLaw, String habitLawAction) {
+    return firestoreInstance
+        .collection('SuggestedHabits')
+        .doc(habitName)
+        .collection('HabitLaws')
+        .doc(habitLaw)
+        .collection('HabitLawActions')
+        .doc(habitLawAction)
+        .snapshots()
+        .map((snapshot) {
+      var data = snapshot.data();
+      if (data != null && data.containsKey('suggestions')) {
+        return List<String>.from(data['suggestions'] as List<dynamic>);
+      } else {
+        return [];
+      }
+    });
+  }
+
   // have auto generated id
   Future<void> deleteHabit(String habitId) async {
     await firestoreInstance

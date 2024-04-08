@@ -16,25 +16,27 @@ import 'package:ahapp3/widgets/app_bar/appbar_title.dart';
 import 'package:ahapp3/widgets/app_bar/appbar_trailing_image.dart';
 import 'package:ahapp3/widgets/app_bar/custom_app_bar.dart';
 
-
-
 class EditHabitPage extends StatefulWidget {
   final String habitId;
-  const EditHabitPage({Key? key, required this.habitId}) : super(key: key);
+  final String habitName;
+  const EditHabitPage(
+      {Key? key, required this.habitId, required this.habitName})
+      : super(key: key);
 
   @override
   State<EditHabitPage> createState() => _EditHabitPageState();
 }
 
 class _EditHabitPageState extends State<EditHabitPage> {
-  final DatabaseService dbService = DatabaseService(uid: FirebaseAuth.instance.currentUser?.uid ?? ''); 
+  final DatabaseService dbService =
+      DatabaseService(uid: FirebaseAuth.instance.currentUser?.uid ?? '');
   // String habitId = "";
   // Define variables for habit details
   String _habitName = "";
   String _startTime = "";
   String _endTime = "";
   String _place = "";
-  
+
   List<String> _days = [];
 
   bool habitLawDetailsFetched = false;
@@ -54,28 +56,29 @@ class _EditHabitPageState extends State<EditHabitPage> {
   //   habitLawDetailsFetched = false;
   // }
 
+  //I dont think this method is actually used
   void getHabitDetails() async {
     //print("TEST")
     try {
-        DocumentSnapshot habitDoc = await dbService.getHabitDetails(widget.habitId);
-        if (habitDoc.exists) {
-          // Assuming 'name' is the field where the habit's name is stored
-          // habitName = habitDoc['name'];
-          Map<String, dynamic> data = habitDoc.data() as Map<String, dynamic>;
-          setState(() {
-            _habitName = habitDoc['name'];
-            _startTime = habitDoc['start time'].toString();
-            _endTime = habitDoc['end time'].toString();
-            _place = habitDoc['place'];
-            _days = List<String>.from(data['days'] ?? []);
-
-          });
-        }
-      } catch (e) {
-        print("Error fetching habit details: $e");
-        // Optionally, handle the error e.g., show a message
+      DocumentSnapshot habitDoc =
+          await dbService.getHabitDetails(widget.habitId);
+      if (habitDoc.exists) {
+        // Assuming 'name' is the field where the habit's name is stored
+        // habitName = habitDoc['name'];
+        Map<String, dynamic> data = habitDoc.data() as Map<String, dynamic>;
+        setState(() {
+          _habitName = habitDoc['name'];
+          _startTime = habitDoc['start time'].toString();
+          _endTime = habitDoc['end time'].toString();
+          _place = habitDoc['place'];
+          _days = List<String>.from(data['days'] ?? []);
+        });
       }
+    } catch (e) {
+      print("Error fetching habit details: $e");
+      // Optionally, handle the error e.g., show a message
     }
+  }
 
   // void getHabitLawDetails() async {
   //   //print("TEST");
@@ -102,10 +105,9 @@ class _EditHabitPageState extends State<EditHabitPage> {
   //       // Optionally, handle the error e.g., show a message
   //     }
   // }
-    
+
   @override
   Widget build(BuildContext context) {
-
     // final habitId = ModalRoute.of(context)?.settings.arguments as String;
 
     //print(mio);
@@ -113,7 +115,8 @@ class _EditHabitPageState extends State<EditHabitPage> {
     // Retrieve the habit name passed as an argument
     // habitId = ModalRoute.of(context)?.settings.arguments as String? ?? 'Default Habit Name';
     // getHabitDetails();
-    String impt_int_act = "Habit Action: $_habitName on ${_days.join(", ")} from $_startTime to $_endTime on $_place";
+    String impt_int_act =
+        "Habit Action: $_habitName on ${_days.join(", ")} from $_startTime to $_endTime on $_place";
 
     // List<String> dummy_mio = [impt_int_act, "Put running shoes near the front door"];
     // // List<String> dummy_mio = ["Run at 7 AM at Liberty Park", "Put running shoes near the front door"]; //Make it obvious habit laws -> will retrieve from database
@@ -128,7 +131,6 @@ class _EditHabitPageState extends State<EditHabitPage> {
     //   habitLawDetailsFetched = true;
     // }
     //print(mio);
-
 
     return Scaffold(
       appBar: AppBar(
@@ -169,35 +171,51 @@ class _EditHabitPageState extends State<EditHabitPage> {
                   // Return widgets that display habit laws
                   return Column(
                     children: [
-                      _buildLaw(habitLaws: mio, 
-                        buttonText: "Make it Obvious", 
-                        context: context, 
-                        onPressed: (){
-                          Navigator.of(context).pushNamed(AppRoutes.lawOnePageRoute, arguments: widget.habitId,);
-                        }),
-                      _buildLaw(habitLaws: mia, 
-                        buttonText: "Make it Attractive", 
-                        context: context, 
-                        onPressed: (){
-                          Navigator.of(context).pushNamed(AppRoutes.lawTwoPageRoute);
-                        }),
-                      _buildLaw(habitLaws: mie, 
-                        buttonText: "Make it Easy", 
-                        context: context, 
-                        onPressed: (){
-                          Navigator.of(context).pushNamed(AppRoutes.lawThreePageRout);
-                        }),
-                      _buildLaw(habitLaws: mis, 
-                        buttonText: "Make it Satisfying", 
-                        context: context, 
-                        onPressed: (){
-                          Navigator.of(context).pushNamed(AppRoutes.lawFourPageRoute);
-                        }),
+                      _buildLaw(
+                          habitLaws: mio,
+                          buttonText: "Make it Obvious",
+                          context: context,
+                          onPressed: () {
+                            //getHabitDetails();
+                            Navigator.of(context).pushNamed(
+                              AppRoutes.lawOnePageRoute,
+                              arguments: {widget.habitId, widget.habitName},
+                            );
+                          }),
+                      _buildLaw(
+                          habitLaws: mia,
+                          buttonText: "Make it Attractive",
+                          context: context,
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(
+                              AppRoutes.lawTwoPageRoute,
+                              arguments: {widget.habitId, widget.habitName},
+                            );
+                          }),
+                      _buildLaw(
+                          habitLaws: mie,
+                          buttonText: "Make it Easy",
+                          context: context,
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(
+                              AppRoutes.lawThreePageRout,
+                              arguments: {widget.habitId, widget.habitName},
+                            );
+                          }),
+                      _buildLaw(
+                          habitLaws: mis,
+                          buttonText: "Make it Satisfying",
+                          context: context,
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(
+                              AppRoutes.lawFourPageRoute,
+                              arguments: {widget.habitId, widget.habitName},
+                            );
+                          }),
                     ],
                   );
                 },
               ),
-              
             ],
           ),
         ),
@@ -205,9 +223,9 @@ class _EditHabitPageState extends State<EditHabitPage> {
     );
   }
 
-  Widget _buildLaw({
-      required List habitLaws, 
-      required String buttonText, 
+  Widget _buildLaw(
+      {required List habitLaws,
+      required String buttonText,
       required BuildContext context,
       required VoidCallback onPressed}) {
     return ExpansionTile(
@@ -222,7 +240,7 @@ class _EditHabitPageState extends State<EditHabitPage> {
           ),
         ],
       ),
-      
+
       children: [
         // Map over habitLaws and convert each element to a buildHabitLaw widget
         // ...habitLaws.map((law) => buildHabitLaw(buttonText: law, context: context)),
@@ -231,15 +249,17 @@ class _EditHabitPageState extends State<EditHabitPage> {
           String law = entry.value;
           return [
             buildHabitLaw(buttonText: law, context: context),
-            if (idx < habitLaws.length - 1) 
-              SizedBox(height: 8), // Add space after each button except the last one
+            if (idx < habitLaws.length - 1)
+              SizedBox(
+                  height: 8), // Add space after each button except the last one
           ];
         }).toList(),
         SizedBox(height: 8.0), // Add some space
         Align(
           alignment: Alignment.topLeft,
           child: Padding(
-            padding: EdgeInsets.only(right: 16.0),  // Right padding to match childrenPadding
+            padding: EdgeInsets.only(
+                right: 16.0), // Right padding to match childrenPadding
             child: ElevatedButton.icon(
               onPressed: onPressed,
               icon: Icon(
@@ -251,7 +271,8 @@ class _EditHabitPageState extends State<EditHabitPage> {
                 backgroundColor: const Color.fromARGB(255, 1, 82, 148),
                 fixedSize: Size(500, 20),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5), // Larger corner radius
+                  borderRadius:
+                      BorderRadius.circular(5), // Larger corner radius
                 ),
               ),
             ),
@@ -270,28 +291,31 @@ class _EditHabitPageState extends State<EditHabitPage> {
     required BuildContext context,
   }) {
     return Align(
-        alignment: Alignment.topLeft,
-        child: Padding(
-          padding: EdgeInsets.only(right: 16),  // Right padding to match childrenPadding
-          child: Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: Text(buttonText),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.yellow, // Button color
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8), // Rounded corners
-                    ),
-                    alignment: Alignment.centerLeft, // Align the text to the left
-                    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0), // Padding inside the button
+      alignment: Alignment.topLeft,
+      child: Padding(
+        padding: EdgeInsets.only(
+            right: 16), // Right padding to match childrenPadding
+        child: Row(
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {},
+                child: Text(buttonText),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.yellow, // Button color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8), // Rounded corners
                   ),
+                  alignment: Alignment.centerLeft, // Align the text to the left
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 16.0), // Padding inside the button
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      );
-    }
+      ),
+    );
+  }
 }

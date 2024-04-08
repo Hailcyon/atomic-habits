@@ -21,12 +21,12 @@ class HabSta extends StatefulWidget {
 class _HabSta extends State<HabSta> {
   final userInputController = TextEditingController();
   List<Widget> additionalInputs = [];
-  final List<String> suggestions = [
-    "Suggestion 1:...",
-    "Suggestion 2",
-    "Suggestion 3",
-    // Add more suggestions as needed
-  ];
+  // final List<String> suggestions = [
+  //   "Suggestion 1:...",
+  //   "Suggestion 2",
+  //   "Suggestion 3",
+  //   // Add more suggestions as needed
+  // ];
 
   final DatabaseService dbService = DatabaseService(
       uid: FirebaseAuth.instance.currentUser?.uid ??

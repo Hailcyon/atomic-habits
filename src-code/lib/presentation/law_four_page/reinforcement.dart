@@ -11,8 +11,13 @@ class Reinforcement extends StatefulWidget {
   final Function(String) onSave;
 
   final String habitId;
+  final String habitName;
 
-  const Reinforcement({Key? key, required this.onSave, required this.habitId})
+  const Reinforcement(
+      {Key? key,
+      required this.onSave,
+      required this.habitId,
+      required this.habitName})
       : super(key: key);
 
   @override
@@ -22,7 +27,9 @@ class Reinforcement extends StatefulWidget {
 class _Reinforcement extends State<Reinforcement> {
   final userInputController = TextEditingController();
   final List<String> suggestions = [
-    "An after work-out snack",
+    "Eating a healthy and tasty snack",
+    "Listening to my favorite song",
+    "Putting a dollar into a jar of money I can use to buy whatever I want"
     // Add more suggestions as needed
   ];
 
@@ -58,8 +65,9 @@ class _Reinforcement extends State<Reinforcement> {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(height: 16.0),
           Text(
-            "I will make reward myself after completing my habit by",
+            "I will reward myself after completing my habit by",
             style: TextStyle(
               fontSize: 20.0,
             ),

@@ -11,8 +11,13 @@ class MotiRitual extends StatefulWidget {
   final Function(String) onSave;
 
   final String habitId;
+  final String habitName;
 
-  const MotiRitual({Key? key, required this.onSave, required this.habitId})
+  const MotiRitual(
+      {Key? key,
+      required this.onSave,
+      required this.habitId,
+      required this.habitName})
       : super(key: key);
 
   @override
@@ -21,12 +26,12 @@ class MotiRitual extends StatefulWidget {
 
 class _MotiRitual extends State<MotiRitual> {
   final userInputController = TextEditingController();
-  final List<String> suggestions = [
-    "Suggestion 1:...",
-    "Suggestion 2",
-    "Suggestion 3",
-    // Add more suggestions as needed
-  ];
+  // final List<String> suggestions = [
+  //   "Suggestion 1:...",
+  //   "Suggestion 2",
+  //   "Suggestion 3",
+  //   // Add more suggestions as needed
+  // ];
 
   final DatabaseService dbService = DatabaseService(
       uid: FirebaseAuth.instance.currentUser?.uid ??
@@ -47,7 +52,7 @@ class _MotiRitual extends State<MotiRitual> {
           children: [
             _reduceFrictionDetail(context),
             SizedBox(height: 50.0),
-            _reduceFrictionSugguestion(context),
+            generateSuggestions(context),
           ],
         ),
       ),
@@ -61,8 +66,9 @@ class _MotiRitual extends State<MotiRitual> {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(height: 16.0),
           Text(
-            "I will make go for a run easier by ",
+            "I will increase my motivation before this task by",
             style: TextStyle(
               fontSize: 20.0,
             ),
@@ -105,26 +111,44 @@ class _MotiRitual extends State<MotiRitual> {
     );
   }
 
-  Widget _reduceFrictionSugguestion(BuildContext context) {
+  Widget generateSuggestions(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: EdgeInsets.only(
-                bottom: 0), // Space between the label and the first suggestion
-            child: Text(
-              "Suggestions:", // The label text
-              style: TextStyle(
-                color: Colors.black, // Color of the label
-                fontSize: 20, // Size of the label text
-                // fontWeight: FontWeight.bold, // Bold text for the label
-              ),
-            ),
-          ),
-          ...suggestions
-              .map((suggestion) => InkWell(
+          StreamBuilder<List<String>>(
+              stream: dbService.getSuggestedHabitLawActions(
+                  widget.habitName, "MakeItAttractive", "MotivationRitual"),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Text("Something went wrong: ${snapshot.error}");
+                }
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Text(""); // Handle case where no data is available
+                }
+                List<Widget> suggestionWidgets = [];
+
+                suggestionWidgets.add(
+                  Padding(
+                    padding: EdgeInsets.only(
+                        bottom:
+                            0), // Space between the label and the first suggestion
+                    child: Text(
+                      "Suggestions:", // The label text
+                      style: TextStyle(
+                        color: Colors.black, // Color of the label
+                        fontSize: 20, // Size of the label text
+                      ),
+                    ),
+                  ),
+                );
+
+                for (int index = 0; index < snapshot.data!.length; index++) {
+                  final suggestion = snapshot.data![index];
+
+                  // Add the suggestion button
+                  suggestionWidgets.add(InkWell(
                     onTap: () {
                       setState(() {
                         userInputController.text = suggestion;
@@ -140,12 +164,15 @@ class _MotiRitual extends State<MotiRitual> {
                           color: Colors.black,
                           fontSize: 16,
                         ),
-                        // softWrap: true, // Allow text wrapping
-                        // overflow: TextOverflow.visible, // Show all text
                       ),
                     ),
-                  ))
-              .toList(),
+                  ));
+                }
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: suggestionWidgets,
+                );
+              }),
         ],
       ),
     );

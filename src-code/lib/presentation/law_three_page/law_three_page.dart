@@ -8,7 +8,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
 class LawThreePage extends StatefulWidget {
-  const LawThreePage({Key? key}) : super(key: key);
+  final String habitId;
+  final String habitName;
+  const LawThreePage({Key? key, required this.habitId, required this.habitName})
+      : super(key: key);
 
   @override
   State<LawThreePage> createState() => _LawThreePageState();
@@ -25,9 +28,9 @@ class _LawThreePageState extends State<LawThreePage> {
 
   @override
   Widget build(BuildContext context) {
-    final String _habitId =
-        ModalRoute.of(context)?.settings.arguments as String? ??
-            'Default Habit Name';
+    // final String _habitId =
+    //     ModalRoute.of(context)?.settings.arguments as String? ??
+    //         'Default Habit Name';
     return Scaffold(
       // backgroundColor: Colors.white,
       appBar: AppBar(title: Text('Make It Easy')),
@@ -41,7 +44,8 @@ class _LawThreePageState extends State<LawThreePage> {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ReduceFrictionPage(
                   onSave: updateFrictionText,
-                  habitId: _habitId,
+                  habitId: widget.habitId,
+                  habitName: widget.habitName,
                 ),
               ));
             }),
@@ -50,7 +54,8 @@ class _LawThreePageState extends State<LawThreePage> {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => TwoMinPage(
                   onSave: updateFrictionText,
-                  habitId: _habitId,
+                  habitId: widget.habitId,
+                  habitName: widget.habitName,
                 ),
               ));
             }),
@@ -59,7 +64,8 @@ class _LawThreePageState extends State<LawThreePage> {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => HabAutoPage(
                   onSave: updateFrictionText,
-                  habitId: _habitId,
+                  habitId: widget.habitId,
+                  habitName: widget.habitName,
                 ),
               ));
             }),
@@ -68,7 +74,8 @@ class _LawThreePageState extends State<LawThreePage> {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => EnvPrimingPage(
                   onSave: updateFrictionText,
-                  habitId: _habitId,
+                  habitId: widget.habitId,
+                  habitName: widget.habitName,
                 ),
               ));
             }),
