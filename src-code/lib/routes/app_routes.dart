@@ -48,7 +48,7 @@ class AppRoutes {
           final args = ModalRoute.of(context)!.settings.arguments;
           // Check if the args is indeed the expected string (habitId)
           if (args is Set<String>) {
-            return LawOnePage(
+            return EditHabitPage(
               habitId: args.first,
               habitName: args.last,
             ); // Pass the habitId to the constructor
@@ -58,7 +58,21 @@ class AppRoutes {
                 'EditHabitPage requires a habitId and habitName string as an argument');
           }
         },
-        lawThreePageRout: (context) => LawThreePage(),
+        lawThreePageRout: (context) {
+          // Extract the arguments from the current settings
+          final args = ModalRoute.of(context)!.settings.arguments;
+          // Check if the args is indeed the expected string (habitId)
+          if (args is Set<String>) {
+            return LawThreePage(
+              habitId: args.first,
+              habitName: args.last,
+            ); // Pass the habitId to the constructor
+          } else {
+            // You can return an error page or any default page if the arguments are not correct
+            throw Exception(
+                'LawThreePage requires a habitId and habitName string as an argument');
+          }
+        },
         lawOnePageRoute: (context) {
           // Extract the arguments from the current settings
           final args = ModalRoute.of(context)!.settings.arguments;
@@ -74,8 +88,36 @@ class AppRoutes {
                 'LawOnePage requires a habitId and habitName string as an argument');
           }
         },
-        lawTwoPageRoute: (context) => LawTwoPage(),
-        lawFourPageRoute: (context) => LawFourPage(),
+        lawTwoPageRoute: (context) {
+          // Extract the arguments from the current settings
+          final args = ModalRoute.of(context)!.settings.arguments;
+          // Check if the args is indeed the expected string (habitId)
+          if (args is Set<String>) {
+            return LawTwoPage(
+              habitId: args.first,
+              habitName: args.last,
+            ); // Pass the habitId to the constructor
+          } else {
+            // You can return an error page or any default page if the arguments are not correct
+            throw Exception(
+                'LawTwoPage requires a habitId and habitName string as an argument');
+          }
+        },
+        lawFourPageRoute: (context) {
+          // Extract the arguments from the current settings
+          final args = ModalRoute.of(context)!.settings.arguments;
+          // Check if the args is indeed the expected string (habitId)
+          if (args is Set<String>) {
+            return LawFourPage(
+              habitId: args.first,
+              habitName: args.last,
+            ); // Pass the habitId to the constructor
+          } else {
+            // You can return an error page or any default page if the arguments are not correct
+            throw Exception(
+                'LawFourPage requires a habitId and habitName string as an argument');
+          }
+        },
         homePageRoute: (context) => HomePageContainerPage(),
         // reduceFrictionRoute: (context) => ReduceFrictionPage(),
       };

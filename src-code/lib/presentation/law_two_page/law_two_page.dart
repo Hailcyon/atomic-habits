@@ -6,7 +6,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
 class LawTwoPage extends StatefulWidget {
-  const LawTwoPage({Key? key}) : super(key: key);
+  final String habitId;
+  final String habitName;
+
+  const LawTwoPage({Key? key, required this.habitId, required this.habitName})
+      : super(key: key);
 
   @override
   State<LawTwoPage> createState() => _LawTwoPage();
@@ -23,9 +27,9 @@ class _LawTwoPage extends State<LawTwoPage> {
 
   @override
   Widget build(BuildContext context) {
-    final String _habitId =
-        ModalRoute.of(context)?.settings.arguments as String? ??
-            'Default Habit Name';
+    // final String _habitId =
+    //     ModalRoute.of(context)?.settings.arguments as String? ??
+    //         'Default Habit Name';
     return Scaffold(
       // backgroundColor: Colors.white,
       appBar: AppBar(title: Text('Make It Attractive')),
@@ -40,7 +44,8 @@ class _LawTwoPage extends State<LawTwoPage> {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => TemptBundle(
                   onSave: updateFrictionText,
-                  habitId: _habitId,
+                  habitId: widget.habitId,
+                  habitName: widget.habitName,
                 ),
               ));
             }),
@@ -50,7 +55,8 @@ class _LawTwoPage extends State<LawTwoPage> {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => MotiRitual(
                   onSave: updateFrictionText,
-                  habitId: _habitId,
+                  habitId: widget.habitId,
+                  habitName: widget.habitName,
                 ),
               ));
             }),

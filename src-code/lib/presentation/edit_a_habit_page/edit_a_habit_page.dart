@@ -56,6 +56,7 @@ class _EditHabitPageState extends State<EditHabitPage> {
   //   habitLawDetailsFetched = false;
   // }
 
+  //I dont think this method is actually used
   void getHabitDetails() async {
     //print("TEST")
     try {
@@ -186,24 +187,30 @@ class _EditHabitPageState extends State<EditHabitPage> {
                           buttonText: "Make it Attractive",
                           context: context,
                           onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed(AppRoutes.lawTwoPageRoute);
+                            Navigator.of(context).pushNamed(
+                              AppRoutes.lawTwoPageRoute,
+                              arguments: {widget.habitId, widget.habitName},
+                            );
                           }),
                       _buildLaw(
                           habitLaws: mie,
                           buttonText: "Make it Easy",
                           context: context,
                           onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed(AppRoutes.lawThreePageRout);
+                            Navigator.of(context).pushNamed(
+                              AppRoutes.lawThreePageRout,
+                              arguments: {widget.habitId, widget.habitName},
+                            );
                           }),
                       _buildLaw(
                           habitLaws: mis,
                           buttonText: "Make it Satisfying",
                           context: context,
                           onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed(AppRoutes.lawFourPageRoute);
+                            Navigator.of(context).pushNamed(
+                              AppRoutes.lawFourPageRoute,
+                              arguments: {widget.habitId, widget.habitName},
+                            );
                           }),
                     ],
                   );
