@@ -19,7 +19,6 @@ class CustomHabitPage extends StatefulWidget {
 }
 
 class _CustomHabitPageState extends State<CustomHabitPage> {
-
   final List<String> allIcons = [
     ImageConstant.shoppingCart,
     ImageConstant.book,
@@ -40,7 +39,8 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
   String _defaultIconPath = ImageConstant.question_mark;
   String? selectedIconPath;
 
-  Future<String?> showIconPicker({required BuildContext context, String? defaultIconPath}) async {
+  Future<String?> showIconPicker(
+      {required BuildContext context, String? defaultIconPath}) async {
     selectedIconPath = null;
     await showDialog(
       context: context,
@@ -63,11 +63,7 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
                 selectedIconPath = allIcons[index];
                 Navigator.of(context).pop();
               },
-              child: SvgPicture.asset(
-                allIcons[index], 
-                height: 50, 
-                width: 50
-              ),
+              child: SvgPicture.asset(allIcons[index], height: 50, width: 50),
             ),
           ),
         ),
@@ -83,7 +79,6 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
     );
     return selectedIconPath;
   }
-  
 
   final List<DayInWeek> _days = [
     DayInWeek("Mo", dayKey: "monday"),
@@ -97,7 +92,6 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
 
   String _startTime = '--:--';
   String _endTime = '--:--';
-
 
   final DatabaseService dbService = DatabaseService(
       uid: FirebaseAuth.instance.currentUser?.uid ??
@@ -116,6 +110,11 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
 
   @override
   Widget build(BuildContext context) {
+    // final argDayOfWeek = ModalRoute.of(context)!.settings.arguments as String;
+    habitId = ModalRoute.of(context)?.settings.arguments as String? ??
+        ''; //habit name will be blank w/out arg
+    _habitNameController = TextEditingController(
+        text: habitId); //autofill with suggested habit clicked
 
     return Scaffold(
       appBar: _buildAppBar(context),
@@ -194,66 +193,66 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
     );
   }
 
-
   Widget _addTime(BuildContext context) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    children: <Widget>[
-      Expanded(
-        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Text('Starts: ', style: TextStyle(fontSize: 16)),
-          ElevatedButton(
-            child: Text(_startTime == '--:--' ? '--:--' : _startTime),
-            onPressed: () async {
-              final TimeOfDay? picked = await showTimePicker(
-                context: context,
-                initialTime: TimeOfDay.now(),
-              );
-              if (picked != null) {
-                setState(() {
-                  _startTime = '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
-                });
-              }
-            },
-          ),
-        ]),
-      ),
-      Expanded(
-        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Text('Ends: ', style: TextStyle(fontSize: 16)),
-          ElevatedButton(
-            child: Text(_endTime == '--:--' ? '--:--' : _endTime),
-            onPressed: () async {
-              final TimeOfDay? picked = await showTimePicker(
-                context: context,
-                initialTime: TimeOfDay.now(),
-              );
-              if (picked != null) {
-                setState(() {
-                  _endTime = '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
-                });
-              }
-            },
-          ),
-        ]),
-      )
-    ],
-  );
-}
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        Expanded(
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text('Starts: ', style: TextStyle(fontSize: 16)),
+            ElevatedButton(
+              child: Text(_startTime == '--:--' ? '--:--' : _startTime),
+              onPressed: () async {
+                final TimeOfDay? picked = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.now(),
+                );
+                if (picked != null) {
+                  setState(() {
+                    _startTime =
+                        '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+                  });
+                }
+              },
+            ),
+          ]),
+        ),
+        Expanded(
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text('Ends: ', style: TextStyle(fontSize: 16)),
+            ElevatedButton(
+              child: Text(_endTime == '--:--' ? '--:--' : _endTime),
+              onPressed: () async {
+                final TimeOfDay? picked = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.now(),
+                );
+                if (picked != null) {
+                  setState(() {
+                    _endTime =
+                        '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+                  });
+                }
+              },
+            ),
+          ]),
+        )
+      ],
+    );
+  }
 
 // Add the Reset Time button
-Widget _resetTimeButton() {
-  return ElevatedButton(
-    onPressed: () {
-      setState(() {
-        _startTime = '--:--';
-        _endTime = '--:--';
-      });
-    },
-    child: Text('Reset Time'),
-  );
-}
-
+  Widget _resetTimeButton() {
+    return ElevatedButton(
+      onPressed: () {
+        setState(() {
+          _startTime = '--:--';
+          _endTime = '--:--';
+        });
+      },
+      child: Text('Reset Time'),
+    );
+  }
 
   Widget _saveButton() {
     return ElevatedButton(
@@ -277,13 +276,14 @@ Widget _resetTimeButton() {
     );
   }
 
-
   Future<void> _iconPicker(BuildContext context) async {
     try {
-      String? newIconPath = await showIconPicker(context: context, defaultIconPath: selectedIconPath);
+      String? newIconPath = await showIconPicker(
+          context: context, defaultIconPath: selectedIconPath);
       if (newIconPath != null) {
         setState(() {
-          _defaultIconPath = newIconPath; // replace with currently selected icon
+          _defaultIconPath =
+              newIconPath; // replace with currently selected icon
         });
       }
     } catch (e) {
@@ -291,7 +291,8 @@ Widget _resetTimeButton() {
     }
   }
 
-  Widget _entryField(BuildContext context, String title, TextEditingController controller) {
+  Widget _entryField(
+      BuildContext context, String title, TextEditingController controller) {
     return Row(
       children: <Widget>[
         // button with icon on it
@@ -327,7 +328,6 @@ Widget _resetTimeButton() {
     );
   }
 
-
   void _saveHabit(BuildContext context) {
     final String habitName = _habitNameController.text;
     final List<String> selectedDays =
@@ -348,44 +348,53 @@ Widget _resetTimeButton() {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Days is empty.")),
       );
-    } 
-    else {
+    } else {
       final FirebaseAuth auth = FirebaseAuth.instance;
       final String uid = auth.currentUser?.uid ?? '';
 
       // can't save if end time is set without a start time
       if (_startTime == '--:--' && _endTime != '--:--') {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Cannot set end time without start time.")));
-        return; 
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Cannot set end time without start time.")));
+        return;
       }
 
       // if both start/end time are set, make sure end is later than start
       if (_startTime != '--:--' && _endTime != '--:--') {
         final List<String> startTimeParts = _startTime.split(':');
         final List<String> endTimeParts = _endTime.split(':');
-        final TimeOfDay startTOD = TimeOfDay(hour: int.parse(startTimeParts[0]), minute: int.parse(startTimeParts[1]));
-        final TimeOfDay endTOD = TimeOfDay(hour: int.parse(endTimeParts[0]), minute: int.parse(endTimeParts[1]));
+        final TimeOfDay startTOD = TimeOfDay(
+            hour: int.parse(startTimeParts[0]),
+            minute: int.parse(startTimeParts[1]));
+        final TimeOfDay endTOD = TimeOfDay(
+            hour: int.parse(endTimeParts[0]),
+            minute: int.parse(endTimeParts[1]));
 
-        if (endTOD.hour < startTOD.hour || (endTOD.hour == startTOD.hour && endTOD.minute <= startTOD.minute)) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("End time must be later than start time.")));
+        if (endTOD.hour < startTOD.hour ||
+            (endTOD.hour == startTOD.hour &&
+                endTOD.minute <= startTOD.minute)) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("End time must be later than start time.")));
           return;
         }
       }
 
       if (selectedIconPath == null) {
-        selectedIconPath = "assets/images/circle.svg"; // default habit icon if not customized
+        selectedIconPath =
+            "assets/images/circle.svg"; // default habit icon if not customized
       }
 
       dbService
-          .saveHabit(habitName, selectedDays, startTimeToSave, endTimeToSave, place, selectedIconPath!, createDate)
-          .then((String newHabitId) {
-      }).catchError((error) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Failed to save habit: $error")));
+          .saveHabit(habitName, selectedDays, startTimeToSave, endTimeToSave,
+              place, selectedIconPath!, createDate)
+          .then((String newHabitId) {})
+          .catchError((error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Failed to save habit: $error")));
       });
 
       Navigator.of(context).pop(); // Optionally pop back after saving
+      Navigator.of(context).pushNamed(AppRoutes.homePageRoute);
     }
   }
 }
-
-

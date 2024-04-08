@@ -88,6 +88,7 @@ class _TwoMinPage extends State<TwoMinPage> {
           SizedBox(height: 16.0),
           MaterialButton(
             onPressed: () {
+              saveHabitLaw(context, userInputController.text);
               //widget.onSave("I will make going for a run easier by ${userInputController.text}");
             },
             color: Color.fromARGB(255, 1, 82, 148),
@@ -199,6 +200,8 @@ class _TwoMinPage extends State<TwoMinPage> {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Habit law action has been added!")));
 
+      Navigator.popUntil(
+          context, ModalRoute.withName(AppRoutes.editHabitPageRoute));
       // Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute, arguments: widget.habitId);
       // Navigator.popUntil(context, ModalRoute.withName(AppRoutes.homePageRoute));
     }
