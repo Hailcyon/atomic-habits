@@ -295,6 +295,7 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
                   habitWidgets.add(buildHabitButton(
                     context: context,
                     habitId: habitId, // Pass the habit ID
+                    habitName: habitName,
                     buttonText: habitName, // Pass the habit name
                     leftIconPath: ImageConstant.imgIconDirectionsRun,
                   ));
@@ -353,6 +354,7 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
   Widget buildHabitButton({
     required BuildContext context,
     required String habitId,
+    required String habitName,
     required String buttonText,
     required String leftIconPath,
   }) {
@@ -429,8 +431,8 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
                 horizontal: 16.0, vertical: 16.0), // Padding inside the button
           ),
           onPressed: () {
-            Navigator.of(context)
-                .pushNamed(AppRoutes.editHabitPageRoute, arguments: habitId);
+            Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute,
+                arguments: {habitId, habitName});
           },
         ),
         // ),

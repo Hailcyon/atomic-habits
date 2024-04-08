@@ -18,7 +18,10 @@ import 'package:ahapp3/widgets/app_bar/custom_app_bar.dart';
 
 class EditHabitPage extends StatefulWidget {
   final String habitId;
-  const EditHabitPage({Key? key, required this.habitId}) : super(key: key);
+  final String habitName;
+  const EditHabitPage(
+      {Key? key, required this.habitId, required this.habitName})
+      : super(key: key);
 
   @override
   State<EditHabitPage> createState() => _EditHabitPageState();
@@ -172,10 +175,10 @@ class _EditHabitPageState extends State<EditHabitPage> {
                           buttonText: "Make it Obvious",
                           context: context,
                           onPressed: () {
-                            getHabitDetails();
+                            //getHabitDetails();
                             Navigator.of(context).pushNamed(
                               AppRoutes.lawOnePageRoute,
-                              arguments: {widget.habitId, _habitName},
+                              arguments: {widget.habitId, widget.habitName},
                             );
                           }),
                       _buildLaw(

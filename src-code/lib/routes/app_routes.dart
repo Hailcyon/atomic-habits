@@ -44,15 +44,18 @@ class AppRoutes {
         // editHabitPageRoute: (context) => EditHabitPage(),
         editHabitPageRoute: (context) {
           // Extract the arguments from the current settings
+          // Extract the arguments from the current settings
           final args = ModalRoute.of(context)!.settings.arguments;
           // Check if the args is indeed the expected string (habitId)
-          if (args is String) {
-            return EditHabitPage(
-                habitId: args); // Pass the habitId to the constructor
+          if (args is Set<String>) {
+            return LawOnePage(
+              habitId: args.first,
+              habitName: args.last,
+            ); // Pass the habitId to the constructor
           } else {
             // You can return an error page or any default page if the arguments are not correct
             throw Exception(
-                'EditHabitPage requires a habitId string as an argument');
+                'EditHabitPage requires a habitId and habitName string as an argument');
           }
         },
         lawThreePageRout: (context) => LawThreePage(),
