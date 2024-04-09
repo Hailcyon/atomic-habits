@@ -179,7 +179,7 @@ class _EditHabitPageState extends State<EditHabitPage> {
                         buttonText: "Make it Attractive", 
                         context: context, 
                         onPressed: (){
-                          Navigator.of(context).pushNamed(AppRoutes.lawTwoPageRoute);
+                          Navigator.of(context).pushNamed(AppRoutes.lawTwoPageRoute, arguments: widget.habitId);
                         }),
                       _buildLaw(habitLaws: mie, 
                         buttonText: "Make it Easy", 

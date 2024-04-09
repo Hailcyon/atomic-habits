@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'account_information_page.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);

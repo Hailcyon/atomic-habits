@@ -79,23 +79,23 @@ class _AccountInformationPage extends State<AccountInformationPage> {
     }
 
       // Check if new email is different from current email
-  if (_user?.email != newEmail) {
-    // Send email verification to new email address
-    _user?.updateEmail(newEmail).then((_) {
-      // Email updated successfully
-      // Send email verification to the new email address
-      _user?.sendEmailVerification().then((_) {
-        // Email verification sent
-        print('Email verification sent to $newEmail');
+    if (_user?.email != newEmail) {
+      // Send email verification to new email address
+      _user?.updateEmail(newEmail).then((_) {
+        // Email updated successfully
+        // Send email verification to the new email address
+        _user?.sendEmailVerification().then((_) {
+          // Email verification sent
+          print('Email verification sent to $newEmail');
+        }).catchError((error) {
+          // An error occurred while sending email verification
+          print('Failed to send email verification to $newEmail: $error');
+        });
       }).catchError((error) {
-        // An error occurred while sending email verification
-        print('Failed to send email verification to $newEmail: $error');
+        // An error occurred while updating email
+        print('Failed to update email: $error');
       });
-    }).catchError((error) {
-      // An error occurred while updating email
-      print('Failed to update email: $error');
-    });
-  }
+    };
 
     // Show a snackbar or dialog to indicate changes saved
     ScaffoldMessenger.of(context).showSnackBar(
