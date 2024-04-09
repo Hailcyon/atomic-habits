@@ -2,6 +2,26 @@ class ImageConstant {
   // Image folder path
   static String imagePath = 'assets/images';
 
+  static String helpOutline = '$imagePath/help_outline.svg';
+  static String shoppingCart = '$imagePath/shopping_cart.svg';
+  static String book = '$imagePath/book.svg';
+  static String dinner = '$imagePath/dinner.svg';
+  static String eat = '$imagePath/eat.svg';
+  static String eye = '$imagePath/eye.svg';
+  static String fitness = '$imagePath/fitness.svg';
+  static String idea = '$imagePath/idea.svg';
+  static String phone = '$imagePath/phone.svg';
+  static String question_mark = '$imagePath/question_mark.svg';
+  static String rowing = '$imagePath/rowing.svg';
+  static String run = '$imagePath/run.svg';
+  static String savings = '$imagePath/savings.svg';
+  static String school = '$imagePath/school.svg';
+  static String table_view = '$imagePath/table_view.svg';
+  static String time = '$imagePath/time.svg';
+  static String ciecle = '$imagePath/circle.svg';
+
+
+
   static String imgProfile = '$imagePath/profile.svg';
 
   // New Habit Search images

@@ -20,13 +20,13 @@ class HabSta extends StatefulWidget {
 
 class _HabSta extends State<HabSta> {
   final userInputController = TextEditingController();
+  final input1 = TextEditingController();
+  final input2 = TextEditingController();
+  final input3 = TextEditingController();
+  final input4 = TextEditingController();
+
   List<Widget> additionalInputs = [];
-  final List<String> suggestions = [
-    "Suggestion 1:...",
-    "Suggestion 2",
-    "Suggestion 3",
-    // Add more suggestions as needed
-  ];
+  List<TextEditingController> textControllers = [];
 
   final DatabaseService dbService = DatabaseService(
       uid: FirebaseAuth.instance.currentUser?.uid ??
@@ -55,12 +55,15 @@ class _HabSta extends State<HabSta> {
   }
 
   Widget _reduceFrictionDetail(BuildContext context) {
+    String stackString = '';
+    textControllers = [input1, input2, input3, input4];
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(height: 16.0),
           Text(
             "First, I will:",
             style: TextStyle(
@@ -85,33 +88,41 @@ class _HabSta extends State<HabSta> {
           ...additionalInputs,
           MaterialButton(
             onPressed: () {
-              setState(() {
-                additionalInputs.add(
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Then, I will:",
-                        style: TextStyle(
-                          fontSize: 20.0,
-                        ),
-                      ),
-                      SizedBox(height: 16.0),
-                      TextField(
-                        decoration: InputDecoration(
-                          hintText: '',
-                          border: OutlineInputBorder(),
-                          suffixIcon: IconButton(
-                            onPressed: () {},
-                            icon: Icon(Icons.clear),
+              if (additionalInputs.length < 5) {
+                if (additionalInputs.length != 0) {}
+                // newInputController.clear();
+                setState(() {
+                  additionalInputs.add(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Then, I will:",
+                          style: TextStyle(
+                            fontSize: 20.0,
                           ),
                         ),
-                      ),
-                      SizedBox(height: 16.0),
-                    ],
-                  ),
-                );
-              });
+                        SizedBox(height: 16.0),
+                        TextField(
+                          controller: textControllers[additionalInputs.length],
+                          decoration: InputDecoration(
+                            hintText: '',
+                            border: OutlineInputBorder(),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                textControllers[additionalInputs.length]
+                                    .clear();
+                              },
+                              icon: Icon(Icons.clear),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16.0),
+                      ],
+                    ),
+                  );
+                });
+              }
             },
             color: Color.fromARGB(255, 1, 82, 148),
             shape: RoundedRectangleBorder(
@@ -127,7 +138,12 @@ class _HabSta extends State<HabSta> {
           ),
           MaterialButton(
             onPressed: () {
-              //widget.onSave("I will make going for a run easier by ${userInputController.text}");
+              stackString = userInputController.text;
+              for (int i = 0; i < additionalInputs.length; i++) {
+                stackString =
+                    stackString + ",\nthen " + textControllers[i].text;
+              }
+              saveHabitLaw(context, stackString);
             },
             color: Color.fromARGB(255, 1, 82, 148),
             shape: RoundedRectangleBorder(
@@ -147,104 +163,7 @@ class _HabSta extends State<HabSta> {
     );
   }
 
-  // Widget addThenText(BuildContext context){
-  //   return (
-  //     Text(
-  //         "Then, I will:",
-  //         style: TextStyle(
-  //           fontSize: 20.0,
-  //         ),
-  //     )
-  //   );
-
-  // }
-
-  // Widget addHabitInput(BuildContext context){
-  //   return (
-  //     TextField(
-  //         controller: userInputController,
-  //         decoration: InputDecoration(
-  //           hintText: '',
-  //           border: OutlineInputBorder(),
-  //           suffixIcon: IconButton(
-  //             onPressed: () {
-  //               userInputController.clear();
-  //             },
-  //             icon: Icon(Icons.clear),
-  //           ),
-  //         ),
-  //       ),
-  //   );
-  // }
-
-  // Widget addHabitButton(BuildContext context){
-  //   return (
-  //     MaterialButton(
-  //           onPressed: () {
-  //             addThenText(context);
-  //             //addHabitInput()
-  //           },
-  //           color: Color.fromARGB(255, 1, 82, 148),
-  //           shape: RoundedRectangleBorder(
-  //             borderRadius: BorderRadius.circular(5),
-  //           ),
-  //           padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-  //           child: Text(
-  //             '+',
-  //             style: TextStyle(
-  //               color: Color.fromARGB(255, 246, 240, 230),
-  //               // fontSize: 20,
-  //             ),
-  //           ),
-  //         )
-  //   );
-  // }
-
-  // Widget _reduceFrictionSugguestion(BuildContext context){
-  //   return Padding(
-  //     padding: EdgeInsets.symmetric(horizontal: 16),
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         Padding(
-  //         padding: EdgeInsets.only(bottom:0), // Space between the label and the first suggestion
-  //         child: Text(
-  //           "Suggestions:", // The label text
-  //           style: TextStyle(
-  //             color: Colors.black, // Color of the label
-  //             fontSize: 20, // Size of the label text
-  //             // fontWeight: FontWeight.bold, // Bold text for the label
-  //           ),
-  //         ),
-  //       ),
-  //       ...suggestions.map((suggestion) => InkWell(
-  //         onTap: () {
-  //           setState(() {
-  //             userInputController.text = suggestion;
-  //           });
-  //         },
-  //         child: Container(
-  //           margin: EdgeInsets.only(top: 20),
-  //           padding: EdgeInsets.all(10),
-  //           color: Color.fromARGB(255, 237, 207, 116),
-  //           child: Text(
-  //             suggestion,
-  //             style: TextStyle(
-  //               color: Colors.black,
-  //               fontSize: 16,
-  //             ),
-  //             // softWrap: true, // Allow text wrapping
-  //             // overflow: TextOverflow.visible, // Show all text
-  //           ),
-  //         ),
-  //       )).toList(),
-  //       ],
-  //     ),
-  //   );
-  // }
-
   void saveHabitLaw(BuildContext context, String habitStr) async {
-    //TODO fix so multiple can be added with array
     //habitNum = habit law (1 2 3 or 4)
     final int habitNum = 1;
 
@@ -265,9 +184,11 @@ class _HabSta extends State<HabSta> {
       // Save the habit and update the ID with the one generated by Firestore
       await dbService.saveHabitLaw(
           widget.habitId, habitNum, habitLawNum, fin_habitStr);
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Habit law has been added!")));
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Habit law action has been added!")));
 
+      Navigator.popUntil(
+          context, ModalRoute.withName(AppRoutes.editHabitPageRoute));
       // Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute, arguments: widget.habitId);
       // Navigator.popUntil(context, ModalRoute.withName(AppRoutes.homePageRoute));
     }

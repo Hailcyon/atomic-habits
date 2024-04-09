@@ -104,7 +104,7 @@ class _ImpInt extends State<ImpInt> {
           children: [
             _editHabit(context),
             SizedBox(height: 50.0),
-            _reduceFrictionSugguestion(context),
+            //_reduceFrictionSugguestion(context),
           ],
         ),
       ),
