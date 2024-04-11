@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:ahapp3/core/app_export.dart';
 
+
 class NewHabitPage extends StatefulWidget {
   const NewHabitPage({Key? key}) : super(key: key);
 
@@ -113,7 +114,7 @@ class _NewHabitPageState extends State<NewHabitPage> {
       onPressed: () {
         Navigator.of(context).pushNamed(AppRoutes.customHabitPageRoute);
       },
-      child: const Text("Add a Custom Habit", style: TextStyle(fontSize: 20)),
+      child: const Text("Add a Custom Habit", style: TextStyle(fontSize: 20, color: Colors.white)),
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color.fromARGB(255, 1, 82, 148),
         fixedSize: Size(300, 50),

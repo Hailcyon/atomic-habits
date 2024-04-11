@@ -8,6 +8,8 @@ dependencies:
     sdk: flutter
   flutter_localizations: 
     sdk: flutter
+
+  url_launcher: ^6.0.13
   flutter_bloc: ^8.0.0
   connectivity_plus: ^2.3.6
   shared_preferences: ^2.0.15

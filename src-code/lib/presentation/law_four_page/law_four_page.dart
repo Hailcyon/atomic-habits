@@ -6,7 +6,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
 class LawFourPage extends StatefulWidget {
-  const LawFourPage({Key? key}) : super(key: key);
+  final String habitId;
+  final String habitName;
+  const LawFourPage({Key? key, required this.habitId, required this.habitName})
+      : super(key: key);
 
   @override
   State<LawFourPage> createState() => _LawFourPage();
@@ -23,9 +26,9 @@ class _LawFourPage extends State<LawFourPage> {
 
   @override
   Widget build(BuildContext context) {
-    final String _habitId =
-        ModalRoute.of(context)?.settings.arguments as String? ??
-            'Default Habit Name';
+    // final String _habitId =
+    //     ModalRoute.of(context)?.settings.arguments as String? ??
+    //         'Default Habit Name';
 
     return Scaffold(
       // backgroundColor: Colors.white,
@@ -41,7 +44,8 @@ class _LawFourPage extends State<LawFourPage> {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => Reinforcement(
                   onSave: updateFrictionText,
-                  habitId: _habitId,
+                  habitId: widget.habitId,
+                  habitName: widget.habitName,
                 ),
               ));
             }),

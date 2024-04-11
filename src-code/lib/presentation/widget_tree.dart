@@ -14,6 +14,7 @@ class WidgetTree extends StatefulWidget {
   State<WidgetTree> createState() => _WidgetTreeState();
 }
 
+
 class _WidgetTreeState extends State<WidgetTree> {
   @override
   Widget build(BuildContext context) {
@@ -21,13 +22,12 @@ class _WidgetTreeState extends State<WidgetTree> {
       stream: Auth().authStateChanges,
       builder: (context, snapshot) {
          if (snapshot.hasData) {
-            // WidgetsBinding.instance!.addPostFrameCallback((_) {
-            //   Navigator.of(context).pushNamed(AppRoutes.homePageRoute);
-            // });
             return HomePageContainerPage();
-            // return HomePageContainerPage();
-            //Navigator.of(context).pushNamed(AppRoutes.homePageRoute);
-            //return HomePageContainerPage.builder(context);
+            // WidgetsBinding.instance?.addPostFrameCallback((_) {
+            //   Navigator.of(context).pushReplacementNamed(AppRoutes.homePageRoute);
+            // });
+            // // Return an empty container while navigating
+            // return Container();
          } else {
           return const LoginPage();
         }

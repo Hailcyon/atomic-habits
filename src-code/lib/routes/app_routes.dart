@@ -1,5 +1,11 @@
+// import 'dart:js';
+
 import 'package:ahapp3/presentation/add_new_habit_pages/habit_search_page.dart';
 import 'package:ahapp3/presentation//edit_a_habit_page/edit_a_habit_page.dart';
+//import 'package:ahapp3/presentation/statistics_page/statistics_page.dart';
+//import 'package:ahapp3/presentation/statistics_page/habit_statistics_page.dart';
+import 'package:ahapp3/presentation/statistics_pages/statistics_details.dart';
+import 'package:ahapp3/presentation/statistics_pages/statistics_overview.dart';
 import 'package:flutter/material.dart';
 import 'package:ahapp3/presentation/widget_tree.dart';
 import 'package:ahapp3/presentation/log_in_screen/log_in_screen.dart';
@@ -7,7 +13,7 @@ import 'package:ahapp3/presentation/add_new_habit_pages/custom_habit_page.dart';
 import 'package:ahapp3/presentation/add_new_habit_pages/add_new_habit_page.dart';
 
 import 'package:ahapp3/presentation/law_three_page/law_three_page.dart';
-import 'package:ahapp3/presentation/profile_page/profile_page.dart';
+import 'package:ahapp3/presentation/settings_pages/profile_page.dart';
 import 'package:ahapp3/presentation/home_page_container_page/home_page_container_page.dart';
 
 import 'package:ahapp3/presentation/law_one_page/law_one_page.dart';
@@ -27,6 +33,9 @@ class AppRoutes {
   static const String initialRoute = widgetTreeRoute;
   static const String profilePageRoute = '/profile_page.dart';
   static const String homePageRoute = '/home_page_container_page.dart';
+  //static const String statisticsPageRoute = '/statistics_page.dart';
+  // static const String habitStatisticsPageRoute = '/habit_statistics_page.dart';
+  static const String statisticsPageRoute = '/statistics_overview.dart';
 
   static const String lawThreePageRout = '/law_three_page.dart';
   static const String lawOnePageRoute = '/law_one_page.dart';
@@ -36,9 +45,10 @@ class AppRoutes {
   static String currentPageID = '';
   // static const String reduceFrictionRoute = '/reduce_friction_page.dart';
 
-
   static Map<String, WidgetBuilder> get routes => {
         widgetTreeRoute: (context) => WidgetTree(),
+        //statisticsPageRoute: (context) => StatisticsPage(),
+        // habitStatisticsPageRoute: (context) => HabitStatisticsPage(),
         profilePageRoute: (context) => ProfilePage(),
         loginScreenRoute: (context) => LoginPage(),
         customHabitPageRoute: (context) => CustomHabitPage(),
@@ -47,21 +57,84 @@ class AppRoutes {
         // editHabitPageRoute: (context) => EditHabitPage(),
         editHabitPageRoute: (context) {
           // Extract the arguments from the current settings
+          // Extract the arguments from the current settings
           final args = ModalRoute.of(context)!.settings.arguments;
           // Check if the args is indeed the expected string (habitId)
-          if (args is String) {
-            return EditHabitPage(habitId: args); // Pass the habitId to the constructor
+          if (args is Set<String>) {
+            return EditHabitPage(
+              habitId: args.first,
+              habitName: args.last,
+            ); // Pass the habitId to the constructor
           } else {
             // You can return an error page or any default page if the arguments are not correct
-            throw Exception('EditHabitPage requires a habitId string as an argument');
+            throw Exception(
+                'EditHabitPage requires a habitId and habitName string as an argument');
           }
         },
-        lawThreePageRout: (context) => LawThreePage(),
-        lawOnePageRoute: (context) => LawOnePage(),
-        lawTwoPageRoute: (context) => LawTwoPage(),
-        lawFourPageRoute: (context) => LawFourPage(),
+        lawThreePageRout: (context) {
+          // Extract the arguments from the current settings
+          final args = ModalRoute.of(context)!.settings.arguments;
+          // Check if the args is indeed the expected string (habitId)
+          if (args is Set<String>) {
+            return LawThreePage(
+              habitId: args.first,
+              habitName: args.last,
+            ); // Pass the habitId to the constructor
+          } else {
+            // You can return an error page or any default page if the arguments are not correct
+            throw Exception(
+                'LawThreePage requires a habitId and habitName string as an argument');
+          }
+        },
+        lawOnePageRoute: (context) {
+          // Extract the arguments from the current settings
+          final args = ModalRoute.of(context)!.settings.arguments;
+          // Check if the args is indeed the expected string (habitId)
+          if (args is Set<String>) {
+            return LawOnePage(
+              habitId: args.first,
+              habitName: args.last,
+            ); // Pass the habitId to the constructor
+          } else {
+            // You can return an error page or any default page if the arguments are not correct
+            throw Exception(
+                'LawOnePage requires a habitId and habitName string as an argument');
+          }
+        },
+        lawTwoPageRoute: (context) {
+          // Extract the arguments from the current settings
+          final args = ModalRoute.of(context)!.settings.arguments;
+          // Check if the args is indeed the expected string (habitId)
+          if (args is Set<String>) {
+            return LawTwoPage(
+              habitId: args.first,
+              habitName: args.last,
+            ); // Pass the habitId to the constructor
+          } else {
+            // You can return an error page or any default page if the arguments are not correct
+            throw Exception(
+                'LawTwoPage requires a habitId and habitName string as an argument');
+          }
+        },
+        lawFourPageRoute: (context) {
+          // Extract the arguments from the current settings
+          final args = ModalRoute.of(context)!.settings.arguments;
+          // Check if the args is indeed the expected string (habitId)
+          if (args is Set<String>) {
+            return LawFourPage(
+              habitId: args.first,
+              habitName: args.last,
+            ); // Pass the habitId to the constructor
+          } else {
+            // You can return an error page or any default page if the arguments are not correct
+            throw Exception(
+                'LawFourPage requires a habitId and habitName string as an argument');
+          }
+        },
         homePageRoute: (context) => HomePageContainerPage(),
         settingsPageRoute: (context) => SettingsPage(),
         // reduceFrictionRoute: (context) => ReduceFrictionPage(),
+
+        statisticsPageRoute: (context) => StatisticsPage(),
       };
 }
