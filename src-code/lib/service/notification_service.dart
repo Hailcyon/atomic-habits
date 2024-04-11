@@ -1,3 +1,4 @@
+import 'package:ahapp3/presentation/home_page_container_page/home_page_container_page.dart';
 import 'package:day_picker/day_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -65,53 +66,10 @@ class NotificationService {
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) {
-        onSelectNotification;
+        onSelectNotification(response.payload);
       },
     );
   }
-
-  // void onSelectNotification(
-  //     int id, String? title, String? body, String? payload) async {
-  //   // display a dialog with the notification details, tap ok to go to another page
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) => CupertinoAlertDialog(
-  //       title: Text(title ?? ''),
-  //       content: Text(body ?? ''),
-  //       actions: [
-  //         CupertinoDialogAction(
-  //           isDefaultAction: true,
-  //           child: Text('Ok'),
-  //           onPressed: () async {
-  //             Navigator.of(context, rootNavigator: true).pop();
-  //             await Navigator.push(
-  //               context,
-  //               MaterialPageRoute(
-  //                 builder: (BuildContext context) => CupertinoAlertDialog(
-  //                   title: Text(title ?? ''),
-  //                   content: Text(body ?? ''),
-  //                   actions: [
-  //                     CupertinoDialogAction(
-  //                       isDefaultAction: true,
-  //                       child: Text('Ok'),
-  //                       onPressed: () async {
-  //                         Navigator.of(context, rootNavigator: true).pop();
-  //                         await Navigator.pushNamed(
-  //                             context,
-  //                             AppRoutes
-  //                                 .homePageRoute); // Replace homePageRoute with the actual route name
-  //                       },
-  //                     )
-  //                   ],
-  //                 ),
-  //               ),
-  //             );
-  //           },
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
 
   Future<void> requestIOSPermissions() async {
     await flutterLocalNotificationsPlugin
@@ -198,8 +156,8 @@ class NotificationService {
 }
 
 Future<void> onSelectNotification(String? payload) async {
-  Future<void> navigateToLoginPage(BuildContext context) async {
+  Future<void> navigateToHomePage(BuildContext context) async {
     await Navigator.of(context)
-        .push(MaterialPageRoute(builder: (_) => LoginPage()));
+        .push(MaterialPageRoute(builder: (_) => HomePageContainerPage()));
   }
 }
