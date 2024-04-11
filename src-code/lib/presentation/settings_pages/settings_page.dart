@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'account_information_page.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:ahapp3/routes/app_routes.dart';
+
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -21,10 +23,7 @@ class _SettingsPage extends State<SettingsPage> {
           ListTile(
             title: Text('Account Information'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AccountInformationPage()),
-              );
+              Navigator.of(context).pushNamed(AppRoutes.profilePageRoute);
             },
           ),
           ListTile(
@@ -48,25 +47,35 @@ class _SettingsPage extends State<SettingsPage> {
           ListTile(
             title: Text('FAQs'),
             onTap: () {
-              // Navigate to FAQs page
+              launchURL();
             },
           ),
           ListTile(
             title: Text('Help & Support'),
             onTap: () {
-              // Navigate to help & support page
+              launchURL();
             },
           ),
-          ListTile(
-            title: Text('Privacy Policy'),
-            onTap: () {
-              // Navigate to privacy policy page
-            },
-          ),
+          // ListTile(
+          //   title: Text('Privacy Policy'),
+          //   onTap: () {
+          //     // Navigate to privacy policy page
+          //   },
+          // ),
         ],
       ),
     );
   }
+  launchURL() async {
+    const url = 'https://ah-app.surge.sh';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 }
+
+
 
 // Add additional pages for Account Information, Notifications, Habit Reminders, View all habits, Delete habit, FAQs, Help & Support, Privacy Policy

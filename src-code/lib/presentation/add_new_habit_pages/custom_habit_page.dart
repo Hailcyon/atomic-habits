@@ -9,6 +9,8 @@ import 'package:ahapp3/core/app_export.dart';
 import 'package:day_picker/day_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:ahapp3/presentation/home_page_container_page/home_page_container_page.dart';
+
 // import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 
 class CustomHabitPage extends StatefulWidget {
@@ -297,13 +299,13 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
       children: <Widget>[
         // button with icon on it
         ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            padding: EdgeInsets.zero,
-          ),
+          // style: ElevatedButton.styleFrom(
+          //   primary: Colors.white,
+          //   shape: RoundedRectangleBorder(
+          //     borderRadius: BorderRadius.circular(8),
+          //   ),
+          //   padding: EdgeInsets.zero,
+          // ),
           onPressed: () => _iconPicker(context), // show icon picker
           child: Container(
             padding: EdgeInsets.all(8), // padding around icon
@@ -328,7 +330,7 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
     );
   }
 
-  void _saveHabit(BuildContext context) {
+  void _saveHabit(BuildContext context) async {
     final String habitName = _habitNameController.text;
     final List<String> selectedDays =
         _days.where((day) => day.isSelected).map((day) => day.dayKey).toList();
@@ -384,6 +386,14 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
             "assets/images/circle.svg"; // default habit icon if not customized
       }
 
+      print("IM IN HERE");
+      final int habitsCount = await getUserHabitsCount();
+      print(habitsCount);
+      if (habitsCount == 0) {
+        print("CHANGING");
+        HomePageContainerPage.addedFirstHabit = true;
+      }
+
       dbService
           .saveHabit(habitName, selectedDays, startTimeToSave, endTimeToSave,
               place, selectedIconPath!, createDate)
@@ -395,6 +405,16 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
 
       Navigator.of(context).pop(); // Optionally pop back after saving
       Navigator.of(context).pushNamed(AppRoutes.homePageRoute);
+    }
+  }
+  
+  Future<int> getUserHabitsCount() async {
+    try {
+      int count = await dbService.getUserHabitsCount();
+      return count;
+    } catch (error) {
+      print('Error fetching user habits count: $error');
+      throw error;
     }
   }
 }

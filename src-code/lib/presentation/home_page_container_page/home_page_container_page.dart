@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ahapp3/presentation/auth.dart';
+import 'package:ahapp3/presentation/log_in_screen/log_in_screen.dart';
 
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:ahapp3/utils/date_utils.dart' as date_util;
@@ -26,6 +27,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePageContainerPage extends StatefulWidget {
   HomePageContainerPage({Key? key}) : super(key: key);
+  static bool isNewUser = false;
+  static bool addedFirstHabit = false;
 
   @override
   State<HomePageContainerPage> createState() => _HomePageContainerPageState();
@@ -102,6 +105,16 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
 
     super.initState();
     fetchHabitsWithStatus();
+    
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      if (HomePageContainerPage.isNewUser) {
+        _showWelcomeDialog(context);
+      }
+      HomePageContainerPage.addedFirstHabit = true;
+      if (HomePageContainerPage.addedFirstHabit) {
+        _showHabitHelpDialog(context);
+      }
+    });
   }
 
   void fetchHabitsWithStatus() async {
@@ -263,6 +276,9 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
   // days and "Habits" are not scrollable now
   @override
   Widget build(BuildContext context) {
+    //super.initState();
+    // Check isNewUser status after the first frame is drawn
+
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -353,7 +369,12 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
         ],
       ),
     );
+    
   }
+
+  
+
+
 
   Widget buildHabitButton({
     required BuildContext context,
@@ -485,6 +506,70 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     );
   }
 
+  Future<void> _showWelcomeDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // Prevents dismissing the dialog by tapping outside
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Welcome to Atomic Habits: The App'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Begin by adding a new habit at the middle of the bottom navigation bar.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                // Dismiss the dialog and set isNewUser to false
+                setState(() {
+                  HomePageContainerPage.isNewUser = false;
+                });
+                Navigator.of(context).pop();
+              },
+              child: Text('Start'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showHabitHelpDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // Prevents dismissing the dialog by tapping outside
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Your First Habit has been added!'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Swipe right on the habit to complete it\n\nSwipe left on the habit to skip it\n\nClick the habit to add habit laws'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                // Dismiss the dialog and set isNewUser to false
+                setState(() {
+                  HomePageContainerPage.addedFirstHabit = false;
+                });
+                Navigator.of(context).pop();
+              },
+              child: Text('Get Started'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  
+
   void _showStreakDialog(
       BuildContext context, String habitId, DateTime chosenDateTime) {
     showDialog(
@@ -554,8 +639,8 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
         leading: IconButton(
           icon: Icon(Icons.settings, size: 40),
           onPressed: () {
-            //Navigator.of(context).pushNamed(AppRoutes.settingsPageRoute);
-            Navigator.of(context).pushNamed(AppRoutes.profilePageRoute);
+            Navigator.of(context).pushNamed(AppRoutes.settingsPageRoute);
+            //Navigator.of(context).pushNamed(AppRoutes.profilePageRoute);
           },
         ),
         centerTitle: true,

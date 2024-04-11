@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ahapp3/routes/app_routes.dart';
 import 'package:ahapp3/presentation/auth.dart';
+import 'account_information_page.dart';
+
 
 
 class ProfilePage extends StatelessWidget {
@@ -45,39 +47,21 @@ class ProfilePage extends StatelessWidget {
             SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AccountInformationPage()),
+                );
+              },
+              child: Text('Edit Account'),
+            ),
+            ElevatedButton(
+              onPressed: () {
                 signOut(context);
               },
               child: Text('Log Out'),
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 2, // Set the current index to 2 (Profile tab)
-        onTap: (int index) {
-          if (index == 0) {
-             Navigator.of(context).pushNamed(AppRoutes.homePageRoute);
-          } else if (index == 1) {
-            // Handle Add Habit tab
-             Navigator.of(context).pushNamed(AppRoutes.newHabitPageRoute);
-          } else {
-            // Handle Profile tab (already on profile page)
-          }
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add),
-            label: 'Add Habit',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
       ),
     );
   }

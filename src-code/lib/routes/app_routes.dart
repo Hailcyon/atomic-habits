@@ -13,7 +13,7 @@ import 'package:ahapp3/presentation/add_new_habit_pages/custom_habit_page.dart';
 import 'package:ahapp3/presentation/add_new_habit_pages/add_new_habit_page.dart';
 
 import 'package:ahapp3/presentation/law_three_page/law_three_page.dart';
-import 'package:ahapp3/presentation/profile_page/profile_page.dart';
+import 'package:ahapp3/presentation/settings_pages/profile_page.dart';
 import 'package:ahapp3/presentation/home_page_container_page/home_page_container_page.dart';
 
 import 'package:ahapp3/presentation/law_one_page/law_one_page.dart';

@@ -40,6 +40,21 @@ class DatabaseService {
     }
   }
 
+  Future<int> getUserHabitsCount() async {
+    try {
+      QuerySnapshot habitSnapshot = await firestoreInstance
+          .collection('Users')
+          .doc(uid)
+          .collection('Habits')
+          .get();
+
+      return habitSnapshot.size; // Return the number of habits
+    } catch (e) {
+      print("Error fetching habits: $e");
+      return 0; // Return 0 in case of error
+    }
+  }
+
   Future<DateTime> getHabitStartDate(String habitId) async {
     DocumentSnapshot habitDoc = await firestoreInstance
         .collection('Users')

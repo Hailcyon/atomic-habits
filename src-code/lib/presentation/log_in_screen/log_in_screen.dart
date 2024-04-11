@@ -2,6 +2,8 @@ import "package:ahapp3/routes/app_routes.dart";
 import "package:flutter/material.dart";
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ahapp3/presentation/auth.dart';
+import 'package:ahapp3/presentation/home_page_container_page/home_page_container_page.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -32,16 +34,16 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> createUserWithEmailAndPassword() async {
+    HomePageContainerPage.isNewUser = true;
     try {
       await Auth().createUserWithEmailAndPassword(
         email: _controllerEmail.text, 
         password: _controllerPassword.text,
-        displayName: _controllerUsername.text, // Pass username to createUserWithEmailAndPassword
+        displayName: _controllerUsername.text,
       );
       Navigator.pushNamedAndRemoveUntil(context, AppRoutes.initialRoute, (route) => false);
     } on FirebaseAuthException catch(e) {
       setState(() {
-        print("IN CREATE EXCEPTION");
         errorMessage = e.message;
       });
     }
