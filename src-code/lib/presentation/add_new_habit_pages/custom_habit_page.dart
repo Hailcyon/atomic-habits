@@ -97,6 +97,7 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
   String _habitName = '';
   String _iconPath = '';
   String _startTime = '';
+  TimeOfDay _picked = TimeOfDay(hour: 0, minute: 0);
   // String _endTime = '--:--';
   String _endTime = '';
   String _place = '';
@@ -276,6 +277,7 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
                 );
                 if (picked != null) {
                   setState(() {
+                    _picked = picked;
                     _startTime =
                         '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
                   });
@@ -531,15 +533,16 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
               place, selectedIconPath!, createDate)
           .then((String newHabitId) {
         //going to add in the notification creation here
-        notificationService.repeatingNotification(
-            newHabitId.hashCode,
-            habitName,
-            place,
-            DateTime.now(),
-            TimeOfDay.fromDateTime(DateTime.parse(startTimeToSave)),
-            "",
-            List<DayInWeek>.from(
-                selectedDays)); //casting here shouldn't be an issue since dayinweek is just a string type
+        if (_picked.hour != 0 && _picked.minute != 0) {
+          notificationService.repeatingNotification(
+              newHabitId.hashCode,
+              habitName,
+              place,
+              DateTime.now(),
+              _picked!,
+              "",
+              List<DayInWeek>.from(selectedDays));
+        } //casting here shouldn't be an issue since dayinweek is just a string type
       }).catchError((error) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Failed to save habit: $error")));
