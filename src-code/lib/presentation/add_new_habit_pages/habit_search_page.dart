@@ -93,7 +93,10 @@ class _HabitSearchPageState extends State<HabitSearchPage> {
     return ElevatedButton(
       onPressed: () {
         Navigator.of(context)
-            .pushNamed(AppRoutes.customHabitPageRoute, arguments: habitId);
+            .pushNamed(AppRoutes.customHabitPageRoute, arguments: {
+          'habitId': habitId,
+          'userHabitId': '',
+        });
       },
       child: Text(habitId, style: TextStyle(fontSize: 20, color: Colors.black)),
       style: ElevatedButton.styleFrom(
