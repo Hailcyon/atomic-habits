@@ -1,9 +1,13 @@
+import 'package:ahapp3/presentation/home_page_container_page/home_page_container_page.dart';
+import 'package:day_picker/day_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import '../main.dart';
 import '../presentation/log_in_screen/log_in_screen.dart';
+import '../routes/app_routes.dart';
 
 class NotificationService {
   // Singleton pattern
@@ -62,7 +66,7 @@ class NotificationService {
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) {
-        // Handle notification response here
+        onSelectNotification(response.payload);
       },
     );
   }
@@ -110,6 +114,38 @@ class NotificationService {
     );
   }
 
+  Future<void> repeatingNotification(
+      int id,
+      String title,
+      String body,
+      DateTime eventDate,
+      TimeOfDay eventTime,
+      String payload,
+      List<DayInWeek> days,
+      [DateTimeComponents? dateTimeComponents]) async {
+    //convert days to a set a repeating scheduled events on a weekly basis
+    //time to schedule activity, being the day plus the time in hours and minutes
+    const Map<String, int> daysOfWeek = {
+      "monday": 1,
+      "tuesday": 2,
+      "wednesday": 3,
+      "thursday": 4,
+      "friday": 5,
+      "saturday": 6,
+      "sunday": 7,
+    };
+    for (final day in days) {
+      //this is our day of the week, a number starting at 1 for monday and 7 for sunday
+      int daynum = daysOfWeek[day]!;
+      int todayoffset = (daynum % 7) + 1;
+      //offset the modified date to accomodate weekday
+      final finalDate = eventDate.add(Duration(days: todayoffset));
+      dateTimeComponents = DateTimeComponents.dayOfWeekAndTime;
+      scheduleNotification(
+          id, title, body, finalDate, eventTime, payload, dateTimeComponents);
+    }
+  }
+
   Future<void> cancelNotification(int id) async {
     await flutterLocalNotificationsPlugin.cancel(id);
   }
@@ -120,8 +156,8 @@ class NotificationService {
 }
 
 Future<void> onSelectNotification(String? payload) async {
-  Future<void> navigateToLoginPage(BuildContext context) async {
+  Future<void> navigateToHomePage(BuildContext context) async {
     await Navigator.of(context)
-        .push(MaterialPageRoute(builder: (_) => LoginPage()));
+        .push(MaterialPageRoute(builder: (_) => HomePageContainerPage()));
   }
 }

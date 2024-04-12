@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:ahapp3/core/app_export.dart';
 import 'package:day_picker/day_picker.dart';
+import 'package:ahapp3/service/notification_service.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:ahapp3/presentation/home_page_container_page/home_page_container_page.dart';
@@ -106,9 +107,9 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
   final DatabaseService dbService = DatabaseService(
       uid: FirebaseAuth.instance.currentUser?.uid ??
           ''); // Initialize dbService with the user's UID;
+  NotificationService notificationService = new NotificationService();
   String habitId = '';
   String userHabitId = '';
-
 
   TextEditingController _habitNameController = TextEditingController();
   final TextEditingController _placeController = TextEditingController();
@@ -531,7 +532,18 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
       dbService
           .saveHabit(habitName, selectedDays, startTimeToSave, endTimeToSave,
               place, selectedIconPath!, createDate)
-          .then((String newHabitId) {})
+          .then((String newHabitId) {
+             //going to add in the notification creation here
+        notificationService.repeatingNotification(
+            newHabitId.hashCode,
+            newHabit.name,
+            newHabit.place,
+            DateTime.now(),
+            newHabit.startTime,
+            "",
+            List<DayInWeek>.from(newHabit
+                .days)); //casting here shouldn't be an issue since dayinweek is just a string type
+          })
           .catchError((error) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Failed to save habit: $error")));
