@@ -534,14 +534,8 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
           .then((String newHabitId) {
         //going to add in the notification creation here
         if (_picked.hour != 0 && _picked.minute != 0) {
-          notificationService.repeatingNotification(
-              newHabitId.hashCode,
-              habitName,
-              place,
-              DateTime.now(),
-              _picked!,
-              "",
-              List<DayInWeek>.from(selectedDays));
+          notificationService.repeatingNotification(newHabitId.hashCode,
+              habitName, place, DateTime.now(), _picked, "", _days);
         } //casting here shouldn't be an issue since dayinweek is just a string type
       }).catchError((error) {
         ScaffoldMessenger.of(context).showSnackBar(
