@@ -100,7 +100,7 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
   // String _endTime = '--:--';
   String _endTime = '';
   String _place = '';
-  List<String> _daysOfWeek =[];
+  List<String> _daysOfWeek = [];
   String pageTitle = 'Add a New Habit';
   bool isEdit = false;
 
@@ -120,14 +120,15 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
     // habitId = '';
     // _habitNameController = TextEditingController(text: habitId);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final Map<String, String> args = ModalRoute.of(context)?.settings.arguments as Map<String, String>;
+      final Map<String, String> args =
+          ModalRoute.of(context)?.settings.arguments as Map<String, String>;
       habitId = args['habitId'] ?? '';
-      userHabitId = args['userHabitId'] ?? ''; 
+      userHabitId = args['userHabitId'] ?? '';
 
       // Add Suggested Habit Mode
       if (habitId != '' && userHabitId == '') {
-        _habitNameController.text = habitId; 
-      } 
+        _habitNameController.text = habitId;
+      }
       // Edit Habit Mode
       else if (habitId == '' && userHabitId != '') {
         getHabitAllInfo(userHabitId);
@@ -139,8 +140,7 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
   Future<void> getHabitAllInfo(String userHabitId) async {
     try {
       pageTitle = 'Edit Habit';
-      DocumentSnapshot habitDoc =
-          await dbService.getHabitDetails(userHabitId);
+      DocumentSnapshot habitDoc = await dbService.getHabitDetails(userHabitId);
       if (habitDoc.exists) {
         Map<String, dynamic> data = habitDoc.data() as Map<String, dynamic>;
         setState(() {
@@ -182,7 +182,6 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
     //     ''; //habit name will be blank w/out arg
     // _habitNameController = TextEditingController(
     //     text: habitId); //autofill with suggested habit clicked
-
 
     return Scaffold(
       appBar: _buildAppBar(context),
@@ -325,10 +324,9 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
   Widget _saveButton() {
     return ElevatedButton(
       onPressed: () {
-        if (!isEdit){
+        if (!isEdit) {
           _saveHabit(context);
-        }
-        else {
+        } else {
           _editHabit(context, userHabitId);
         }
         // _saveHabit(context);
@@ -398,7 +396,6 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
     );
   }
 
-
   void _editHabit(BuildContext context, String habitId) async {
     final String habitName = _habitNameController.text;
     final List<String> selectedDays =
@@ -431,7 +428,8 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
       }
 
       // if both start/end time are set, make sure end is later than start
-      if ((_startTime != '' && _endTime != '') && (_startTime != '--:--' && _endTime != '--:--')) {
+      if ((_startTime != '' && _endTime != '') &&
+          (_startTime != '--:--' && _endTime != '--:--')) {
         final List<String> startTimeParts = _startTime.split(':');
         final List<String> endTimeParts = _endTime.split(':');
         final TimeOfDay startTOD = TimeOfDay(
@@ -450,10 +448,9 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
         }
       }
 
-
       dbService
-          .editHabit(habitId, habitName, selectedDays, startTimeToSave, endTimeToSave,
-              place, _defaultIconPath!)
+          .editHabit(habitId, habitName, selectedDays, startTimeToSave,
+              endTimeToSave, place, _defaultIconPath!)
           .catchError((error) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Failed to save habit: $error")));
@@ -463,7 +460,6 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
       Navigator.of(context).pushNamed(AppRoutes.homePageRoute);
     }
   }
-
 
   void _saveHabit(BuildContext context) async {
     final String habitName = _habitNameController.text;
@@ -497,7 +493,8 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
       }
 
       // if both start/end time are set, make sure end is later than start
-      if ((_startTime != '' && _endTime != '') && (_startTime != '--:--' && _endTime != '--:--')) {
+      if ((_startTime != '' && _endTime != '') &&
+          (_startTime != '--:--' && _endTime != '--:--')) {
         final List<String> startTimeParts = _startTime.split(':');
         final List<String> endTimeParts = _endTime.split(':');
         final TimeOfDay startTOD = TimeOfDay(
@@ -533,18 +530,17 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
           .saveHabit(habitName, selectedDays, startTimeToSave, endTimeToSave,
               place, selectedIconPath!, createDate)
           .then((String newHabitId) {
-             //going to add in the notification creation here
+        //going to add in the notification creation here
         notificationService.repeatingNotification(
             newHabitId.hashCode,
-            newHabit.name,
-            newHabit.place,
+            habitName,
+            place,
             DateTime.now(),
-            newHabit.startTime,
+            TimeOfDay.fromDateTime(DateTime.parse(startTimeToSave)),
             "",
-            List<DayInWeek>.from(newHabit
-                .days)); //casting here shouldn't be an issue since dayinweek is just a string type
-          })
-          .catchError((error) {
+            List<DayInWeek>.from(
+                selectedDays)); //casting here shouldn't be an issue since dayinweek is just a string type
+      }).catchError((error) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Failed to save habit: $error")));
       });
@@ -553,7 +549,7 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
       Navigator.of(context).pushNamed(AppRoutes.homePageRoute);
     }
   }
-  
+
   Future<int> getUserHabitsCount() async {
     try {
       int count = await dbService.getUserHabitsCount();
