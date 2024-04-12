@@ -97,9 +97,10 @@ class NotificationService {
       DateTime eventDate, TimeOfDay eventTime, String payload,
       [DateTimeComponents? dateTimeComponents]) async {
     final scheduledTime = eventDate.add(Duration(
-      hours: eventTime.hour,
-      minutes: eventTime.minute,
+      hours: eventTime.hour - DateTime.now().hour,
+      minutes: eventTime.minute - DateTime.now().minute,
     ));
+    print(scheduledTime);
     await flutterLocalNotificationsPlugin.zonedSchedule(
       id,
       title,
@@ -126,18 +127,27 @@ class NotificationService {
     //convert days to a set a repeating scheduled events on a weekly basis
     //time to schedule activity, being the day plus the time in hours and minutes
     const Map<String, int> daysOfWeek = {
-      "monday": 1,
-      "tuesday": 2,
-      "wednesday": 3,
-      "thursday": 4,
-      "friday": 5,
-      "saturday": 6,
-      "sunday": 7,
+      "Mo": 1,
+      "Tu": 2,
+      "We": 3,
+      "Th": 4,
+      "Fr": 5,
+      "Sa": 6,
+      "Su": 7,
+    };
+    const Map<String, int> todaysOfWeek = {
+      "Monday": 1,
+      "Tuesday": 2,
+      "Wednesday": 3,
+      "Thursday": 4,
+      "Friday": 5,
+      "Saturday": 6,
+      "Sunday": 7,
     };
     for (final day in days) {
       //this is our day of the week, a number starting at 1 for monday and 7 for sunday
       int daynum = daysOfWeek[day.dayName]!;
-      int todayoffset = (daynum % 7) + 1;
+      int todayoffset = daynum - DateTime.now().weekday;
       //offset the modified date to accomodate weekday
       final finalDate = eventDate.add(Duration(days: todayoffset));
       dateTimeComponents = DateTimeComponents.dayOfWeekAndTime;

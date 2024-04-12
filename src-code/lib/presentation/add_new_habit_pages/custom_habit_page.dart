@@ -45,7 +45,7 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
 
   Future<String?> showIconPicker(
       {required BuildContext context, String? defaultIconPath}) async {
-    selectedIconPath = null;
+    selectedIconPath = defaultIconPath;
     await showDialog(
       context: context,
       builder: (_) => AlertDialog(
