@@ -96,7 +96,14 @@ class _NewHabitPageState extends State<NewHabitPage> {
     return ElevatedButton(
       onPressed: () {
         Navigator.of(context)
-            .pushNamed(AppRoutes.customHabitPageRoute, arguments: habitId);
+            .pushNamed(
+              AppRoutes.customHabitPageRoute, 
+              // arguments: habitId
+              arguments: {
+                'habitId': habitId,
+                'userHabitId': '',
+              },
+            );
       },
       child: Text(habitId, style: TextStyle(fontSize: 20, color: Colors.black)),
       style: ElevatedButton.styleFrom(
@@ -112,7 +119,16 @@ class _NewHabitPageState extends State<NewHabitPage> {
   Widget _customHabitButton(context) {
     return ElevatedButton(
       onPressed: () {
-        Navigator.of(context).pushNamed(AppRoutes.customHabitPageRoute);
+        // Navigator.of(context).pushNamed(AppRoutes.customHabitPageRoute);
+        Navigator.of(context)
+            .pushNamed(
+              AppRoutes.customHabitPageRoute, 
+              // arguments: habitId
+              arguments: {
+                'habitId': '',
+                'userHabitId': '',
+              },
+            );
       },
       child: const Text("Add a Custom Habit", style: TextStyle(fontSize: 20, color: Colors.white)),
       style: ElevatedButton.styleFrom(

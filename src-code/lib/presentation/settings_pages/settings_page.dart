@@ -32,18 +32,18 @@ class _SettingsPage extends State<SettingsPage> {
               // Navigate to notifications page
             },
           ),
-          ListTile(
-            title: Text('View all habits'),
-            onTap: () {
-              // Navigate to view all habits page
-            },
-          ),
-          ListTile(
-            title: Text('Delete habit from database or archive'),
-            onTap: () {
-              // Navigate to delete habit page
-            },
-          ),
+          // ListTile(
+          //   title: Text('View all habits'),
+          //   onTap: () {
+          //     Navigator.of(context).pushNamed(AppRoutes.viewAllHabitsPageRoute);
+          //   },
+          // ),
+          // ListTile(
+          //   title: Text('Delete habit from database or archive'),
+          //   onTap: () {
+          //     // Navigate to delete habit page
+          //   },
+          // ),
           ListTile(
             title: Text('FAQs'),
             onTap: () {
