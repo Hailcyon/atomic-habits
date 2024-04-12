@@ -1,5 +1,6 @@
 // import 'dart:js';
 
+import 'package:ahapp3/presentation/add_new_habit_pages/custom_habit_page.dart';
 import 'package:ahapp3/service/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
@@ -110,7 +111,7 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
       if (HomePageContainerPage.isNewUser) {
         _showWelcomeDialog(context);
       }
-      HomePageContainerPage.addedFirstHabit = true;
+      // HomePageContainerPage.addedFirstHabit = true;
       if (HomePageContainerPage.addedFirstHabit) {
         _showHabitHelpDialog(context);
       }
@@ -231,9 +232,9 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
                           Colors.white.withOpacity(0.6)
                         ]
                       : [
-                          Colors.green.withOpacity(0.8),
-                          Colors.green.withOpacity(0.7),
-                          Colors.green.withOpacity(0.6)
+                          Color.fromARGB(255, 131, 194, 60),
+                          Color.fromARGB(255, 131, 194, 60),
+                          Color.fromARGB(255, 131, 194, 60)
                         ],
                   begin: const FractionalOffset(0.0, 0.0),
                   end: const FractionalOffset(0.0, 1.0),
@@ -295,52 +296,59 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
         Expanded(
           // Use Expanded to fill the remaining space
           child: ListView(
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-              children: <Widget>[
-                StreamBuilder<List<Map<String, String>>>(
-                  stream: dbService.getHabitsAscending(curDayOfWeekFullName),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Text("Something went wrong: ${snapshot.error}");
-                    }
-                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return Center(
-                        child: Text(
-                            "No habits found"), // Handle case where no data is available
-                      );
-                    }
-                    List<Widget> habitWidgets = [];
-                    snapshot.data!.asMap().forEach((index, habit) {
-                      final habitId = habit['id']!; // Extract the habit ID
-                      final habitName =
-                          habit['name']!; // Extract the habit name
-                      final iconPath =
-                          habit['iconPath']; // Extract the icon path
-                      // Add the habit button
-                      habitWidgets.add(buildHabitButton(
-                        context: context,
-                        habitId: habitId, // Pass the habit ID
-                        habitName: habitName,
-                        buttonText: habitName, // Pass the habit name
-                        leftIconPath: iconPath!,
-                      ));
-
-                      // Add spacing after the button, but not after the last one
-                      if (index < snapshot.data!.length - 1) {
-                        habitWidgets.add(SizedBox(
-                            height:
-                                15)); // Adjust the height for desired spacing
-                      }
-                    });
-
-                    // Return a SingleChildScrollView containing a Column of habit buttons
-                    return Column(
-                      children: habitWidgets,
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+            children: <Widget>[
+              StreamBuilder<List<Map<String, String>>>(
+                stream: dbService.getHabitsAscending(curDayOfWeekFullName),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Text("Something went wrong: ${snapshot.error}");
+                  }
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Center(
+                      child: Text(
+                          "No habits found"), // Handle case where no data is available
                     );
-                  },
-                ),
-                SizedBox(height: 100.v),
-              ]),
+                  }
+                  List<Widget> habitWidgets = [];
+                  snapshot.data!.asMap().forEach((index, habit) {
+                    final habitId = habit['id']!; // Extract the habit ID
+                    final habitName =
+                        habit['name']; // Extract the habit name
+                    final iconPath =
+                        habit['iconPath']; // Extract the icon path
+                    final startTime =
+                        habit['startTime']; // Extract the icon path
+                    final endTime =
+                        habit['endTime']; // Extract the icon path
+                    final place =
+                        habit['place']; // Extract the icon path
+                    final daysOfWeek = dbService.getHabitDaysOfWeek(habitId);
+                    // Add the habit button
+                    habitWidgets.add(buildHabitButton(
+                      context: context,
+                      habitId: habitId, // Pass the habit ID
+                      habitName: habitName!,
+                      // buttonText: habitName!, // Pass the habit name
+                      leftIconPath: iconPath!,
+                    ));
+
+                    // Add spacing after the button, but not after the last one
+                    if (index < snapshot.data!.length - 1) {
+                      habitWidgets.add(SizedBox(
+                          height: 20)); // Adjust the height for desired spacing
+                    }
+                  });
+
+                  // Return a SingleChildScrollView containing a Column of habit buttons
+                  return Column(
+                    children: habitWidgets,
+                  );
+                },
+              ),
+              SizedBox(height: 100.v),
+            ]
+          ),
         ),
       ]),
       bottomNavigationBar: BottomNavigationBar(
@@ -380,15 +388,14 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     required BuildContext context,
     required String habitId,
     required String habitName,
-    required String buttonText,
     required String leftIconPath,
   }) {
     // set color based on the chosen date habit skipped status
     String currentDateStr = DateFormat('yyyy-MM-dd').format(currentDateTime);
     String habitDateKey = '${habitId}_$currentDateStr';
     Color buttonColor = skippedHabits[habitDateKey] ?? false
-        ? Colors.yellow.withOpacity(0.2)
-        : Colors.yellow;
+        ? Color.fromARGB(255, 248, 213, 17).withOpacity(0.2)
+        : Color.fromARGB(255, 248, 213, 17);
 
     return SlidableAutoCloseBehavior(
       closeWhenOpened: true,
@@ -463,45 +470,50 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
             ),
           ],
         ),
+      
         // build the habit button
         child: Container(
           width: 600,
+          height: 60,
           margin: EdgeInsets.symmetric(horizontal: 16.0),
-          // child: Expanded( //have Expanded in Container will cause Incorrect use of ParentDataWidget error
-          child: ElevatedButton.icon(
-            // icon: const Icon(Icons.directions_run_rounded),
-            icon: SvgPicture.asset(
-              leftIconPath,
-              width: 24, // set icon width
-              height: 24, // set icon height
-              color: Colors.pink, // set icon color
-            ),
-            label: Text(
-              buttonText,
-              style: TextStyle(color: Colors.black), // Text color
-              overflow: TextOverflow.ellipsis,
-              softWrap: false,
-              maxLines: 100,
-            ),
+          child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              // backgroundColor: Colors.yellow, // Button color
               backgroundColor: buttonColor, // Button color
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8), // Rounded corners
               ),
-              alignment:
-                  Alignment.centerLeft, // Align the icon and text to the left
-              padding: EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 16.0), // Padding inside the button
+              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0), // Padding inside the button
+              alignment: Alignment.centerLeft, // Align the content to the left
+              elevation: 5, // Optional: Add shadow
             ),
             onPressed: () {
               Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute,
                   arguments: {habitId, habitName});
             },
+            child: Row(
+              mainAxisSize: MainAxisSize.min, // Use the minimum space
+              children: [
+                SvgPicture.asset(
+                  leftIconPath,
+                  width: 24, // set icon width
+                  height: 24, // set icon height
+                  color: Colors.black, // set icon color
+                ),
+                SizedBox(width: 15), // Add spacing between the icon and the text
+                Expanded(
+                  child: Text(
+                    habitName,
+                    style: TextStyle(color: Colors.black, fontSize: 15), // Text color
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: false,
+                    maxLines: 10,
+                  ),
+                ),
+              ],
+            ),
           ),
-          // ),
         ),
+
       ),
     );
   }

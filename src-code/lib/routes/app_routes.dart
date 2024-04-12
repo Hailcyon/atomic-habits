@@ -4,7 +4,7 @@ import 'package:ahapp3/presentation/add_new_habit_pages/habit_search_page.dart';
 import 'package:ahapp3/presentation//edit_a_habit_page/edit_a_habit_page.dart';
 //import 'package:ahapp3/presentation/statistics_page/statistics_page.dart';
 //import 'package:ahapp3/presentation/statistics_page/habit_statistics_page.dart';
-import 'package:ahapp3/presentation/statistics_pages/statistics_details.dart';
+// import 'package:ahapp3/presentation/statistics_pages/statistics_details.dart';
 import 'package:ahapp3/presentation/statistics_pages/statistics_overview.dart';
 import 'package:flutter/material.dart';
 import 'package:ahapp3/presentation/widget_tree.dart';
@@ -20,7 +20,7 @@ import 'package:ahapp3/presentation/law_one_page/law_one_page.dart';
 import 'package:ahapp3/presentation/law_two_page/law_two_page.dart';
 import 'package:ahapp3/presentation/law_four_page/law_four_page.dart';
 import 'package:ahapp3/presentation/settings_pages/settings_page.dart';
-// import 'package:ahapp3/presentation/law_three_page/reduce_friction_page.dart';
+import 'package:ahapp3/presentation/settings_pages/view_all_habits_page.dart';
 
 class AppRoutes {
   static const String editAHabitPageScreen = '/edit_a_habit_page_screen';
@@ -37,6 +37,8 @@ class AppRoutes {
   // static const String habitStatisticsPageRoute = '/habit_statistics_page.dart';
   static const String statisticsPageRoute = '/statistics_overview.dart';
 
+  static const String viewAllHabitsPageRoute = '/viea_all_habits_page.dart';
+
   static const String lawThreePageRout = '/law_three_page.dart';
   static const String lawOnePageRoute = '/law_one_page.dart';
   static const String lawTwoPageRoute = '/law_two_page.dart';
@@ -50,6 +52,7 @@ class AppRoutes {
         //statisticsPageRoute: (context) => StatisticsPage(),
         // habitStatisticsPageRoute: (context) => HabitStatisticsPage(),
         profilePageRoute: (context) => ProfilePage(),
+        viewAllHabitsPageRoute: (context) => ViewAllHabitsPage(),
         loginScreenRoute: (context) => LoginPage(),
         customHabitPageRoute: (context) => CustomHabitPage(),
         newHabitPageRoute: (context) => NewHabitPage(),

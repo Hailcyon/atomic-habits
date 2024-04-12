@@ -1,4 +1,3 @@
-import 'package:ahapp3/presentation/statistics_pages/statistics_details.dart';
 import 'package:ahapp3/service/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
@@ -24,9 +23,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
       ),
       body: Container(
           padding: const EdgeInsets.all(30),
+          alignment: Alignment.center,
           child: Column(children: [
-            SizedBox(height: 5),
-            const Text('Current Streaks', style: TextStyle(fontSize: 26)),
             SizedBox(height: 7),
             const Text('click a habit to view details',
                 style: TextStyle(
@@ -43,10 +41,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         "No habits found"); // Handle case where no data is available
                   }
                   List<Widget> habitWidgets = [];
-                  int habitsToAdd =
-                      snapshot.data!.length < 4 ? snapshot.data!.length : 4;
 
-                  for (int index = 0; index < habitsToAdd; index++) {
+                  for (int index = 0; index < snapshot.data!.length; index++) {
                     final habit = snapshot.data![index];
                     final habitName = habit['name']!; // Extract the habit name
                     final habitId = habit['id']!;
@@ -74,8 +70,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
                           height: 20)); // Adjust the height for desired spacing
                     }
                   }
-                  return Column(
-                    children: habitWidgets,
+                  return Expanded(
+                    child: ListView(
+                      children: habitWidgets,
+                    ),
                   );
                 }),
           ])),
@@ -108,20 +106,16 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   Widget _habitButton({
-    required BuildContext context,
-    required String habitName,
-    required int habitStreak,
-    required List<String> streakList,
-    required habitId,
-  }) {
-    return ElevatedButton(
+  required BuildContext context,
+  required String habitName,
+  required int habitStreak,
+  required List<String> streakList,
+  required habitId,
+}) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 10), // Adjust spacing between buttons
+    child: ElevatedButton(
       onPressed: () {
-        // Navigator.of(context).push(MaterialPageRoute(
-        //   builder: (context) => StatisticsDetailPage(
-        //       habitName: habitName,
-        //       habitStreak: habitStreak,
-        //       streakList: streakList),
-        // ));
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -132,35 +126,47 @@ class _StatisticsPageState extends State<StatisticsPage> {
           ),
         );
       },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            habitName,
-            style: TextStyle(fontSize: 20, color: Colors.black),
-          ),
-          Row(
-            children: [
-              Icon(
-                Icons
-                    .whatshot, // You can change this to any flame icon you prefer
-                color: Colors.red, // You can change the color of the flame icon
-              ),
-              Text(
-                habitStreak.toString(),
-                style: TextStyle(fontSize: 20, color: Colors.black),
-              ),
-            ],
-          ),
-        ],
+      child: Padding(
+        // Add padding inside the button
+        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+        child: Column(
+          // Use column to allow text to span multiple lines if needed
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              habitName,
+              style: TextStyle(fontSize: 20, color: Colors.black),
+              overflow: TextOverflow.ellipsis, // Use ellipsis for long texts
+              maxLines: 20, // Allow text to span up to two lines
+            ),
+            SizedBox(height: 0), // Spacing between text and streak count
+            Row(
+              children: [
+                Icon(
+                  Icons.whatshot,
+                  color: Colors.red,
+                ),
+                SizedBox(width: 5), // Spacing between the icon and text
+                Text(
+                  habitStreak.toString(),
+                  style: TextStyle(fontSize: 20, color: Colors.black),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
       style: ElevatedButton.styleFrom(
         backgroundColor: Color.fromARGB(255, 248, 213, 17),
-        fixedSize: Size(300, 50),
+        // Remove the fixedSize to allow button to grow
+        padding: EdgeInsets.zero, // Padding is handled inside the button now
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10), // Larger corner radius
         ),
+        elevation: 5, // Optional: Add shadow
       ),
-    );
-  }
+    ),
+  );
+}
+
 }

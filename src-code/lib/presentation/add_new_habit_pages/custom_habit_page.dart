@@ -3,6 +3,7 @@ import 'dart:ffi' hide Size;
 
 import 'package:ahapp3/model/habit.dart';
 import 'package:ahapp3/service/database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:ahapp3/core/app_export.dart';
@@ -92,13 +93,22 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
     DayInWeek("Su", dayKey: "sunday"),
   ];
 
-  String _startTime = '--:--';
-  String _endTime = '--:--';
+  String _habitName = '';
+  String _iconPath = '';
+  String _startTime = '';
+  // String _endTime = '--:--';
+  String _endTime = '';
+  String _place = '';
+  List<String> _daysOfWeek =[];
+  String pageTitle = 'Add a New Habit';
+  bool isEdit = false;
 
   final DatabaseService dbService = DatabaseService(
       uid: FirebaseAuth.instance.currentUser?.uid ??
           ''); // Initialize dbService with the user's UID;
-  String habitId = "";
+  String habitId = '';
+  String userHabitId = '';
+
 
   TextEditingController _habitNameController = TextEditingController();
   final TextEditingController _placeController = TextEditingController();
@@ -106,17 +116,72 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
   @override
   void initState() {
     super.initState();
-    habitId = '';
-    _habitNameController = TextEditingController(text: habitId);
+    // habitId = '';
+    // _habitNameController = TextEditingController(text: habitId);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final Map<String, String> args = ModalRoute.of(context)?.settings.arguments as Map<String, String>;
+      habitId = args['habitId'] ?? '';
+      userHabitId = args['userHabitId'] ?? ''; 
+
+      // Add Suggested Habit Mode
+      if (habitId != '' && userHabitId == '') {
+        _habitNameController.text = habitId; 
+      } 
+      // Edit Habit Mode
+      else if (habitId == '' && userHabitId != '') {
+        getHabitAllInfo(userHabitId);
+        isEdit = true;
+      }
+    });
+  }
+
+  Future<void> getHabitAllInfo(String userHabitId) async {
+    try {
+      pageTitle = 'Edit Habit';
+      DocumentSnapshot habitDoc =
+          await dbService.getHabitDetails(userHabitId);
+      if (habitDoc.exists) {
+        Map<String, dynamic> data = habitDoc.data() as Map<String, dynamic>;
+        setState(() {
+          _habitName = habitDoc['name'];
+          // _iconPath = habitDoc['icon path'];
+          _defaultIconPath = habitDoc['icon path'];
+          _startTime = habitDoc['start time'];
+          _endTime = habitDoc['end time'];
+          _place = habitDoc['place'];
+          _daysOfWeek = List<String>.from(data['days'] ?? []);
+        });
+        if (_habitName != '') {
+          _habitNameController.text = _habitName;
+        }
+        if (!_daysOfWeek.isEmpty) {
+          _days.forEach((day) {
+            day.isSelected = _daysOfWeek.contains(day.dayKey);
+          });
+        }
+        if (_place != '') {
+          _placeController.text = _place;
+        }
+        if (_startTime != '') {
+          _startTime = habitDoc['start time'];
+        }
+        if (_endTime != '') {
+          _endTime = habitDoc['end time'];
+        }
+      }
+    } catch (e) {
+      print("Error fetching habit details: $e");
+      // Optionally, handle the error e.g., show a message
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // final argDayOfWeek = ModalRoute.of(context)!.settings.arguments as String;
-    habitId = ModalRoute.of(context)?.settings.arguments as String? ??
-        ''; //habit name will be blank w/out arg
-    _habitNameController = TextEditingController(
-        text: habitId); //autofill with suggested habit clicked
+    // habitId = ModalRoute.of(context)?.settings.arguments as String? ??
+    //     ''; //habit name will be blank w/out arg
+    // _habitNameController = TextEditingController(
+    //     text: habitId); //autofill with suggested habit clicked
+
 
     return Scaffold(
       appBar: _buildAppBar(context),
@@ -166,8 +231,8 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
-      title: Text('Add a New Habit'),
-      //leading: Icon(Icons.arrow_back_ios),
+      // title: Text('Add a New Habit'),
+      title: Text(pageTitle),
     );
   }
 
@@ -203,7 +268,7 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Text('Starts: ', style: TextStyle(fontSize: 16)),
             ElevatedButton(
-              child: Text(_startTime == '--:--' ? '--:--' : _startTime),
+              child: Text(_startTime == '' ? '--:--' : _startTime),
               onPressed: () async {
                 final TimeOfDay? picked = await showTimePicker(
                   context: context,
@@ -223,7 +288,7 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Text('Ends: ', style: TextStyle(fontSize: 16)),
             ElevatedButton(
-              child: Text(_endTime == '--:--' ? '--:--' : _endTime),
+              child: Text(_endTime == '' ? '--:--' : _endTime),
               onPressed: () async {
                 final TimeOfDay? picked = await showTimePicker(
                   context: context,
@@ -259,7 +324,13 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
   Widget _saveButton() {
     return ElevatedButton(
       onPressed: () {
-        _saveHabit(context);
+        if (!isEdit){
+          _saveHabit(context);
+        }
+        else {
+          _editHabit(context, userHabitId);
+        }
+        // _saveHabit(context);
       },
       child: Text(
         'Save',
@@ -299,13 +370,6 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
       children: <Widget>[
         // button with icon on it
         ElevatedButton(
-          // style: ElevatedButton.styleFrom(
-          //   primary: Colors.white,
-          //   shape: RoundedRectangleBorder(
-          //     borderRadius: BorderRadius.circular(8),
-          //   ),
-          //   padding: EdgeInsets.zero,
-          // ),
           onPressed: () => _iconPicker(context), // show icon picker
           child: Container(
             padding: EdgeInsets.all(8), // padding around icon
@@ -315,6 +379,9 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
               height: 24, // set icon height
               color: Colors.black, // icon color
             ),
+            // child: _iconPath.isNotEmpty
+            //   ? SvgPicture.asset(_iconPath, width: 24, height: 24, color: Colors.black)
+            //   : SvgPicture.asset(_defaultIconPath, width: 24, height: 24, color: Colors.black),
           ),
         ),
         SizedBox(width: 10),
@@ -330,12 +397,79 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
     );
   }
 
+
+  void _editHabit(BuildContext context, String habitId) async {
+    final String habitName = _habitNameController.text;
+    final List<String> selectedDays =
+        _days.where((day) => day.isSelected).map((day) => day.dayKey).toList();
+    final String place = _placeController.text;
+
+    // Convert the time displayed as "--:--" to an empty string
+    final String startTimeToSave = _startTime != '--:--' ? _startTime : '';
+    final String endTimeToSave = _endTime != '--:--' ? _endTime : '';
+
+    if (habitName.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Habit name is empty.")),
+      );
+    } else if (selectedDays.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Days is empty.")),
+      );
+    } else {
+      final FirebaseAuth auth = FirebaseAuth.instance;
+      final String uid = auth.currentUser?.uid ?? '';
+
+      await dbService.streakSkipInEditMode(habitId, selectedDays);
+
+      // can't save if end time is set without a start time
+      if (_startTime == '--:--' && _endTime != '--:--') {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Cannot set end time without start time.")));
+        return;
+      }
+
+      // if both start/end time are set, make sure end is later than start
+      if ((_startTime != '' && _endTime != '') && (_startTime != '--:--' && _endTime != '--:--')) {
+        final List<String> startTimeParts = _startTime.split(':');
+        final List<String> endTimeParts = _endTime.split(':');
+        final TimeOfDay startTOD = TimeOfDay(
+            hour: int.parse(startTimeParts[0]),
+            minute: int.parse(startTimeParts[1]));
+        final TimeOfDay endTOD = TimeOfDay(
+            hour: int.parse(endTimeParts[0]),
+            minute: int.parse(endTimeParts[1]));
+
+        if (endTOD.hour < startTOD.hour ||
+            (endTOD.hour == startTOD.hour &&
+                endTOD.minute <= startTOD.minute)) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("End time must be later than start time.")));
+          return;
+        }
+      }
+
+
+      dbService
+          .editHabit(habitId, habitName, selectedDays, startTimeToSave, endTimeToSave,
+              place, _defaultIconPath!)
+          .catchError((error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Failed to save habit: $error")));
+      });
+
+      Navigator.of(context).pop(); // Optionally pop back after saving
+      Navigator.of(context).pushNamed(AppRoutes.homePageRoute);
+    }
+  }
+
+
   void _saveHabit(BuildContext context) async {
     final String habitName = _habitNameController.text;
     final List<String> selectedDays =
         _days.where((day) => day.isSelected).map((day) => day.dayKey).toList();
     final String place = _placeController.text;
-    // 获取和格式化当前日期
+
     String createDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
     // Convert the time displayed as "--:--" to an empty string
@@ -362,7 +496,7 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
       }
 
       // if both start/end time are set, make sure end is later than start
-      if (_startTime != '--:--' && _endTime != '--:--') {
+      if ((_startTime != '' && _endTime != '') && (_startTime != '--:--' && _endTime != '--:--')) {
         final List<String> startTimeParts = _startTime.split(':');
         final List<String> endTimeParts = _endTime.split(':');
         final TimeOfDay startTOD = TimeOfDay(

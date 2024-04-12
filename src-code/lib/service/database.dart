@@ -191,6 +191,33 @@ class DatabaseService {
     }
   }
 
+  Future<void> editHabit(
+      String habitId,
+      String habitName,
+      List<String> days,
+      String startTime,
+      String endTime,
+      String place,
+      String iconPath) async {
+    try {
+      await firestoreInstance
+        .collection('Users')
+        .doc(uid)
+        .collection('Habits')
+        .doc(habitId)
+        .update({
+          "name": habitName,
+          "days": days,
+          "start time": startTime,
+          "end time": endTime,
+          "place": place,
+          "icon path": iconPath,
+        });
+    } catch (e) {
+      throw Exception('Failed to edit habit: $e');
+    }
+  }
+
   Future<String> saveHabit(
       String habitName,
       List<String> days,
@@ -328,6 +355,41 @@ class DatabaseService {
         .doc(habitId)
         .delete();
   }
+
+
+  Future<void> streakSkipInEditMode(String habitId, List<String> selectedDaysOfWeek) async {
+    DocumentSnapshot habitDoc = await firestoreInstance.collection('Users').doc(uid).collection('Habits').doc(habitId).get();
+
+    if (habitDoc.exists) {
+      Map<String, dynamic> habitData = habitDoc.data() as Map<String, dynamic>; // 进行类型转换
+      List<dynamic> streakList = habitData['streak'] ?? [];
+      List<dynamic> skippedList = habitData['skipped'] ?? [];
+      List<String> daysOfWeek = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+
+      // Convert selectedDaysOfWeek to corresponding weekday numbers
+    List<int> selectedWeekdays = selectedDaysOfWeek.map((day) => daysOfWeek.indexOf(day)+1).toList();
+
+      // Filter streak list based on the new selectedDaysOfWeek
+    List<dynamic> updatedStreakList = streakList.where((date) {
+      DateTime dt = DateTime.parse(date);
+      return selectedWeekdays.contains(dt.weekday); // Check if the date's weekday is in selectedWeekdays
+    }).toList();
+
+      List<dynamic> updatedSkippedList = skippedList.where((date) {
+        DateTime dt = DateTime.parse(date);
+        return !selectedWeekdays.contains(dt.weekday);
+      }).toList();
+
+      // Update the habit document
+      await firestoreInstance.collection('Users').doc(uid).collection('Habits').doc(habitId).update({
+        'streak': updatedStreakList,
+        'skipped': updatedSkippedList,
+      });
+    }
+  }
+
+
+
 
   /**
    * Add chosen date to selected habit's streak list,
