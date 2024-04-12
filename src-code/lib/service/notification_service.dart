@@ -136,7 +136,7 @@ class NotificationService {
     };
     for (final day in days) {
       //this is our day of the week, a number starting at 1 for monday and 7 for sunday
-      int daynum = daysOfWeek[day]!;
+      int daynum = daysOfWeek[day.dayName]!;
       int todayoffset = (daynum % 7) + 1;
       //offset the modified date to accomodate weekday
       final finalDate = eventDate.add(Duration(days: todayoffset));
