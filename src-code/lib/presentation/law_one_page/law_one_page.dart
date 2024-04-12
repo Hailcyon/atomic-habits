@@ -40,15 +40,6 @@ class _LawOnePage extends State<LawOnePage> {
         child: ListView(
           physics: BouncingScrollPhysics(),
           children: [
-            _buildHabitLaw(context, "Implementation Intention",
-                "Edit your habit for effective habit planning.", () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ImpInt(
-                  onSave: updateFrictionText,
-                  habitId: widget.habitId,
-                ),
-              ));
-            }),
             _buildHabitLaw(context, "Habit Stacking",
                 "Combine new habits with existing routines for simplicity.",
                 () {
