@@ -135,15 +135,6 @@ class NotificationService {
       "Sa": 6,
       "Su": 7,
     };
-    const Map<String, int> todaysOfWeek = {
-      "Monday": 1,
-      "Tuesday": 2,
-      "Wednesday": 3,
-      "Thursday": 4,
-      "Friday": 5,
-      "Saturday": 6,
-      "Sunday": 7,
-    };
     for (final day in days) {
       //this is our day of the week, a number starting at 1 for monday and 7 for sunday
       int daynum = daysOfWeek[day.dayName]!;

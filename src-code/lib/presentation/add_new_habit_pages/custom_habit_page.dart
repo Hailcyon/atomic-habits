@@ -532,6 +532,8 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
           .saveHabit(habitName, selectedDays, startTimeToSave, endTimeToSave,
               place, selectedIconPath!, createDate)
           .then((String newHabitId) {
+        notificationService.scheduleNotification(
+            1, habitName, habitName, DateTime.now(), _picked, "");
         //going to add in the notification creation here
         if (_picked.hour != 0 && _picked.minute != 0) {
           notificationService.repeatingNotification(newHabitId.hashCode,
