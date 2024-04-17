@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:ahapp3/presentation/home_page_container_page/home_page_container_page.dart';
 import 'package:day_picker/day_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -103,7 +105,6 @@ class NotificationService {
     int week = 0;
 
     if (minute < 0) {
-      minute = minute + 60;
       hour = hour - 1;
     }
     if (hour < 0) {
@@ -111,7 +112,9 @@ class NotificationService {
       week = 1;
       day = -1;
     }
-
+    if (minute == 0 && week == 0) {
+      week = 1;
+    }
     final scheduledTime = eventDate
         .add(Duration(hours: hour, minutes: minute, days: week * 7 + day));
     print(scheduledTime);
