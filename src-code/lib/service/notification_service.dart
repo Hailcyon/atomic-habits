@@ -96,10 +96,24 @@ class NotificationService {
   Future<void> scheduleNotification(int id, String title, String body,
       DateTime eventDate, TimeOfDay eventTime, String payload,
       [DateTimeComponents? dateTimeComponents]) async {
-    final scheduledTime = eventDate.add(Duration(
-      hours: eventTime.hour - DateTime.now().hour,
-      minutes: eventTime.minute - DateTime.now().minute,
-    ));
+    //if time is before now then add a week
+    int hour = eventTime.hour - DateTime.now().hour;
+    int minute = eventDate.minute - DateTime.now().minute;
+    int day = 0;
+    int week = 0;
+
+    if (minute < 0) {
+      minute = minute + 60;
+      hour = hour - 1;
+    }
+    if (hour < 0) {
+      hour = hour + 24;
+      week = 1;
+      day = -1;
+    }
+
+    final scheduledTime = eventDate
+        .add(Duration(hours: hour, minutes: minute, days: week * 7 + day));
     print(scheduledTime);
     await flutterLocalNotificationsPlugin.zonedSchedule(
       id,
