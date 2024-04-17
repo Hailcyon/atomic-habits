@@ -1,13 +1,9 @@
-import 'package:ahapp3/core/utils/size_utils.dart';
 import 'package:ahapp3/routes/app_routes.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:ahapp3/service/database.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class EnvPrimingPage extends StatefulWidget {
-  // const ReduceFrictionPage({Key? key}) : super(key: key);
   final Function(String) onSave;
 
   final String habitId;
@@ -38,10 +34,12 @@ class _EnvPrimingPage extends State<EnvPrimingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(
-          'Environment Priming',
+        title:
+            Text('Environment Priming', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color.fromARGB(255, 1, 82, 148),
+        iconTheme: IconThemeData(
+          color: Colors.white,
         ),
       ),
       body: Container(
@@ -89,7 +87,6 @@ class _EnvPrimingPage extends State<EnvPrimingPage> {
           MaterialButton(
             onPressed: () {
               saveHabitLaw(context, userInputController.text);
-              //widget.onSave("I will make going for a run easier by ${userInputController.text}");
             },
             color: Color.fromARGB(255, 1, 82, 148),
             shape: RoundedRectangleBorder(
@@ -100,7 +97,6 @@ class _EnvPrimingPage extends State<EnvPrimingPage> {
               'Save',
               style: TextStyle(
                 color: Color.fromARGB(255, 246, 240, 230),
-                // fontSize: 20,
               ),
             ),
           )
@@ -133,10 +129,10 @@ class _EnvPrimingPage extends State<EnvPrimingPage> {
                         bottom:
                             0), // Space between the label and the first suggestion
                     child: Text(
-                      "Suggestions:", // The label text
+                      "Suggestions:",
                       style: TextStyle(
-                        color: Colors.black, // Color of the label
-                        fontSize: 20, // Size of the label text
+                        color: Colors.black,
+                        fontSize: 20,
                       ),
                     ),
                   ),
@@ -188,9 +184,6 @@ class _EnvPrimingPage extends State<EnvPrimingPage> {
         SnackBar(content: Text("Input is empty.")),
       );
     } else {
-      final FirebaseAuth auth = FirebaseAuth.instance;
-      final String uid = auth.currentUser?.uid ?? '';
-
       //habitStr Should be input controller.text
       String fin_habitStr = "Environment Priming:\n" + habitStr;
 
@@ -200,7 +193,6 @@ class _EnvPrimingPage extends State<EnvPrimingPage> {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Habit law action has been added!")));
 
-      // Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute, arguments: widget.habitId);
       Navigator.popUntil(
           context, ModalRoute.withName(AppRoutes.editHabitPageRoute));
     }

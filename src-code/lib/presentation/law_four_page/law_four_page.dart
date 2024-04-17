@@ -1,8 +1,4 @@
-import 'package:ahapp3/core/utils/size_utils.dart';
-import 'package:ahapp3/presentation/law_four_page/habit_tracker.dart';
 import 'package:ahapp3/presentation/law_four_page/reinforcement.dart';
-import 'package:ahapp3/routes/app_routes.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
 class LawFourPage extends StatefulWidget {
@@ -26,15 +22,16 @@ class _LawFourPage extends State<LawFourPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final String _habitId =
-    //     ModalRoute.of(context)?.settings.arguments as String? ??
-    //         'Default Habit Name';
-
     return Scaffold(
-      // backgroundColor: Colors.white,
-      appBar: AppBar(title: Text('Make It Satisfying')),
+      appBar: AppBar(
+        title:
+            Text('Make It Satisfying', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color.fromARGB(255, 1, 82, 148),
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+      ),
       body: Container(
-        //color: Color.fromARGB(255, 246, 240, 230),
         child: ListView(
           physics: BouncingScrollPhysics(),
           children: [
@@ -49,10 +46,6 @@ class _LawFourPage extends State<LawFourPage> {
                 ),
               ));
             }),
-            // _buildHabitLaw(context,
-            //               "Use a Habit Tracker",
-            //               "A tool for visually recording your habits to provide instant satisfaction and motivation.",
-            //               (){}),
           ],
         ),
       ),
@@ -77,17 +70,14 @@ class _LawFourPage extends State<LawFourPage> {
         Align(
           alignment: Alignment.topLeft,
           child: Padding(
-            padding: EdgeInsets.only(
-                right: 0.0,
-                left: 0.0), // Right padding to match childrenPadding
+            padding: EdgeInsets.only(right: 0.0, left: 0.0),
             child: frictionResult.isNotEmpty
                 ? Text(
                     frictionResult) // Display the frictionResult text if it's not empty
                 : Text(buttonDescription),
-            //Text('Reduce friction explained xxxxxxxx xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj.'),
           ),
         ),
-        SizedBox(height: 16.0), // Add some space
+        SizedBox(height: 16.0),
         Align(
           alignment: Alignment.topLeft,
           child: Padding(
@@ -104,17 +94,14 @@ class _LawFourPage extends State<LawFourPage> {
                 backgroundColor: const Color.fromARGB(255, 1, 82, 148),
                 fixedSize: Size(500, 20),
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(5), // Larger corner radius
+                  borderRadius: BorderRadius.circular(5),
                 ),
               ),
             ),
           ),
         ),
       ],
-      // childrenPadding: EdgeInsets.all(100),
       tilePadding: EdgeInsets.symmetric(horizontal: 16),
-      // expandedAlignment: Alignment.topLeft,
       childrenPadding: EdgeInsets.only(left: 16.0),
     );
   }

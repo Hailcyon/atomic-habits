@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'account_information_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:ahapp3/routes/app_routes.dart';
-
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -16,7 +14,11 @@ class _SettingsPage extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: Text('Settings', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color.fromARGB(255, 1, 82, 148),
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
       ),
       body: ListView(
         children: <Widget>[
@@ -32,18 +34,6 @@ class _SettingsPage extends State<SettingsPage> {
               // Navigate to notifications page
             },
           ),
-          // ListTile(
-          //   title: Text('View all habits'),
-          //   onTap: () {
-          //     Navigator.of(context).pushNamed(AppRoutes.viewAllHabitsPageRoute);
-          //   },
-          // ),
-          // ListTile(
-          //   title: Text('Delete habit from database or archive'),
-          //   onTap: () {
-          //     // Navigate to delete habit page
-          //   },
-          // ),
           ListTile(
             title: Text('FAQs'),
             onTap: () {
@@ -56,16 +46,11 @@ class _SettingsPage extends State<SettingsPage> {
               launchURL();
             },
           ),
-          // ListTile(
-          //   title: Text('Privacy Policy'),
-          //   onTap: () {
-          //     // Navigate to privacy policy page
-          //   },
-          // ),
         ],
       ),
     );
   }
+
   launchURL() async {
     const url = 'https://ah-app.surge.sh';
     if (await canLaunch(url)) {
@@ -75,7 +60,3 @@ class _SettingsPage extends State<SettingsPage> {
     }
   }
 }
-
-
-
-// Add additional pages for Account Information, Notifications, Habit Reminders, View all habits, Delete habit, FAQs, Help & Support, Privacy Policy

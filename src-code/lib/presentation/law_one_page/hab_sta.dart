@@ -1,12 +1,9 @@
-import 'package:ahapp3/core/utils/size_utils.dart';
 import 'package:ahapp3/routes/app_routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:ahapp3/service/database.dart';
 
 class HabSta extends StatefulWidget {
-  // const ReduceFrictionPage({Key? key}) : super(key: key);
   final Function(String) onSave;
 
   final String habitId;
@@ -35,10 +32,11 @@ class _HabSta extends State<HabSta> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(
-          'Habit Stacking',
+        title: Text('Habit Stacking', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color.fromARGB(255, 1, 82, 148),
+        iconTheme: IconThemeData(
+          color: Colors.white,
         ),
       ),
       body: Container(
@@ -47,7 +45,6 @@ class _HabSta extends State<HabSta> {
           children: [
             _reduceFrictionDetail(context),
             SizedBox(height: 50.0),
-            //_reduceFrictionSugguestion(context),
           ],
         ),
       ),
@@ -90,7 +87,6 @@ class _HabSta extends State<HabSta> {
             onPressed: () {
               if (additionalInputs.length < 5) {
                 if (additionalInputs.length != 0) {}
-                // newInputController.clear();
                 setState(() {
                   additionalInputs.add(
                     Column(
@@ -154,7 +150,6 @@ class _HabSta extends State<HabSta> {
               'Save',
               style: TextStyle(
                 color: Color.fromARGB(255, 246, 240, 230),
-                // fontSize: 20,
               ),
             ),
           )
@@ -175,9 +170,6 @@ class _HabSta extends State<HabSta> {
         SnackBar(content: Text("Input is empty.")),
       );
     } else {
-      final FirebaseAuth auth = FirebaseAuth.instance;
-      final String uid = auth.currentUser?.uid ?? '';
-
       //habitStr Should be input controller.text
       String fin_habitStr = "Habit Stack:\n" + habitStr;
 
@@ -189,8 +181,6 @@ class _HabSta extends State<HabSta> {
 
       Navigator.popUntil(
           context, ModalRoute.withName(AppRoutes.editHabitPageRoute));
-      // Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute, arguments: widget.habitId);
-      // Navigator.popUntil(context, ModalRoute.withName(AppRoutes.homePageRoute));
     }
   }
 }

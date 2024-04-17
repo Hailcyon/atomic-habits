@@ -27,6 +27,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   final List<Widget>? actions;
 
+  // final Color? backgroundColor;
+
   @override
   Widget build(BuildContext context) {
     return AppBar(

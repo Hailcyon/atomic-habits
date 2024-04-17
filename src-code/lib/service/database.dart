@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'dart:math' as Math;
 
 class DatabaseService {
   final String uid;
@@ -66,7 +64,6 @@ class DatabaseService {
     if (habitDoc.exists) {
       Map<String, dynamic> habitData = habitDoc.data() as Map<String, dynamic>;
       String startDateStr = habitData['create date'];
-      // Assuming 'createDate' is in 'yyyy-MM-dd' format
       DateTime startDate = DateFormat('yyyy-MM-dd').parse(startDateStr);
       return startDate;
     } else {
@@ -291,8 +288,8 @@ class DatabaseService {
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((doc) => {
-                  'id': doc.id, // Get the document ID
-                  'name': doc.data()['name'] as String, // Get the habit name
+                  'id': doc.id,
+                  'name': doc.data()['name'] as String,
                   'iconPath': doc.data()['icon path'] as String,
                 })
             .toList());
@@ -304,7 +301,7 @@ class DatabaseService {
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((doc) => {
-                  'id': doc.id, // Get the document ID, which is the habit name
+                  'id': doc.id,
                 })
             .toList());
   }
@@ -317,9 +314,9 @@ class DatabaseService {
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((doc) => {
-                  'name': doc.data()['name'] as String, // Get the habit name
+                  'name': doc.data()['name'] as String,
                   'streak':
-                      doc.data()['streak'] as List<dynamic>, //Get habit streak
+                      doc.data()['streak'] as List<dynamic>,
                   'days': doc.data()['days'] as List<dynamic>,
                   'id': doc.id,
                 })
@@ -346,7 +343,7 @@ class DatabaseService {
     });
   }
 
-  // have auto generated id
+
   Future<void> deleteHabit(String habitId) async {
     await firestoreInstance
         .collection('Users')
@@ -606,17 +603,14 @@ class DatabaseService {
         .contains(DateFormat('EEEE').format(nextDate).toLowerCase());
   }
 
-  String _formattedDate(DateTime dateTime) {
-    return dateTime.toString().split(' ')[0]; // Extract YYYY-MM-DD format
-  }
 
   Future<void> updateHabitName(String habitId, String newHabitName) async {
     return firestoreInstance
         .collection('Users')
         .doc(uid)
         .collection('Habits')
-        .doc(habitId) // Use the habit ID instead of the old name
-        .update({'name': newHabitName}); // Update the 'name' field
+        .doc(habitId)
+        .update({'name': newHabitName});
   }
 
   Future<void> updateStartTime(String habitId, String newStartTime) async {
@@ -624,8 +618,8 @@ class DatabaseService {
         .collection('Users')
         .doc(uid)
         .collection('Habits')
-        .doc(habitId) // Use the habit ID instead of the old name
-        .update({'start time': newStartTime}); // Update the 'name' field
+        .doc(habitId)
+        .update({'start time': newStartTime});
   }
 
   Future<void> updateEndTime(String habitId, String newEndTime) async {
@@ -633,8 +627,8 @@ class DatabaseService {
         .collection('Users')
         .doc(uid)
         .collection('Habits')
-        .doc(habitId) // Use the habit ID instead of the old name
-        .update({'end time': newEndTime}); // Update the 'name' field
+        .doc(habitId)
+        .update({'end time': newEndTime});
   }
 
   Future<DocumentSnapshot> getHabitDetails(String habitId) {

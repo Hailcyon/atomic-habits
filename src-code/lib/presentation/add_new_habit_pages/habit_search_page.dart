@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:ahapp3/core/app_export.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,7 +21,11 @@ class _HabitSearchPageState extends State<HabitSearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add a New Habit'),
+        title: Text('Add a New Habit', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color.fromARGB(255, 1, 82, 148),
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
       ),
       body: Center(
         child: Container(
@@ -36,7 +39,7 @@ class _HabitSearchPageState extends State<HabitSearchPage> {
                 _createHabitListDisplay(),
                 SizedBox(height: 25),
                 const Text('Not what you\'re looking for?',
-                    style: TextStyle(fontSize: 18)),
+                    style: TextStyle(fontSize: 18, color: Colors.black)),
                 SizedBox(height: 30.v),
                 _customHabitButton(context),
                 SizedBox(height: 30.v),
@@ -100,10 +103,10 @@ class _HabitSearchPageState extends State<HabitSearchPage> {
       },
       child: Text(habitId, style: TextStyle(fontSize: 20, color: Colors.black)),
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.yellow,
+        backgroundColor: Color.fromARGB(255, 248, 213, 17),
         fixedSize: Size(300, 50),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10), // Larger corner radius
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
     );
@@ -114,12 +117,13 @@ class _HabitSearchPageState extends State<HabitSearchPage> {
       onPressed: () {
         Navigator.of(context).pushNamed(AppRoutes.customHabitPageRoute);
       },
-      child: const Text("Add a Custom Habit", style: TextStyle(fontSize: 20)),
+      child: const Text("Add a Custom Habit",
+          style: TextStyle(fontSize: 20, color: Colors.white)),
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color.fromARGB(255, 1, 82, 148),
         fixedSize: Size(300, 50),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10), // Larger corner radius
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
     );

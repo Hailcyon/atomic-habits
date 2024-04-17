@@ -1,12 +1,9 @@
-import 'package:ahapp3/core/utils/size_utils.dart';
 import 'package:ahapp3/routes/app_routes.dart';
 import 'package:ahapp3/service/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
 class ReduceFrictionPage extends StatefulWidget {
-  // const ReduceFrictionPage({Key? key}) : super(key: key);
   final Function(String) onSave;
 
   final String habitId;
@@ -25,12 +22,6 @@ class ReduceFrictionPage extends StatefulWidget {
 
 class _ReduceFrictionPageState extends State<ReduceFrictionPage> {
   final userInputController = TextEditingController();
-  // final List<String> suggestions = [
-  //   "Suggestion 1 jyfhf,jf,jhf,jhg,jhghghghfgfhg ftshkjug,khuk hfyggu hfjugkug jygjgjmghjg hghjghgtuy fdersfcvnhgnhc hghghyfyuf,hgfjh  tfjhfjhfuyg",
-  //   "Suggestion 2",
-  //   "Suggestion 3",
-  //   // Add more suggestions as needed
-  // ];
 
   final DatabaseService dbService =
       DatabaseService(uid: FirebaseAuth.instance.currentUser?.uid ?? '');
@@ -38,10 +29,11 @@ class _ReduceFrictionPageState extends State<ReduceFrictionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(
-          'Reduce Friction',
+        title: Text('Reduce Friction', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color.fromARGB(255, 1, 82, 148),
+        iconTheme: IconThemeData(
+          color: Colors.white,
         ),
       ),
       body: Container(
@@ -89,7 +81,6 @@ class _ReduceFrictionPageState extends State<ReduceFrictionPage> {
           MaterialButton(
             onPressed: () {
               saveHabitLaw(context, userInputController.text);
-              //widget.onSave("I will make going for a run easier by ${userInputController.text}");
             },
             color: Color.fromARGB(255, 1, 82, 148),
             shape: RoundedRectangleBorder(
@@ -100,7 +91,6 @@ class _ReduceFrictionPageState extends State<ReduceFrictionPage> {
               'Save',
               style: TextStyle(
                 color: Color.fromARGB(255, 246, 240, 230),
-                // fontSize: 20,
               ),
             ),
           )
@@ -133,10 +123,10 @@ class _ReduceFrictionPageState extends State<ReduceFrictionPage> {
                         bottom:
                             0), // Space between the label and the first suggestion
                     child: Text(
-                      "Suggestions:", // The label text
+                      "Suggestions:",
                       style: TextStyle(
-                        color: Colors.black, // Color of the label
-                        fontSize: 20, // Size of the label text
+                        color: Colors.black,
+                        fontSize: 20,
                       ),
                     ),
                   ),
@@ -188,9 +178,6 @@ class _ReduceFrictionPageState extends State<ReduceFrictionPage> {
         SnackBar(content: Text("Input is empty.")),
       );
     } else {
-      final FirebaseAuth auth = FirebaseAuth.instance;
-      final String uid = auth.currentUser?.uid ?? '';
-
       //habitStr Should be input controller.text
       String fin_habitStr = "Reduce Friction:\n" + habitStr;
 
@@ -202,8 +189,6 @@ class _ReduceFrictionPageState extends State<ReduceFrictionPage> {
 
       Navigator.popUntil(
           context, ModalRoute.withName(AppRoutes.editHabitPageRoute));
-      // Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute, arguments: widget.habitId);
-      // Navigator.popUntil(context, ModalRoute.withName(AppRoutes.homePageRoute));
     }
   }
 }

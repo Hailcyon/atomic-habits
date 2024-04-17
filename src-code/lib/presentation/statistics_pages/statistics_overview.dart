@@ -2,7 +2,7 @@ import 'package:ahapp3/service/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:ahapp3/core/app_export.dart';
-import 'package:ahapp3/presentation/statistics_page/habit_statistics_page.dart';
+import 'package:ahapp3/presentation/statistics_pages/habit_statistics_page.dart';
 
 class StatisticsPage extends StatefulWidget {
   const StatisticsPage({Key? key}) : super(key: key);
@@ -19,7 +19,14 @@ class _StatisticsPageState extends State<StatisticsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Statistics'),
+        title: Text(
+          'Statistics',
+          style: TextStyle(fontSize: 22, color: Colors.white),
+        ),
+        backgroundColor: Color.fromARGB(255, 1, 82, 148),
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
       ),
       body: Container(
           padding: const EdgeInsets.all(30),
@@ -78,6 +85,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 }),
           ])),
       bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Color.fromARGB(255, 1, 82, 148),
+        unselectedItemColor: Colors.grey,
         currentIndex: 2, // Index of the currently selected tab
         onTap: (int index) {
           if (index == 0) {
@@ -106,67 +115,67 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   Widget _habitButton({
-  required BuildContext context,
-  required String habitName,
-  required int habitStreak,
-  required List<String> streakList,
-  required habitId,
-}) {
-  return Padding(
-    padding: const EdgeInsets.only(bottom: 10), // Adjust spacing between buttons
-    child: ElevatedButton(
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HabitStatisticsPage(
-              habitId: habitId,
-              habitName: habitName,
+    required BuildContext context,
+    required String habitName,
+    required int habitStreak,
+    required List<String> streakList,
+    required habitId,
+  }) {
+    return Padding(
+      padding:
+          const EdgeInsets.only(bottom: 10), // Adjust spacing between buttons
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HabitStatisticsPage(
+                habitId: habitId,
+                habitName: habitName,
+              ),
             ),
+          );
+        },
+        child: Padding(
+          // Add padding inside the button
+          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+          child: Column(
+            // Use column to allow text to span multiple lines if needed
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                habitName,
+                style: TextStyle(fontSize: 20, color: Colors.black),
+                overflow: TextOverflow.ellipsis, // Use ellipsis for long texts
+                maxLines: 20, // Allow text to span up to two lines
+              ),
+              SizedBox(height: 0), // Spacing between text and streak count
+              Row(
+                children: [
+                  Icon(
+                    Icons.whatshot,
+                    color: Colors.red,
+                  ),
+                  SizedBox(width: 5), // Spacing between the icon and text
+                  Text(
+                    habitStreak.toString(),
+                    style: TextStyle(fontSize: 20, color: Colors.black),
+                  ),
+                ],
+              ),
+            ],
           ),
-        );
-      },
-      child: Padding(
-        // Add padding inside the button
-        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-        child: Column(
-          // Use column to allow text to span multiple lines if needed
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              habitName,
-              style: TextStyle(fontSize: 20, color: Colors.black),
-              overflow: TextOverflow.ellipsis, // Use ellipsis for long texts
-              maxLines: 20, // Allow text to span up to two lines
-            ),
-            SizedBox(height: 0), // Spacing between text and streak count
-            Row(
-              children: [
-                Icon(
-                  Icons.whatshot,
-                  color: Colors.red,
-                ),
-                SizedBox(width: 5), // Spacing between the icon and text
-                Text(
-                  habitStreak.toString(),
-                  style: TextStyle(fontSize: 20, color: Colors.black),
-                ),
-              ],
-            ),
-          ],
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Color.fromARGB(255, 248, 213, 17),
+          // Remove the fixedSize to allow button to grow
+          padding: EdgeInsets.zero, // Padding is handled inside the button now
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          elevation: 5,
         ),
       ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Color.fromARGB(255, 248, 213, 17),
-        // Remove the fixedSize to allow button to grow
-        padding: EdgeInsets.zero, // Padding is handled inside the button now
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10), // Larger corner radius
-        ),
-        elevation: 5, // Optional: Add shadow
-      ),
-    ),
-  );
-}
-
+    );
+  }
 }

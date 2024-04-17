@@ -1,8 +1,5 @@
-import 'package:ahapp3/core/utils/size_utils.dart';
 import 'package:ahapp3/presentation/law_two_page/moti_ritual.dart';
 import 'package:ahapp3/presentation/law_two_page/tempt_bundle.dart';
-import 'package:ahapp3/routes/app_routes.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
 class LawTwoPage extends StatefulWidget {
@@ -27,14 +24,16 @@ class _LawTwoPage extends State<LawTwoPage> {
 
   @override
   Widget build(BuildContext context) {
-    // final String _habitId =
-    //     ModalRoute.of(context)?.settings.arguments as String? ??
-    //         'Default Habit Name';
     return Scaffold(
-      // backgroundColor: Colors.white,
-      appBar: AppBar(title: Text('Make It Attractive')),
+      appBar: AppBar(
+        title:
+            Text('Make It Attractive', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color.fromARGB(255, 1, 82, 148),
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+      ),
       body: Container(
-        //color: Color.fromARGB(255, 246, 240, 230),
         child: ListView(
           physics: BouncingScrollPhysics(),
           children: [
@@ -91,10 +90,9 @@ class _LawTwoPage extends State<LawTwoPage> {
                 ? Text(
                     frictionResult) // Display the frictionResult text if it's not empty
                 : Text(buttonDescription),
-            //Text('Reduce friction explained xxxxxxxx xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj.'),
           ),
         ),
-        SizedBox(height: 16.0), // Add some space
+        SizedBox(height: 16.0),
         Align(
           alignment: Alignment.topLeft,
           child: Padding(
@@ -111,17 +109,14 @@ class _LawTwoPage extends State<LawTwoPage> {
                 backgroundColor: const Color.fromARGB(255, 1, 82, 148),
                 fixedSize: Size(500, 20),
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(5), // Larger corner radius
+                  borderRadius: BorderRadius.circular(5),
                 ),
               ),
             ),
           ),
         ),
       ],
-      // childrenPadding: EdgeInsets.all(100),
       tilePadding: EdgeInsets.symmetric(horizontal: 16),
-      // expandedAlignment: Alignment.topLeft,
       childrenPadding: EdgeInsets.only(left: 16.0),
     );
   }

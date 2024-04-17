@@ -1,10 +1,7 @@
-import 'package:ahapp3/core/utils/size_utils.dart';
 import 'package:ahapp3/presentation/law_three_page/reduce_friction_page.dart';
 import 'package:ahapp3/presentation/law_three_page/habit_automation_page.dart';
 import 'package:ahapp3/presentation/law_three_page/two_min_rule_page.dart';
 import 'package:ahapp3/presentation/law_three_page/env_priming_page.dart';
-import 'package:ahapp3/routes/app_routes.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
 class LawThreePage extends StatefulWidget {
@@ -28,14 +25,15 @@ class _LawThreePageState extends State<LawThreePage> {
 
   @override
   Widget build(BuildContext context) {
-    // final String _habitId =
-    //     ModalRoute.of(context)?.settings.arguments as String? ??
-    //         'Default Habit Name';
     return Scaffold(
-      // backgroundColor: Colors.white,
-      appBar: AppBar(title: Text('Make It Easy')),
+      appBar: AppBar(
+        title: Text('Make It Easy', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color.fromARGB(255, 1, 82, 148),
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+      ),
       body: Container(
-        //color: Color.fromARGB(255, 246, 240, 230),
         child: ListView(
           physics: BouncingScrollPhysics(),
           children: [
@@ -110,7 +108,6 @@ class _LawThreePageState extends State<LawThreePage> {
                 ? Text(
                     frictionResult) // Display the frictionResult text if it's not empty
                 : Text(buttonDescription),
-            //Text('Reduce friction explained xxxxxxxx xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj xxxxdskjfh skdhfksd hfkhsdkuhdmfchbsdkj.'),
           ),
         ),
         SizedBox(height: 16.0), // Add some space
@@ -131,16 +128,14 @@ class _LawThreePageState extends State<LawThreePage> {
                 fixedSize: Size(500, 20),
                 shape: RoundedRectangleBorder(
                   borderRadius:
-                      BorderRadius.circular(5), // Larger corner radius
+                      BorderRadius.circular(5),
                 ),
               ),
             ),
           ),
         ),
       ],
-      // childrenPadding: EdgeInsets.all(100),
       tilePadding: EdgeInsets.symmetric(horizontal: 16),
-      // expandedAlignment: Alignment.topLeft,
       childrenPadding: EdgeInsets.only(left: 16.0),
     );
   }

@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:ahapp3/core/app_export.dart';
 
-
 class NewHabitPage extends StatefulWidget {
   const NewHabitPage({Key? key}) : super(key: key);
 
@@ -17,13 +16,14 @@ class _NewHabitPageState extends State<NewHabitPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Extract the arguments(currentDateTime) from HomePageContainerPage
-    // settings and cast them as currentDateTime
-    // final argDayOfWeek = ModalRoute.of(context)!.settings.arguments as String;
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add a New Habit'),
+        title: Text('Add a New Habit',
+            style: TextStyle(fontSize: 22, color: Colors.white)),
+        backgroundColor: Color.fromARGB(255, 1, 82, 148),
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
       ),
       body: Center(
         child: Container(
@@ -32,7 +32,7 @@ class _NewHabitPageState extends State<NewHabitPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text('Try one of our suggestions:',
-                  style: TextStyle(fontSize: 20)),
+                  style: TextStyle(fontSize: 20, color: Colors.black)),
               SizedBox(height: 25),
               StreamBuilder<List<Map<String, String>>>(
                   stream: dbService.getSuggestedHabits(),
@@ -74,11 +74,19 @@ class _NewHabitPageState extends State<NewHabitPage> {
                   Navigator.of(context)
                       .pushNamed(AppRoutes.habitSearchPageRoute);
                 },
-                child: const Text('Search for more',
-                    style: TextStyle(fontSize: 16)),
+                child: Container(
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(color: Colors.black, width: 1))),
+                  child: Text(
+                    'Search for more',
+                    style: TextStyle(fontSize: 16, color: Colors.black),
+                  ),
+                ),
               ),
               Spacer(),
-              const Text('Or:', style: TextStyle(fontSize: 18)),
+              const Text('Or:',
+                  style: TextStyle(fontSize: 18, color: Colors.black)),
               SizedBox(height: 30.v),
               _customHabitButton(context),
               SizedBox(height: 30.v),
@@ -95,19 +103,17 @@ class _NewHabitPageState extends State<NewHabitPage> {
   }) {
     return ElevatedButton(
       onPressed: () {
-        Navigator.of(context)
-            .pushNamed(
-              AppRoutes.customHabitPageRoute, 
-              // arguments: habitId
-              arguments: {
-                'habitId': habitId,
-                'userHabitId': '',
-              },
-            );
+        Navigator.of(context).pushNamed(
+          AppRoutes.customHabitPageRoute,
+          arguments: {
+            'habitId': habitId,
+            'userHabitId': '',
+          },
+        );
       },
       child: Text(habitId, style: TextStyle(fontSize: 20, color: Colors.black)),
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.yellow,
+        backgroundColor: Color.fromARGB(255, 248, 213, 17),
         fixedSize: Size(300, 50),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10), // Larger corner radius
@@ -119,18 +125,16 @@ class _NewHabitPageState extends State<NewHabitPage> {
   Widget _customHabitButton(context) {
     return ElevatedButton(
       onPressed: () {
-        // Navigator.of(context).pushNamed(AppRoutes.customHabitPageRoute);
-        Navigator.of(context)
-            .pushNamed(
-              AppRoutes.customHabitPageRoute, 
-              // arguments: habitId
-              arguments: {
-                'habitId': '',
-                'userHabitId': '',
-              },
-            );
+        Navigator.of(context).pushNamed(
+          AppRoutes.customHabitPageRoute,
+          arguments: {
+            'habitId': '',
+            'userHabitId': '',
+          },
+        );
       },
-      child: const Text("Add a Custom Habit", style: TextStyle(fontSize: 20, color: Colors.white)),
+      child: const Text("Add a Custom Habit",
+          style: TextStyle(fontSize: 20, color: Colors.white)),
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color.fromARGB(255, 1, 82, 148),
         fixedSize: Size(300, 50),

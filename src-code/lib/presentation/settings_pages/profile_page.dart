@@ -18,7 +18,11 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: Text('Profile', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color.fromARGB(255, 1, 82, 148),
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
       ),
       body: Center(
         child: Column(
@@ -26,7 +30,7 @@ class ProfilePage extends StatelessWidget {
           children: <Widget>[
             Icon(
               Icons.person,
-              size: 100, // Adjust the size as needed
+              size: 100,
             ),
             SizedBox(height: 20),
             Text(

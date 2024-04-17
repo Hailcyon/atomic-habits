@@ -1,13 +1,9 @@
-import 'package:ahapp3/core/utils/size_utils.dart';
 import 'package:ahapp3/routes/app_routes.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:ahapp3/service/database.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class TemptBundle extends StatefulWidget {
-  // const ReduceFrictionPage({Key? key}) : super(key: key);
   final Function(String) onSave;
 
   final String habitId;
@@ -26,12 +22,6 @@ class TemptBundle extends StatefulWidget {
 
 class _TemptBundle extends State<TemptBundle> {
   final userInputController = TextEditingController();
-  // final List<String> suggestions = [
-  //   "Suggestion 1:...",
-  //   "Suggestion 2",
-  //   "Suggestion 3",
-  //   // Add more suggestions as needed
-  // ];
 
   final DatabaseService dbService = DatabaseService(
       uid: FirebaseAuth.instance.currentUser?.uid ??
@@ -40,10 +30,14 @@ class _TemptBundle extends State<TemptBundle> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
           'Temptation Bundling',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Color.fromARGB(255, 1, 82, 148),
+        iconTheme: IconThemeData(
+          color: Colors.white,
         ),
       ),
       body: Container(
@@ -91,7 +85,6 @@ class _TemptBundle extends State<TemptBundle> {
           MaterialButton(
             onPressed: () {
               saveHabitLaw(context, userInputController.text);
-              //widget.onSave("I will make going for a run easier by ${userInputController.text}");
             },
             color: Color.fromARGB(255, 1, 82, 148),
             shape: RoundedRectangleBorder(
@@ -102,7 +95,6 @@ class _TemptBundle extends State<TemptBundle> {
               'Save',
               style: TextStyle(
                 color: Color.fromARGB(255, 246, 240, 230),
-                // fontSize: 20,
               ),
             ),
           )
@@ -135,10 +127,10 @@ class _TemptBundle extends State<TemptBundle> {
                         bottom:
                             0), // Space between the label and the first suggestion
                     child: Text(
-                      "Suggestions:", // The label text
+                      "Suggestions:",
                       style: TextStyle(
-                        color: Colors.black, // Color of the label
-                        fontSize: 20, // Size of the label text
+                        color: Colors.black,
+                        fontSize: 20,
                       ),
                     ),
                   ),
@@ -190,9 +182,6 @@ class _TemptBundle extends State<TemptBundle> {
         SnackBar(content: Text("Input is empty.")),
       );
     } else {
-      final FirebaseAuth auth = FirebaseAuth.instance;
-      final String uid = auth.currentUser?.uid ?? '';
-
       //habitStr Should be input controller.text
       String fin_habitStr = "Temptation Bundle:\n" + habitStr;
 
@@ -204,9 +193,6 @@ class _TemptBundle extends State<TemptBundle> {
 
       Navigator.popUntil(
           context, ModalRoute.withName(AppRoutes.editHabitPageRoute));
-
-      // Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute, arguments: widget.habitId);
-      // Navigator.popUntil(context, ModalRoute.withName(AppRoutes.homePageRoute));
     }
   }
 }

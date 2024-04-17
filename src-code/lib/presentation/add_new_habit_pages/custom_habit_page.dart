@@ -1,7 +1,3 @@
-import 'dart:ffi' hide Size;
-// import 'dart:ui';
-
-import 'package:ahapp3/model/habit.dart';
 import 'package:ahapp3/service/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,8 +8,6 @@ import 'package:ahapp3/service/notification_service.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:ahapp3/presentation/home_page_container_page/home_page_container_page.dart';
-
-// import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 
 class CustomHabitPage extends StatefulWidget {
   CustomHabitPage({Key? key}) : super(key: key);
@@ -95,10 +89,8 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
   ];
 
   String _habitName = '';
-  String _iconPath = '';
   String _startTime = '';
   TimeOfDay _picked = TimeOfDay(hour: 0, minute: 0);
-  // String _endTime = '--:--';
   String _endTime = '';
   String _place = '';
   List<String> _daysOfWeek = [];
@@ -118,11 +110,12 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
   @override
   void initState() {
     super.initState();
-    // habitId = '';
-    // _habitNameController = TextEditingController(text: habitId);
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Safely cast the arguments to Map<String, String> or use an empty map if null
       final Map<String, String> args =
-          ModalRoute.of(context)?.settings.arguments as Map<String, String>;
+          ModalRoute.of(context)?.settings.arguments as Map<String, String>? ??
+              {};
+
       habitId = args['habitId'] ?? '';
       userHabitId = args['userHabitId'] ?? '';
 
@@ -146,7 +139,6 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
         Map<String, dynamic> data = habitDoc.data() as Map<String, dynamic>;
         setState(() {
           _habitName = habitDoc['name'];
-          // _iconPath = habitDoc['icon path'];
           _defaultIconPath = habitDoc['icon path'];
           _startTime = habitDoc['start time'];
           _endTime = habitDoc['end time'];
@@ -173,29 +165,21 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
       }
     } catch (e) {
       print("Error fetching habit details: $e");
-      // Optionally, handle the error e.g., show a message
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // habitId = ModalRoute.of(context)?.settings.arguments as String? ??
-    //     ''; //habit name will be blank w/out arg
-    // _habitNameController = TextEditingController(
-    //     text: habitId); //autofill with suggested habit clicked
-
     return Scaffold(
       appBar: _buildAppBar(context),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30.0),
           child: Container(
-            // padding: const EdgeInsets.all(10),
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // _entryField('Habit Name', TextEditingController()),
                   _entryField(context, 'Habit Name', _habitNameController),
                   SizedBox(height: 40.v),
                   SelectWeekDays(
@@ -205,7 +189,6 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
                       borderRadius: BorderRadius.circular(30.0),
                       gradient: LinearGradient(
                         begin: Alignment.topLeft,
-                        // 10% of the width, so there are ten blinds.
                         colors: [
                           Color.fromARGB(255, 243, 220, 115),
                           Color.fromARGB(255, 226, 192, 41),
@@ -232,8 +215,11 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
-      // title: Text('Add a New Habit'),
-      title: Text(pageTitle),
+      title: Text(pageTitle, style: TextStyle(color: Colors.white)),
+      backgroundColor: Color.fromARGB(255, 1, 82, 148),
+      iconTheme: IconThemeData(
+        color: Colors.white,
+      ),
     );
   }
 
@@ -243,8 +229,7 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
         Text(
           'Place: ',
           style: TextStyle(
-            fontSize:
-                16, // Optional: Adjust the font size according to your design
+            fontSize: 16,
           ),
         ),
         Expanded(
@@ -269,7 +254,8 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Text('Starts: ', style: TextStyle(fontSize: 16)),
             ElevatedButton(
-              child: Text(_startTime == '' ? '--:--' : _startTime),
+              child: Text(_startTime == '' ? '--:--' : _startTime,
+                  style: TextStyle(color: Colors.black)),
               onPressed: () async {
                 final TimeOfDay? picked = await showTimePicker(
                   context: context,
@@ -290,7 +276,8 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Text('Ends: ', style: TextStyle(fontSize: 16)),
             ElevatedButton(
-              child: Text(_endTime == '' ? '--:--' : _endTime),
+              child: Text(_endTime == '' ? '--:--' : _endTime,
+                  style: TextStyle(color: Colors.black)),
               onPressed: () async {
                 final TimeOfDay? picked = await showTimePicker(
                   context: context,
@@ -319,7 +306,7 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
           _endTime = '--:--';
         });
       },
-      child: Text('Reset Time'),
+      child: Text('Reset Time', style: TextStyle(color: Colors.black)),
     );
   }
 
@@ -331,20 +318,19 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
         } else {
           _editHabit(context, userHabitId);
         }
-        // _saveHabit(context);
       },
       child: Text(
         'Save',
         style: TextStyle(
           fontSize: 20,
-          color: Colors.white, // Set text color here
+          color: Colors.white,
         ),
       ),
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color.fromARGB(255, 1, 82, 148),
         fixedSize: Size(150, 40),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10), // Larger corner radius
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
     );
@@ -380,9 +366,6 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
               height: 24, // set icon height
               color: Colors.black, // icon color
             ),
-            // child: _iconPath.isNotEmpty
-            //   ? SvgPicture.asset(_iconPath, width: 24, height: 24, color: Colors.black)
-            //   : SvgPicture.asset(_defaultIconPath, width: 24, height: 24, color: Colors.black),
           ),
         ),
         SizedBox(width: 10),
@@ -417,9 +400,6 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
         SnackBar(content: Text("Days is empty.")),
       );
     } else {
-      final FirebaseAuth auth = FirebaseAuth.instance;
-      final String uid = auth.currentUser?.uid ?? '';
-
       await dbService.streakSkipInEditMode(habitId, selectedDays);
 
       // can't save if end time is set without a start time
@@ -484,9 +464,6 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
         SnackBar(content: Text("Days is empty.")),
       );
     } else {
-      final FirebaseAuth auth = FirebaseAuth.instance;
-      final String uid = auth.currentUser?.uid ?? '';
-
       // can't save if end time is set without a start time
       if (_startTime == '--:--' && _endTime != '--:--') {
         ScaffoldMessenger.of(context).showSnackBar(

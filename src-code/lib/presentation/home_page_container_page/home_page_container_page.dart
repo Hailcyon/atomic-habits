@@ -1,25 +1,15 @@
-// import 'dart:js';
-
-import 'package:ahapp3/presentation/add_new_habit_pages/custom_habit_page.dart';
 import 'package:ahapp3/service/database.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 import 'bloc/home_page_container_bloc.dart';
-import 'models/home_page_container_model.dart';
-// import 'package:ahapp3/presentation/funAlertDialog.dart';
 
 import 'package:ahapp3/core/app_export.dart';
-import 'package:ahapp3/widgets/app_bar/appbar_leading_image.dart';
-import 'package:ahapp3/widgets/app_bar/appbar_title.dart';
 import 'package:ahapp3/widgets/app_bar/appbar_trailing_image.dart';
 import 'package:ahapp3/widgets/app_bar/custom_app_bar.dart';
-import 'package:ahapp3/widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ahapp3/presentation/auth.dart';
-import 'package:ahapp3/presentation/log_in_screen/log_in_screen.dart';
 
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:ahapp3/utils/date_utils.dart' as date_util;
@@ -69,17 +59,6 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     await Auth().signOut();
   }
 
-  Widget _userUid() {
-    return Text(user?.email ?? "User email");
-  }
-
-  Widget _signOutButton() {
-    return ElevatedButton(
-      onPressed: signOut,
-      child: const Text("Sign Out"),
-    );
-  }
-
   String getDayOfWeekFullName(DateTime dateTime) {
     List<String> daysOfWeekAbbrev = [
       "monday",
@@ -106,12 +85,11 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
 
     super.initState();
     fetchHabitsWithStatus();
-    
+
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       if (HomePageContainerPage.isNewUser) {
         _showWelcomeDialog(context);
       }
-      // HomePageContainerPage.addedFirstHabit = true;
       if (HomePageContainerPage.addedFirstHabit) {
         _showHabitHelpDialog(context);
       }
@@ -143,7 +121,7 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
       height: height * 0.13,
       width: width,
       decoration: BoxDecoration(
-        color: Colors.grey,
+        color: Color.fromARGB(255, 1, 82, 148),
         boxShadow: const [
           BoxShadow(
               blurRadius: 4,
@@ -172,9 +150,6 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
       child: Text(
-        // date_util.DateUtils.months[currentDateTime.month - 1] +
-        //     ' ' +
-        //     currentDateTime.year.toString(),
         date_util.DateUtils.months[currentDateTime.month - 1] +
             ' ' +
             currentDateTime.year.toString(),
@@ -224,7 +199,6 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
             height: 48,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                  // colors: (currentMonthList[index].day != currentDateTime.day)
                   colors: !isSelected
                       ? [
                           Colors.white.withOpacity(0.8),
@@ -277,89 +251,74 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
   // days and "Habits" are not scrollable now
   @override
   Widget build(BuildContext context) {
-    //super.initState();
-    // Check isNewUser status after the first frame is drawn
-
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: _buildAppBar(context),
       body: Column(children: <Widget>[
+        SizedBox(height: 10),
         topView(),
-        SizedBox(height: 10),
-        Text(
-          "Habits",
-          style: theme.textTheme.headlineLarge,
-          textAlign: TextAlign.center, // Align text to the center
-        ),
-        SizedBox(height: 10),
+        SizedBox(height: 20),
         Expanded(
           // Use Expanded to fill the remaining space
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-            children: <Widget>[
-              StreamBuilder<List<Map<String, String>>>(
-                stream: dbService.getHabitsAscending(curDayOfWeekFullName),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return Text("Something went wrong: ${snapshot.error}");
-                  }
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(
-                      child: Text(
-                          "No habits found"), // Handle case where no data is available
-                    );
-                  }
-                  List<Widget> habitWidgets = [];
-                  snapshot.data!.asMap().forEach((index, habit) {
-                    final habitId = habit['id']!; // Extract the habit ID
-                    final habitName =
-                        habit['name']; // Extract the habit name
-                    final iconPath =
-                        habit['iconPath']; // Extract the icon path
-                    final startTime =
-                        habit['startTime']; // Extract the icon path
-                    final endTime =
-                        habit['endTime']; // Extract the icon path
-                    final place =
-                        habit['place']; // Extract the icon path
-                    final daysOfWeek = dbService.getHabitDaysOfWeek(habitId);
-                    // Add the habit button
-                    habitWidgets.add(buildHabitButton(
-                      context: context,
-                      habitId: habitId, // Pass the habit ID
-                      habitName: habitName!,
-                      // buttonText: habitName!, // Pass the habit name
-                      leftIconPath: iconPath!,
-                    ));
-
-                    // Add spacing after the button, but not after the last one
-                    if (index < snapshot.data!.length - 1) {
-                      habitWidgets.add(SizedBox(
-                          height: 20)); // Adjust the height for desired spacing
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              children: <Widget>[
+                StreamBuilder<List<Map<String, String>>>(
+                  stream: dbService.getHabitsAscending(curDayOfWeekFullName),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text("Something went wrong: ${snapshot.error}");
                     }
-                  });
+                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Center(
+                        child: Text(
+                            "No habits found"), // Handle case where no data is available
+                      );
+                    }
+                    List<Widget> habitWidgets = [];
+                    snapshot.data!.asMap().forEach((index, habit) {
+                      final habitId = habit['id']!; // Extract the habit ID
+                      final habitName = habit['name']; // Extract the habit name
+                      final iconPath =
+                          habit['iconPath']; // Extract the icon path
+                      // Add the habit button
+                      habitWidgets.add(buildHabitButton(
+                        context: context,
+                        habitId: habitId, // Pass the habit ID
+                        habitName: habitName!,
+                        leftIconPath: iconPath!,
+                      ));
 
-                  // Return a SingleChildScrollView containing a Column of habit buttons
-                  return Column(
-                    children: habitWidgets,
-                  );
-                },
-              ),
-              SizedBox(height: 100.v),
-            ]
-          ),
+                      // Add spacing after the button, but not after the last one
+                      if (index < snapshot.data!.length - 1) {
+                        habitWidgets.add(SizedBox(
+                            height:
+                                20)); // Adjust the height for desired spacing
+                      }
+                    });
+
+                    // Return a SingleChildScrollView containing a Column of habit buttons
+                    return Column(
+                      children: habitWidgets,
+                    );
+                  },
+                ),
+                SizedBox(height: 100.v),
+              ]),
         ),
       ]),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 0, // Index of the currently selected tab
+        selectedItemColor: Color.fromARGB(255, 1, 82, 148),
+        unselectedItemColor: Colors.grey,
         onTap: (int index) {
           if (index == 1) {
             Navigator.of(context).pushNamed(AppRoutes.newHabitPageRoute);
           } else if (index == 2) {
-            Navigator.of(context).pushNamed(AppRoutes.statisticsPageRoute);
+            Navigator.pushNamedAndRemoveUntil(
+                context, AppRoutes.statisticsPageRoute, (route) => false);
           } else {}
-          // Handle tab selection
         },
         items: [
           BottomNavigationBarItem(
@@ -377,12 +336,7 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
         ],
       ),
     );
-    
   }
-
-  
-
-
 
   Widget buildHabitButton({
     required BuildContext context,
@@ -416,7 +370,7 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
                       TextButton(
                         child: Text("Cancel"),
                         onPressed: () {
-                          Navigator.of(context).pop(); // Close the dialog
+                          Navigator.of(context).pop();
                         },
                       ),
                       TextButton(
@@ -434,7 +388,7 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
                             // immediately set selected habit skip status to True on chosen date
                             skippedHabits[habitDateKey] = true;
                           });
-                          Navigator.of(context).pop(); // Close the dialog
+                          Navigator.of(context).pop();
                         },
                       ),
                     ],
@@ -470,7 +424,7 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
             ),
           ],
         ),
-      
+
         // build the habit button
         child: Container(
           width: 600,
@@ -478,13 +432,14 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
           margin: EdgeInsets.symmetric(horizontal: 16.0),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: buttonColor, // Button color
+              backgroundColor: buttonColor,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8), // Rounded corners
+                borderRadius: BorderRadius.circular(8),
               ),
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0), // Padding inside the button
+              padding: EdgeInsets.symmetric(
+                  horizontal: 16.0, vertical: 6.0), // Padding inside the button
               alignment: Alignment.centerLeft, // Align the content to the left
-              elevation: 5, // Optional: Add shadow
+              elevation: 5,
             ),
             onPressed: () {
               Navigator.of(context).pushNamed(AppRoutes.editHabitPageRoute,
@@ -495,15 +450,16 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
               children: [
                 SvgPicture.asset(
                   leftIconPath,
-                  width: 24, // set icon width
-                  height: 24, // set icon height
-                  color: Colors.black, // set icon color
+                  width: 24,
+                  height: 24,
+                  color: Colors.black,
                 ),
-                SizedBox(width: 15), // Add spacing between the icon and the text
+                SizedBox(
+                    width: 15), // Add spacing between the icon and the text
                 Expanded(
                   child: Text(
                     habitName,
-                    style: TextStyle(color: Colors.black, fontSize: 15), // Text color
+                    style: TextStyle(color: Colors.black, fontSize: 15),
                     overflow: TextOverflow.ellipsis,
                     softWrap: false,
                     maxLines: 10,
@@ -513,7 +469,6 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
             ),
           ),
         ),
-
       ),
     );
   }
@@ -521,14 +476,16 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
   Future<void> _showWelcomeDialog(BuildContext context) async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // Prevents dismissing the dialog by tapping outside
+      barrierDismissible:
+          false, // Prevents dismissing the dialog by tapping outside
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Welcome to Atomic Habits: The App'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Begin by adding a new habit at the middle of the bottom navigation bar.'),
+                Text(
+                    'Begin by adding a new habit at the middle of the bottom navigation bar.'),
               ],
             ),
           ),
@@ -552,14 +509,16 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
   Future<void> _showHabitHelpDialog(BuildContext context) async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // Prevents dismissing the dialog by tapping outside
+      barrierDismissible:
+          false, // Prevents dismissing the dialog by tapping outside
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Your First Habit has been added!'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Swipe right on the habit to complete it\n\nSwipe left on the habit to skip it\n\nClick the habit to add habit laws'),
+                Text(
+                    'Swipe right on the habit to complete it\n\nSwipe left on the habit to skip it\n\nClick the habit to add habit laws'),
               ],
             ),
           ),
@@ -579,8 +538,6 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
       },
     );
   }
-
-  
 
   void _showStreakDialog(
       BuildContext context, String habitId, DateTime chosenDateTime) {
@@ -625,7 +582,7 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
                 actions: [
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).pop(); // Close the dialog
+                      Navigator.of(context).pop();
                     },
                     child: Text('Close'),
                   ),
@@ -638,21 +595,20 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     );
   }
 
-// Inside an asynchronous function
   Future<int> getStreak(habitId, DateTime chosenDateTime) async {
     return await dbService.updateStreak(habitId, chosenDateTime);
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
-        title: Text('Atomic Habits', style: TextStyle(color: Colors.black)),
+        title:
+            Text('Habits', style: TextStyle(color: Colors.black, fontSize: 25)),
         height: 70.v,
         leadingWidth: 100.h,
         leading: IconButton(
-          icon: Icon(Icons.settings, size: 40),
+          icon: Icon(Icons.settings, size: 40, color: Colors.black),
           onPressed: () {
             Navigator.of(context).pushNamed(AppRoutes.settingsPageRoute);
-            //Navigator.of(context).pushNamed(AppRoutes.profilePageRoute);
           },
         ),
         centerTitle: true,
@@ -675,7 +631,6 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     } else {
       dateTime = DateTime.now();
     }
-    // curDayOfWeekFullName = getDayOfWeekFullName(dateTime);
     showCupertinoModalPopup(
         context: context,
         builder: (BuildContext context) => SizedBox(
@@ -685,15 +640,12 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
                 backgroundColor: Colors.white,
                 initialDateTime: dateTime,
                 onDateTimeChanged: (DateTime newTime) {
-                  // dateTime = newTime;
                   initialDateTimeChanged = true;
                   setState(() {
                     currentDateTime = newTime;
-
                     // update current dayOfWeek full name
                     curDayOfWeekFullName =
                         getDayOfWeekFullName(currentDateTime);
-
                     currentMonthList =
                         date_util.DateUtils.daysInMonth(currentDateTime);
                     // Make sure to remove duplicates and sort if necessary, like in initState
