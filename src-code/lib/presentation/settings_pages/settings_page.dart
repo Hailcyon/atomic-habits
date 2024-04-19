@@ -28,12 +28,12 @@ class _SettingsPage extends State<SettingsPage> {
               Navigator.of(context).pushNamed(AppRoutes.profilePageRoute);
             },
           ),
-          ListTile(
-            title: Text('Notifications'),
-            onTap: () {
-              // Navigate to notifications page
-            },
-          ),
+          // ListTile(
+          //   title: Text('Notifications'),
+          //   onTap: () {
+          //     // Navigate to notifications page
+          //   },
+          // ),
           ListTile(
             title: Text('FAQs'),
             onTap: () {
