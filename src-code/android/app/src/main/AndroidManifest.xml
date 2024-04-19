@@ -10,7 +10,7 @@
 
 
     <application
-        android:label="ahapp3"
+        android:label="Atomic Habits"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
