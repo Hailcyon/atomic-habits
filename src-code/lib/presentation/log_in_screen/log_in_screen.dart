@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ahapp3/presentation/auth.dart';
 import 'package:ahapp3/presentation/home_page_container_page/home_page_container_page.dart';
 
-
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -23,12 +22,12 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> signInWithEmailAndPassword() async {
     try {
       await Auth().signInWithEmailAndPassword(
-        email: _controllerEmail.text, 
-        password: _controllerPassword.text);
-        Navigator.pushNamedAndRemoveUntil(context, AppRoutes.initialRoute, (route) => false);
-    } on FirebaseAuthException catch(e) {
+          email: _controllerEmail.text, password: _controllerPassword.text);
+      Navigator.pushNamedAndRemoveUntil(
+          context, AppRoutes.initialRoute, (route) => false);
+    } on FirebaseAuthException catch (e) {
       setState(() {
-        errorMessage = "Error logging in: ${e.toString().substring(0, 50)}" ;
+        errorMessage = "Error logging in: ${e.toString().substring(0, 50)}";
       });
     }
   }
@@ -37,11 +36,11 @@ class _LoginPageState extends State<LoginPage> {
     HomePageContainerPage.isNewUser = true;
     try {
       await Auth().createUserWithEmailAndPassword(
-        email: _controllerEmail.text, 
+        email: _controllerEmail.text,
         password: _controllerPassword.text,
         displayName: _controllerUsername.text,
       );
-    } on FirebaseAuthException catch(e) {
+    } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
       });
@@ -59,10 +58,9 @@ class _LoginPageState extends State<LoginPage> {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
-         labelText: title,
+        labelText: title,
       ),
     );
-
   }
 
   Widget _errorMessage() {
@@ -72,8 +70,21 @@ class _LoginPageState extends State<LoginPage> {
   Widget _submitButton() {
     return ElevatedButton(
       onPressed:
-        isLogin ? signInWithEmailAndPassword : createUserWithEmailAndPassword,
-      child: Text(isLogin ? 'Login' : 'Register')
+          isLogin ? signInWithEmailAndPassword : createUserWithEmailAndPassword,
+      child: Text(
+        isLogin ? 'Login' : 'Register',
+        style: TextStyle(
+          fontSize: 16,
+          color: Colors.white,
+        ),
+      ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color.fromARGB(255, 1, 82, 148),
+        fixedSize: Size(150, 40),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
     );
   }
 
@@ -93,22 +104,29 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         title: _title(),
+        backgroundColor: Color.fromARGB(255, 1, 82, 148),
       ),
       body: Container(
         height: double.infinity,
         width: double.infinity,
         padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _entryField('email', _controllerEmail),
-            _entryField('password', _controllerPassword),
-            if (!isLogin) _entryField('username', _controllerUsername), // Show username field only in register mode
-            _errorMessage(),
-            _submitButton(),
-            _loginOrRegisterButton(),
-          ],
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                _entryField('email', _controllerEmail),
+                _entryField('password', _controllerPassword),
+                if (!isLogin)
+                  _entryField('username',
+                      _controllerUsername), // Show username field only in register mode
+                _errorMessage(),
+                _submitButton(),
+                _loginOrRegisterButton(),
+              ],
+            ),
+          ),
         ),
       ),
     );

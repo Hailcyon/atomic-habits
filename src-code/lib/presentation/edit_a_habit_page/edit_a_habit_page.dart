@@ -30,7 +30,7 @@ class _EditHabitPageState extends State<EditHabitPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Habit', style: TextStyle(color: Colors.white)),
+        title: Text(widget.habitName, style: TextStyle(color: Colors.white)),
         backgroundColor: Color.fromARGB(255, 1, 82, 148),
         iconTheme: IconThemeData(
           color: Colors.white,

@@ -115,7 +115,7 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     });
   }
 
-  // the grey box to show days
+  // the blue box to show days
   Widget topView() {
     return Container(
       height: height * 0.13,
@@ -248,7 +248,6 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
         ));
   }
 
-  // days and "Habits" are not scrollable now
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -298,7 +297,7 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
                       }
                     });
 
-                    // Return a SingleChildScrollView containing a Column of habit buttons
+                    // Return a Column of habit buttons
                     return Column(
                       children: habitWidgets,
                     );
@@ -397,7 +396,7 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
                 );
               }),
               backgroundColor: Colors.red,
-              icon: Icons.clear_outlined,
+              icon: Icons.arrow_forward,
             ),
           ],
         ),

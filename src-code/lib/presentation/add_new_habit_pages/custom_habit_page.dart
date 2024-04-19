@@ -256,6 +256,12 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
             ElevatedButton(
               child: Text(_startTime == '' ? '--:--' : _startTime,
                   style: TextStyle(color: Colors.black)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
               onPressed: () async {
                 final TimeOfDay? picked = await showTimePicker(
                   context: context,
@@ -278,6 +284,12 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
             ElevatedButton(
               child: Text(_endTime == '' ? '--:--' : _endTime,
                   style: TextStyle(color: Colors.black)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
               onPressed: () async {
                 final TimeOfDay? picked = await showTimePicker(
                   context: context,
@@ -306,6 +318,12 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
           _endTime = '--:--';
         });
       },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
       child: Text('Reset Time', style: TextStyle(color: Colors.black)),
     );
   }
@@ -358,6 +376,12 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
         // button with icon on it
         ElevatedButton(
           onPressed: () => _iconPicker(context), // show icon picker
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
           child: Container(
             padding: EdgeInsets.all(8), // padding around icon
             child: SvgPicture.asset(

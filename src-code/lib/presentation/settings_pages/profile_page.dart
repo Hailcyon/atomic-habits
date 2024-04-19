@@ -4,14 +4,13 @@ import 'package:ahapp3/routes/app_routes.dart';
 import 'package:ahapp3/presentation/auth.dart';
 import 'account_information_page.dart';
 
-
-
 class ProfilePage extends StatelessWidget {
   final User? user = FirebaseAuth.instance.currentUser;
 
   Future<void> signOut(BuildContext context) async {
     await Auth().signOut();
-    Navigator.pushNamedAndRemoveUntil(context, AppRoutes.initialRoute, (route) => false);
+    Navigator.pushNamedAndRemoveUntil(
+        context, AppRoutes.initialRoute, (route) => false);
   }
 
   @override
@@ -53,16 +52,43 @@ class ProfilePage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AccountInformationPage()),
+                  MaterialPageRoute(
+                      builder: (context) => AccountInformationPage()),
                 );
               },
-              child: Text('Edit Account'),
+              child: Text(
+                'Edit Account',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 1, 82, 148),
+                fixedSize: Size(150, 40),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
             ),
             ElevatedButton(
               onPressed: () {
                 signOut(context);
               },
-              child: Text('Log Out'),
+              child: Text(
+                'Log Out',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 1, 82, 148),
+                fixedSize: Size(150, 40),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
             ),
           ],
         ),

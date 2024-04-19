@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 class AccountInformationPage extends StatefulWidget {
   const AccountInformationPage({Key? key}) : super(key: key);
 
@@ -27,6 +26,10 @@ class _AccountInformationPage extends State<AccountInformationPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Account Information'),
+        backgroundColor: Color.fromARGB(255, 1, 82, 148),
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -54,7 +57,20 @@ class _AccountInformationPage extends State<AccountInformationPage> {
                 // Implement logic to save changes to account information
                 saveChanges();
               },
-              child: Text('Save Changes'),
+              child: Text(
+                'Save Changes',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 1, 82, 148),
+                fixedSize: Size(150, 40),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
             ),
           ],
         ),
@@ -78,7 +94,7 @@ class _AccountInformationPage extends State<AccountInformationPage> {
       });
     }
 
-      // Check if new email is different from current email
+    // Check if new email is different from current email
     if (_user?.email != newEmail) {
       // Send email verification to new email address
       _user?.updateEmail(newEmail).then((_) {
@@ -95,7 +111,8 @@ class _AccountInformationPage extends State<AccountInformationPage> {
         // An error occurred while updating email
         print('Failed to update email: $error');
       });
-    };
+    }
+    ;
 
     // Show a snackbar or dialog to indicate changes saved
     ScaffoldMessenger.of(context).showSnackBar(
