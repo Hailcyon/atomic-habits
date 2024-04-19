@@ -86,7 +86,7 @@ class _HomePageContainerPageState extends State<HomePageContainerPage> {
     super.initState();
     fetchHabitsWithStatus();
 
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (HomePageContainerPage.isNewUser) {
         _showWelcomeDialog(context);
       }

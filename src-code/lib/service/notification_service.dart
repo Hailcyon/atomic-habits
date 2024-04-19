@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:ahapp3/presentation/home_page_container_page/home_page_container_page.dart';
 import 'package:day_picker/day_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,9 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import '../main.dart';
-import '../presentation/log_in_screen/log_in_screen.dart';
-import '../routes/app_routes.dart';
 
 class NotificationService {
   // Singleton pattern

@@ -139,36 +139,34 @@ class _StatisticsPageState extends State<StatisticsPage> {
         child: Padding(
           // Add padding inside the button
           padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-          child: Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                    flex: 1,
-                    // Use expanded to allow text to span multiple lines if needed
-                    child: Text(
-                      habitName,
-                      style: TextStyle(fontSize: 20, color: Colors.black),
-                      overflow:
-                          TextOverflow.ellipsis, // Use ellipsis for long texts
-                      maxLines: 2, // Allow text to span up to two lines
-                    )),
-                SizedBox(width: 10), // Spacing between text and streak count
-                Row(
-                  children: [
-                    Icon(
-                      Icons.whatshot,
-                      color: Colors.red,
-                    ),
-                    SizedBox(width: 3), // Spacing between the icon and text
-                    Text(
-                      habitStreak.toString(),
-                      style: TextStyle(fontSize: 20, color: Colors.black),
-                    ),
-                  ],
-                )
-              ],
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                  flex: 1,
+                  // Use expanded to allow text to span multiple lines if needed
+                  child: Text(
+                    habitName,
+                    style: TextStyle(fontSize: 20, color: Colors.black),
+                    overflow:
+                        TextOverflow.ellipsis, // Use ellipsis for long texts
+                    maxLines: 2, // Allow text to span up to two lines
+                  )),
+              SizedBox(width: 10), // Spacing between text and streak count
+              Row(
+                children: [
+                  Icon(
+                    Icons.whatshot,
+                    color: Colors.red,
+                  ),
+                  SizedBox(width: 3), // Spacing between the icon and text
+                  Text(
+                    habitStreak.toString(),
+                    style: TextStyle(fontSize: 20, color: Colors.black),
+                  ),
+                ],
+              )
+            ],
           ),
         ),
         style: ElevatedButton.styleFrom(

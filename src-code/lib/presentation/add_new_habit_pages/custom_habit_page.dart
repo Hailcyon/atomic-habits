@@ -456,7 +456,7 @@ class _CustomHabitPageState extends State<CustomHabitPage> {
 
       dbService
           .editHabit(habitId, habitName, selectedDays, startTimeToSave,
-              endTimeToSave, place, _defaultIconPath!)
+              endTimeToSave, place, _defaultIconPath)
           .catchError((error) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Failed to save habit: $error")));

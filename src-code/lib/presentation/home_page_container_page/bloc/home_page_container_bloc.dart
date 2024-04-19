@@ -1,6 +1,5 @@
 import 'package:ahapp3/presentation/auth.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '/core/app_export.dart';
 import 'package:ahapp3/presentation/home_page_container_page/models/home_page_container_model.dart';
@@ -45,8 +44,8 @@ class HomePageContainerBloc
       emit(state.copyWith(data: data, isLoading: false, error: ''));
     } catch (e) {
       // Handle errors during initialization
-      emit(state.copyWith(error: 'Failed to initialize: $e', isLoading: false, data: null));
+      emit(state.copyWith(
+          error: 'Failed to initialize: $e', isLoading: false, data: null));
     }
   }
 }
-
